@@ -54,17 +54,42 @@ set("S.hyd.focaccia",80);set("S.scale.focaccia",{tray:"30x40",cw:23,cl:33});
 set("S.scale.focaccia",{tray:"23x33",cw:23,cl:33});
 {const b=JSON.parse(R(`JSON.stringify(calc("focaccia").build)`));ok("scaling: 23×33 focaccia uses the booklet 20 + 50 + 50 build",b.m===20&&b.f===50&&b.w===50,JSON.stringify(b));}
 for(const h of HY("pizza")){set("S.hyd.pizza",h);
-  for(const balls of [1,4,7,24])for(const bw of [150,250,276.5,400]){set("S.scale.pizza",{balls,bw});figs+=checkConsistency("pizza",`${balls}×${bw} ${h}%`);combos++;
+  for(const balls of [1,4,7,24])for(const bw of [150,250,276.5,280,400]){set("S.scale.pizza",{balls,bw});figs+=checkConsistency("pizza",`${balls}×${bw} ${h}%`);combos++;
     const tot=R(`calc("pizza").total`);ok("mass: pizza balls × ball weight = total dough (±1 g)",Math.abs(tot-balls*bw)<=1,`${balls}×${bw}=${balls*bw} vs ${tot}`)}}
-set("S.hyd.pizza",66.4);set("S.scale.pizza",{balls:4,bw:276.5});
-{const rows=JSON.parse(R(`JSON.stringify(calc("pizza").rows)`));ok("mass: default pizza flours are the booklet 360 g + 240 g",Math.abs(rows[0].g-360)<0.5&&Math.abs(rows[1].g-240)<0.5,rows.map(r=>r.g).join("/"));
- const b=JSON.parse(R(`JSON.stringify(calc("pizza").build)`));ok("scaling: default pizza uses the booklet 20 + 55 + 55 build",b.m===20&&b.f===55&&b.w===55,JSON.stringify(b));}
+set("S.hyd.pizza",66.4);
+/* Michael, 23 Oct 2026: 280 g balls. 4 × 280 = 1,120 g, every gram from the one formula (same percentages as the booklet's 360/240/350/30/110/16) */
+{const d=defaults();ok("pizza 280: harness default is 4 × 280 g",d.scale.pizza.balls===4&&d.scale.pizza.bw===280,JSON.stringify(d.scale.pizza));}
+set("S.scale.pizza",{balls:4,bw:280});
+{const c=JSON.parse(R(`JSON.stringify(calc("pizza"))`)),r=c.rows,q=c.q,gn=x=>R(`gnum(${x})`);
+ ok("pizza 280: 4 × 280 g = 1,120 g total (±0.01 g)",Math.abs(c.total-1120)<0.01,c.total);
+ ok("pizza 280: flours 364.6 g Tipo 00 + 243.1 g bread (60/40), shown 365 g + 243 g",Math.abs(r[0].g-364.58)<0.01&&Math.abs(r[1].g-243.06)<0.01&&gn(r[0].g)==="365"&&gn(r[1].g)==="243",r.map(x=>x.g).join("/"));
+ ok("pizza 280: water 354 g + 30 g reserved (384.8 g total)",gn(q.water1)==="354"&&gn(q.reserve)==="30"&&Math.abs(q.water1+q.reserve-384.76)<0.01,`${q.water1}+${q.reserve}`);
+ ok("pizza 280: levain 111 g and salt 16 g follow the formula (110/600 and 16/600 of flour)",Math.abs(q.lev-q.flour*110/600)<1e-9&&Math.abs(q.salt-q.flour*16/600)<1e-9&&gn(q.lev)==="111"&&gn(q.salt)==="16",`${q.lev} ${q.salt}`);
+ ok("pizza 280: same percentages as the booklet formula (scale factor 1,120 / 1,105.9)",Math.abs(q.flour/600-1120/1105.92)<1e-4,q.flour/600);
+ ok("pizza 280: levain build scales from the booklet 20 + 55 + 55 → 20 + 56 + 56 (makes 132 g, uses 111 g)",!c.build.booklet&&gn(c.build.m)==="20"&&gn(c.build.f)==="56"&&gn(c.build.w)==="56"&&gn(c.build.t)==="132"&&c.build.t>=c.build.use,JSON.stringify(c.build));
+ const lt=JSON.parse(R(`JSON.stringify(LEVAIN_TABLE.find(x=>/^Pizza/.test(x[0])))`));
+ ok("pizza 280: reference levain card matches the default batch's build",lt[1]===`${gn(c.build.m)} + ${gn(c.build.f)} + ${gn(c.build.w)}`&&lt[2]===`${gn(c.build.t)} / ${gn(c.build.use)} g`,JSON.stringify(lt));
+ const meth=JSON.parse(R(`JSON.stringify(methodFor("pizza"))`)).map(x=>x.join(" ")).join("\n"),st=JSON.parse(R(`JSON.stringify(currentPlan("pizza").steps)`)).map(s=>s.detail).join("\n");
+ ok("pizza 280: method and planner say 4 balls of 280 g, and no 276 / 1,106 anywhere",meth.includes("4 equal balls of 280 g")&&st.includes("4 balls of 280 g")&&!/276|1,106/.test(meth+st),"");}
+set("S.scale.pizza",{balls:4,bw:280});
 for(const tin of ["large","std"])for(const n of [1,2,3,6])for(const v of ["std","warm","chill"]){set("S.scale.sandwich",{tin,n});set("S.variant.sandwich",v);figs+=checkConsistency("sandwich",`${tin}×${n} ${v}`);combos++;
   const f=(tin==="large"?1:.75)*n,q=JSON.parse(R(`JSON.stringify(calc("sandwich").q)`));
   ok("scaling: sandwich starter = (15|8 seed) + 15 + 30 + 60 and tangzhong 35 + 175, × tin factor",Math.abs(q.seed-(v==="warm"?8:15)*f)<1e-9&&Math.abs(q.shoney-15*f)<1e-9&&Math.abs(q.swater-30*f)<1e-9&&Math.abs(q.sflour-60*f)<1e-9&&Math.abs(q.tflour-35*f)<1e-9&&Math.abs(q.milk-175*f)<1e-9,`${tin}×${n} ${v}`);
   const st=JSON.parse(R(`JSON.stringify(currentPlan("sandwich").steps.map(s=>s.k+":"+s.t))`));
   ok("variant: chill adds a fridge stage for the starter; std/warm don't",v==="chill"?st[1]==="cold:Starter in the fridge":!st.some(x=>x.startsWith("cold:Starter")),st.join(","))}
 set("S.scale.sandwich",{tin:"large",n:1});set("S.variant.sandwich","std");
+/* sandwich chill: the user picks 8–12 h in the fridge (default 8 h); the planner and timer use it */
+set("S.variant.sandwich","chill");
+for(const h of [8,9,10,11,12]){set("S.variant.chillH",h);const st=JSON.parse(R(`JSON.stringify(currentPlan("sandwich").steps)`)),m=JSON.parse(R(`JSON.stringify(methodFor("sandwich"))`))[0][1];
+  ok("chill: fridge stage = chosen hours × 60 min (8–12 h)",st[1].t==="Starter in the fridge"&&st[1].d===h*60&&st[1].k==="cold",`${h} h → ${st[1].d}`);
+  ok("chill: step and method text say the chosen hours",st[1].detail.includes(`${h} h until you mix`)&&m.includes(`${h} h in the fridge`),st[1].detail+" | "+m);
+  const sig=R(`planSig("sandwich")`);ok("chill: the accepted-plan signature includes the hours (changing them asks again)",sig.split("|").includes(String(h)),sig)}
+{const d=defaults();ok("chill: default is 8 h",d.variant.chillH===8&&R(`CHILL_H.def`)===8);}
+set("S.variant.chillH",8);{const a=R(`currentPlan("sandwich").steps[1].d`);set("S.variant.chillH",12);const b=R(`currentPlan("sandwich").steps[1].d`);set("S.variant.chillH",8);
+  ok("chill: total plan grows by exactly 4 h from 8 h to 12 h",b-a===240,`${a} → ${b}`)}
+for(const [v,want] of [[3,8],[20,12],[9.6,10],["x",8],[null,8]]){set("S.variant.chillH",v);ok("chill: out-of-range or bad hours are clamped (8–12) or default to 8",R(`currentPlan("sandwich").steps[1].d`)===want*60,`${v} → ${R(`currentPlan("sandwich").steps[1].d`)}`)}
+{set("S.variant.chillH",12);const p=R(`buildPlan("sandwich",25,12,calc("sandwich"),{variant:"chill",chillH:9}).steps[1].d`);ok("chill: an explicit chillH (a running timer's snapshot) wins over the current setting",p===540,p)}
+set("S.variant.chillH",8);set("S.variant.sandwich","std");
 
 /* ---------- 2. interpolation ---------- */
 for(const tab of ["LEV","LEV_FAST","LOAF_BULK","FOC_WARM","PIZ_BULK","PIZ_WARM","SW_BULK","SW_PROOF"]){

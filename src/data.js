@@ -39,6 +39,8 @@ const PIZ_WARM=[R("4–4½ h",255),R("3½–4 h",225),R("3–3½ h",195),R("2–
 const SW_BULK=[R("9–12 h",630),R("8–11 h",570),R("6–9 h",450),R("5–7 h",360),R("4–6 h",300)];
 const SW_PROOF=[R("3–4 h",210),R("2–4 h",180),R("2–3 h",150),R("1½–3 h",135),R("1½–2½ h",120)];
 const COLD_OPTS={loaf:[10,12,14,16],focaccia:[8,10,12,14,16],pizza:[20,24,28],sandwich:[8,10,12,14]};
+// sandwich "Chill" variant: hours the stiff starter spends in the fridge before mixing (Michael, 23 Oct: user picks 8–12 h, default 8 h)
+const CHILL_H={def:8,min:8,max:12};
 const ANCHOR_DEFAULT={loaf:"09:00",focaccia:"13:05",pizza:"16:30",sandwich:"10:15"};
 
 const TROUBLE={
@@ -62,5 +64,5 @@ const WARM_TIPS={
 const RULES=["Never use up the mother.","Build a separate levain for each bake.","For storage: feed, short start, fridge before peak.","Bake with the levain at peak.","Sour usually means hungry.","Follow the dough, not the clock.","Keep the ratios fixed.","Change one variable at a time, and log temperatures and times."];
 const WEEK=[["Mon / Tue","Refresh the mother if it's been 7+ days","rest"],["Thu 07:00","Build the loaf levain","wait"],["Thu 12:15","Autolyse; 13:00 levain in; folds until 15:20","prep"],["Thu 17:00–19:00","Shape → fridge","cold"],["Fri 07:00","Preheat 250 °C; build the pizza levain","oven"],["Fri 08:00","Bake the loaf (out ~09:00, slice ~11:30)","oven"],["Fri 12:30","Mix pizza; 2 folds; bulk 20–30% (~16:00–18:00); ball → fridge","prep"],["Sat 12:30–13:00","Pizza balls out","wait"],["Sat 15:50","Ooni on","oven"],["Sat 16:30","Pizza","oven"]];
 // booklet base builds (reference card); the recipe screens compute the build for the batch you set
-const LEVAIN_TABLE=[["Loaf","20 + 70 + 70","160 / 150 g"],["Focaccia 23 × 33","20 + 50 + 50","120 / 100 g"],["Focaccia 30 × 40","25 + 75 + 75","175 / 160 g"],["Pizza","20 + 55 + 55","130 / 110 g"],["Sandwich stiff starter","15 starter + 15 honey + 30 water + 60 flour","120 g / all"]];
+const LEVAIN_TABLE=[["Loaf","20 + 70 + 70","160 / 150 g"],["Focaccia 23 × 33","20 + 50 + 50","120 / 100 g"],["Focaccia 30 × 40","25 + 75 + 75","175 / 160 g"],["Pizza (4 × 280 g)","20 + 56 + 56","132 / 111 g"],["Sandwich stiff starter","15 starter + 15 honey + 30 water + 60 flour","120 g / all"]];
 const OVENS=[["Loaf, covered","250 °C","230 °C","480 °F"],["Loaf, uncovered","220–225 °C","200–205 °C","430–435 °F"],["Focaccia","240–245 °C","220–225 °C","465–475 °F"],["Sandwich loaf","175 °C","~160 °C","350 °F"],["Pizza (Ooni stone)","420–450 °C","—","—"]];

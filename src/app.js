@@ -10,12 +10,12 @@ const KEY="michael-baking-app.v1";
 const newEpoch=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
 const DEFAULT={
   tab:"recipes",detail:null,seg:"ing",rid:"loaf",
-  scale:{loaf:{mode:"loaves",n:1,w:1415},focaccia:{tray:"23x33",cw:23,cl:33},pizza:{balls:4,bw:276.5},sandwich:{tin:"large",n:1}},
+  scale:{loaf:{mode:"loaves",n:1,w:1415},focaccia:{tray:"23x33",cw:23,cl:33},pizza:{balls:4,bw:280},sandwich:{tin:"large",n:1}},
   hyd:{loaf:69.7,focaccia:80,pizza:66.4},temp:25,
-  cold:{loaf:14,focaccia:14,pizza:24,sandwich:12},variant:{sandwich:"std"},
+  cold:{loaf:14,focaccia:14,pizza:24,sandwich:12},variant:{sandwich:"std",chillH:CHILL_H.def},
   plan:{mode:"finish",anchor:Object.assign({},ANCHOR_DEFAULT),start:"07:00",day:{loaf:tomorrowIso(),focaccia:tomorrowIso(),pizza:tomorrowIso(),sandwich:tomorrowIso()},custom:{},
     target:{loaf:"oven",focaccia:"oven",pizza:"oven",sandwich:"oven"},away:{on:true,from:"23:00",to:"06:00"},accept:{}},
-  session:null,starter:{fedAt:null},sound:true,wake:true,notify:false,theme:"auto",weekHot:false,openAcc:{},ddt:Object.assign({},DDT_DEFAULT),v:3,epoch:"",rev:0
+  session:null,starter:{fedAt:null},sound:true,wake:true,notify:false,theme:"auto",weekHot:false,openAcc:{},ddt:Object.assign({},DDT_DEFAULT),v:4,epoch:"",rev:0
 };
 const fresh=()=>JSON.parse(JSON.stringify(DEFAULT));
 function merge(a,b){if(b===null||b===undefined)return a;if(typeof a!=="object"||a===null||Array.isArray(a))return b;if(typeof b!=="object"||Array.isArray(b))return a;const o={...a};for(const k in b)o[k]=(k in a)?merge(a[k],b[k]):b[k];return o}
@@ -28,14 +28,15 @@ function sanitize(T){
   const num=(o,k,a,b,def,step)=>{const v=+o[k];o[k]=Number.isFinite(v)?clamp(step?Math.round(v/step)*step:v,a,b):def};
   if(!T.v||T.v<2){T.wake=true;if(T.plan&&T.plan.date){for(const r of RIDS)T.plan.day[r]=T.plan.date}if(T.plan)delete T.plan.date}
   if(!T.v||T.v<3){if(+T.scale.pizza.bw===276)T.scale.pizza.bw=276.5;T.v=3}   // 276 was the rounded booklet ball; 276.5 × 4 = the booklet's 1,106 g
+  if(T.v<4){if(T.scale&&T.scale.pizza&&[276,276.5].includes(+T.scale.pizza.bw))T.scale.pizza.bw=280;T.v=4}   // Michael, 23 Oct: 280 g balls replace the old 276 / 276.5 g default
   num(T,"temp",16,40,25,1);num(T.scale.loaf,"n",1,8,1,1);num(T.scale.loaf,"w",300,12000,1415,1);
-  num(T.scale.pizza,"balls",1,24,4,1);num(T.scale.pizza,"bw",150,400,276.5,.5);
+  num(T.scale.pizza,"balls",1,24,4,1);num(T.scale.pizza,"bw",150,400,280,.5);
   num(T.scale.focaccia,"cw",10,80,23,1);num(T.scale.focaccia,"cl",10,80,33,1);num(T.scale.sandwich,"n",1,6,1,1);
   for(const r of ["loaf","focaccia","pizza"])num(T.hyd,r,LEAN[r].Hmin,LEAN[r].Hmax,LEAN[r].H0,.5);T.hyd.loaf=+(+T.hyd.loaf).toFixed(1);T.hyd.pizza=+(+T.hyd.pizza).toFixed(1);
   if(!["loaves","weight"].includes(T.scale.loaf.mode))T.scale.loaf.mode="loaves";
   if(!["large","std"].includes(T.scale.sandwich.tin))T.scale.sandwich.tin="large";
   if(!TRAYS.some(t=>t.id===T.scale.focaccia.tray))T.scale.focaccia.tray="23x33";
-  if(!T.variant||typeof T.variant!=="object")T.variant={sandwich:"std"};if(!SANDWICH_VARIANTS[T.variant.sandwich])T.variant.sandwich="std";
+  if(!T.variant||typeof T.variant!=="object")T.variant={sandwich:"std"};if(!SANDWICH_VARIANTS[T.variant.sandwich])T.variant.sandwich="std";num(T.variant,"chillH",CHILL_H.min,CHILL_H.max,CHILL_H.def,1);
   const P=T.plan;if(!["finish","start"].includes(P.mode))P.mode="finish";if(parseClock(P.start)===null)P.start="07:00";
   for(const k of ["custom","accept","target","day","anchor"])if(!P[k]||typeof P[k]!=="object")P[k]={};
   if(!P.away||typeof P.away!=="object")P.away={on:true,from:"23:00",to:"06:00"};P.away.on=P.away.on!==false;
@@ -93,7 +94,7 @@ function thermoColor(t){return t<=23?"#56707F":t<=25?"#5C6A38":t<=26?"#8A6A1E":t
 function remNow(){const s=S.session;if(!s)return 0;return s.running?Math.max(0,(s.endsAt-Date.now())/1000):s.remaining}
 function startSession(rid,from){const p=currentPlan(rid);
   S.session={rid,steps:p.steps.map(x=>({t:x.t,d:x.d,k:x.k,detail:x.detail,cue:x.cue||"",est:!!x.est,check:!!x.check,key:x.key||"",hands:x.hands||0})),anchor:p.anchor,idx:from||0,running:false,
-    remaining:p.steps[from||0].d*60,endsAt:0,startedAt:Date.now(),alerted:false,temp:S.temp,cold:S.cold[rid],variant:S.variant.sandwich,doughT:null,summary:calc(rid).summary};
+    remaining:p.steps[from||0].d*60,endsAt:0,startedAt:Date.now(),alerted:false,temp:S.temp,cold:S.cold[rid],variant:S.variant.sandwich,chillH:chillH(),doughT:null,summary:calc(rid).summary};
   sessDirty=true;unlockAudio();tPlay()}
 function tPlay(){const s=S.session;if(!s)return;if(s.remaining<=0)s.remaining=s.steps[s.idx].d*60;s.endsAt=Date.now()+s.remaining*1000;s.running=true;s.alerted=false;sessDirty=true;saveNow();wakeSync()}
 function tPause(){const s=S.session;if(!s)return;s.remaining=remNow();s.running=false;sessDirty=true;saveNow();wakeSync()}
@@ -104,7 +105,7 @@ function tMore(m){const s=S.session;if(!s)return;s.remaining=m*60;s.closedEnd=fa
 /* measured dough temperature drives the bulk estimate (never shortens below what has already passed) */
 function setDoughT(v){const s=S.session;if(!s)return;const bi=s.steps.findIndex(x=>x.key==="bulk");if(bi<0)return;
   if(s.idx>bi){toast("Bulk is already finished");return}
-  const T=v===null?null:clamp(v,15,35);const p=buildPlan(s.rid,s.temp,s.cold,calc(s.rid),{variant:s.variant,bulkT:T===null?s.temp:T});
+  const T=v===null?null:clamp(v,15,35);const p=buildPlan(s.rid,s.temp,s.cold,calc(s.rid),{variant:s.variant,chillH:s.chillH,bulkT:T===null?s.temp:T});
   const nd=p.steps.find(x=>x.key==="bulk").d,delta=nd-s.steps[bi].d;s.steps[bi].d=nd;s.steps[bi].detail=p.steps.find(x=>x.key==="bulk").detail;
   if(s.idx===bi&&!(s.alerted&&remNow()<=0)){if(s.running)s.endsAt+=delta*60000;else s.remaining=Math.max(60,s.remaining+delta*60)}
   s.doughT=T;sessDirty=true;saveNow();render();toast(T===null?"Back to the kitchen-temperature estimate":`Bulk estimate now uses ${T} °C dough: ${fmtDur(nd)}`)}
@@ -174,7 +175,7 @@ function vDetail(rid){
     let ctl="";
     if(rid==="loaf"){ctl=seg("loafmode",[["loaves","Loaves"],["weight","Dough weight"]],st.mode)+`<div class="spacer"></div>`+(st.mode==="loaves"?`<div class="ctrl"><div class="lab">Loaves<small>${gt(c.total/c.units)} each</small></div>${stepper("loafn",st.n,"",{label:"Loaves",min:st.n<=1,max:st.n>=8})}</div>`:`<div class="ctrl"><div class="lab">Total dough<small>Type it, or ±50 g</small></div>${stepper("loafw",gnum(st.w),"g",{label:"Total dough",input:Math.round(st.w),lo:300,hi:12000,min:st.w<=300,max:st.w>=12000})}</div>`)}
     if(rid==="focaccia"){ctl=`<div class="pillrow">${TRAYS.map(t=>`<button class="pill ${st.tray===t.id?"on":""}" data-act="tray" data-arg="${t.id}">${t.label}${t.id!=="custom"?" cm":""}<small>${t.sub}</small></button>`).join("")}</div>`+(st.tray==="custom"?`<div class="ctrl"><div class="lab">Width</div>${stepper("trayw",st.cw,"cm",{label:"Tray width",input:st.cw,lo:10,hi:80,min:st.cw<=10,max:st.cw>=80})}</div><div class="ctrl"><div class="lab">Length</div>${stepper("trayl",st.cl,"cm",{label:"Tray length",input:st.cl,lo:10,hi:80,min:st.cl<=10,max:st.cl>=80})}</div>`:"")}
-    if(rid==="pizza"){ctl=`<div class="ctrl"><div class="lab">Pizza balls<small>One per 30–32 cm pizza</small></div>${stepper("balls",st.balls,"",{label:"Pizza balls",min:st.balls<=1,max:st.balls>=24})}</div><div class="ctrl"><div class="lab">Ball weight<small>276.5 g = the booklet's 1,106 g ÷ 4 · 250–280 g suits 30–32 cm</small></div>${stepper("bw",g1(st.bw),"g",{label:"Ball weight",input:g1(st.bw),dec:1,lo:150,hi:400,min:st.bw<=150,max:st.bw>=400})}</div><div class="faint">Total dough = balls × ball weight; the flour, water and levain are worked back from it.</div>`}
+    if(rid==="pizza"){ctl=`<div class="ctrl"><div class="lab">Pizza balls<small>One per 30–32 cm pizza</small></div>${stepper("balls",st.balls,"",{label:"Pizza balls",min:st.balls<=1,max:st.balls>=24})}</div><div class="ctrl"><div class="lab">Ball weight<small>280 g is the default · 250–280 g suits 30–32 cm</small></div>${stepper("bw",g1(st.bw),"g",{label:"Ball weight",input:g1(st.bw),dec:1,lo:150,hi:400,min:st.bw<=150,max:st.bw>=400})}</div><div class="faint">Total dough = balls × ball weight; the flour, water and levain are worked back from it.</div>`}
     if(rid==="sandwich"){ctl=seg("tin",[["large","Large 3–3.5 L"],["std","2 lb tin (0.75×)"]],st.tin)+`<div class="spacer"></div><div class="ctrl"><div class="lab">Tins<small>${st.tin==="large"?"33 cm Pullman or ~28 × 12 × 10 cm":"Standard 2 lb loaf tin"}</small></div>${stepper("tinn",st.n,"",{label:"Tins",min:st.n<=1,max:st.n>=6})}</div>`}
     if(rid==="sandwich")ctl+=`</div><div class="card"><div class="ct">Starter version</div>${variantPick()}`;
     let hyd="";
@@ -206,11 +207,12 @@ function ingBox(rid,c){
   return`<div class="stats">${c.stats.map(([v,l])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("")}</div>
   <div class="card"><div class="ct" style="display:flex;justify-content:space-between"><span>Ingredients</span><span>Baker's %</span></div>${list}</div>
   ${b?`<div class="card tint"><div class="ct">Levain build · start it first</div><div class="build"><div class="b"><b>${gnum(b.m)}</b><span>mother g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.f)}</b><span>flour g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.w)}</b><span>water g</span></div></div><div class="faint" style="margin-top:8px">Makes ≈ ${gt(b.t)}, use ${gt(b.use)} at peak. ${fmtWin(interp(rid==="loaf"?LEV:LEV_FAST,S.temp))} at ${S.temp} °C <span class="est">est.</span>${b.booklet?"":` · scaled from the booklet's ${BUILDS[rid][0].b.join(" + ")} for this batch`}</div></div>`:
-  `<div class="card tint"><div class="ct">Night before · ${esc(c.variant.label)}</div><p style="margin:0">Stiff starter: ${gt(c.q.seed)} starter + ${gt(c.q.shoney)} honey + ${gt(c.q.swater)} water + ${gt(c.q.sflour)} flour${S.variant.sandwich==="chill"?", 3–4 h out then into the fridge":", 8–10 h"}. It's the levain: use it all. Tangzhong: ${gt(c.q.tflour)} flour + ${gt(c.q.milk)} milk cooked to 65 °C, then chilled.</p></div>`}
+  `<div class="card tint"><div class="ct">Night before · ${esc(c.variant.label)}</div><p style="margin:0">Stiff starter: ${gt(c.q.seed)} starter + ${gt(c.q.shoney)} honey + ${gt(c.q.swater)} water + ${gt(c.q.sflour)} flour${S.variant.sandwich==="chill"?`, 3–4 h out then ${chillH()} h in the fridge`:", 8–10 h"}. It's the levain: use it all. Tangzhong: ${gt(c.q.tflour)} flour + ${gt(c.q.milk)} milk cooked to 65 °C, then chilled.</p></div>`}
   ${c.extras.length?`<div class="card"><div class="ct">Also needed</div>${c.extras.map(([a,v])=>`<div class="ing"><div class="n">${a}</div><div style="text-align:right;font-weight:600;font-size:14.5px;max-width:60%">${v}</div></div>`).join("")}</div>`:""}`;
 }
 function variantPick(){const v=S.variant.sandwich,V=SANDWICH_VARIANTS[v];
-  return seg("variant",Object.entries(SANDWICH_VARIANTS).map(([k,x])=>[k,x.label]),v)+`<div class="faint" style="margin-top:8px">${esc(V.sub)}.${v==="std"&&S.temp>=27?` <b>Your kitchen is ${S.temp} °C: Warm kitchen or Chill keeps the starter from overshooting.</b>`:""}${v==="chill"?" The planner adds the fridge stage.":""}</div>`}
+  return seg("variant",Object.entries(SANDWICH_VARIANTS).map(([k,x])=>[k,x.label]),v)+`<div class="faint" style="margin-top:8px">${esc(V.sub)}.${v==="std"&&S.temp>=27?` <b>Your kitchen is ${S.temp} °C: Warm kitchen or Chill keeps the starter from overshooting.</b>`:""}${v==="chill"?" The planner and timer add the fridge stage.":""}</div>${v==="chill"?chillCtl():""}`}
+function chillCtl(){const h=chillH();return`<div class="ctrl" data-test="chillh"><div class="lab">Starter in the fridge<small>8–12 h works; the planner and timer use this</small></div>${stepper("chillh",h,"h",{label:"Hours in the fridge",min:h<=CHILL_H.min,max:h>=CHILL_H.max})}</div>`}
 /* planner: the user's plan is checked interval by interval against the unavailable window.
    Untouched plans are chosen automatically; if nothing complies the app says so (never a silent fallback). */
 let PLAN_NONE={};
@@ -491,6 +493,7 @@ const ACT={
   paccept(){const r=S.rid;S.plan.custom[r]=true;S.plan.accept[r]=planSig(r);render()},
   punaccept(){delete S.plan.accept[S.rid];render()},
   variant(a){S.variant.sandwich=a;haptic(5);render()},
+  chillh(d){S.variant.chillH=clamp(chillH()+ +d,CHILL_H.min,CHILL_H.max);haptic(5);render()},
   tstart(a){startSession(S.rid,+a);render();const v=$("#view");v&&v.scrollTo(0,0)},
   tplay(){unlockAudio();haptic(12);if(S.session.running)tPause();else tPlay();render()},
   tnext(){unlockAudio();haptic(12);const s=S.session;if(s.idx<s.steps.length-1)tGo(s.idx+1,true);render();const v=$("#view");v&&v.scrollTo(0,0)},

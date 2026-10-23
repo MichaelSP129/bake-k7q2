@@ -91,6 +91,7 @@ function calc(rid,st){
    k: prep (hands-on), oven (attended), wait (rising), cold (fridge), rest (cooling)
    hands: minutes of real work at the start of a wait step (mixing a build, cooking a tangzhong…)
    check: a fermentation/proof stage that ends with a readiness check, never an automatic next step */
+function chillH(h){const v=+(h??(S&&S.variant&&S.variant.chillH));return Number.isFinite(v)?clamp(Math.round(v),CHILL_H.min,CHILL_H.max):CHILL_H.def}
 function buildPlan(id,T,coldH,c,o){
   o=o||{};const bT=o.bulkT??T,b=band(T),q=c.q;
   const S_=(t,d,k,detail,x)=>Object.assign({t,d:Math.max(1,Math.round(d)),k,detail},x||{});
@@ -140,7 +141,7 @@ function buildPlan(id,T,coldH,c,o){
   const build=`Stiff starter: ${gt(q.seed)} starter + ${gt(q.shoney)} honey + ${gt(q.swater)} water + ${gt(q.sflour)} flour. Tangzhong: ${gt(q.tflour)} flour + ${gt(q.milk)} milk, whisked to 65 °C, covered and chilled.`;
   const first=v==="chill"?[
     S_("Stiff starter + tangzhong",210,"wait",`${build} Starter 3–4 h at room temperature, then into the fridge.`,{est:1,check:1,hands:20,key:"levain",cue:"Starter visibly risen, about 50%."}),
-    S_("Starter in the fridge",480,"cold","Covered, 3–5 °C, until you mix in the morning (8–12 h).",{hands:0})]:[
+    S_("Starter in the fridge",chillH(o.chillH)*60,"cold",`Covered, 3–5 °C, ${chillH(o.chillH)} h until you mix (your setting; 8–12 h works).`,{hands:0})]:[
     S_("Stiff starter + tangzhong",600,"wait",`${build} ${v==="warm"?"Warm-kitchen version: the smaller seed keeps it from overshooting. ":""}Leave 8–10 h.`,{est:1,check:1,hands:20,key:"levain",cue:"Starter domed and risen."})];
   const steps=[...first,
     S_("Mix and knead",20,"prep",`${gt(q.water)} cold water, ${gt(q.honey)} honey, the tangzhong, all the starter, ${gt(q.flour)} flour and ${gt(q.salt)} salt. Mix 2–3 min slow; add ${gt(q.oil)} oil after 3–4 min of kneading, 10–15 min total.`,{key:"bulkstart",cue:"Weak windowpane, dough 24–26 °C."}),
@@ -154,7 +155,7 @@ function buildPlan(id,T,coldH,c,o){
     S_("Cool on a rack",100,"rest","1–2 h before slicing.")];
   return{anchor:steps.findIndex(s=>s.t==="Bake"),steps};
 }
-function currentPlan(rid,o){o=o||{};return buildPlan(rid,o.temp??S.temp,o.cold??S.cold[rid],o.c||calc(rid),{variant:S.variant.sandwich,bulkT:o.bulkT})}
+function currentPlan(rid,o){o=o||{};return buildPlan(rid,o.temp??S.temp,o.cold??S.cold[rid],o.c||calc(rid),{variant:S.variant.sandwich,chillH:chillH(),bulkT:o.bulkT})}
 
 /* ---------- Method tab text, generated from the same numbers ---------- */
 function methodFor(rid,c){
@@ -201,7 +202,7 @@ function methodFor(rid,c){
     ["Launch, flame down","Turn the flame low just after launching so the top catches up with the base."],
     ["Bake 60–90 s","Rotate every 15–20 s."]];
   const v=S.variant.sandwich;
-  return[[`Night before: stiff sweet starter (${c.variant.label.toLowerCase()})`,`${gt(q.seed)} starter + ${gt(q.shoney)} honey + ${gt(q.swater)} water + ${gt(q.sflour)} flour. ${v==="chill"?"3–4 h at room temperature, then into the fridge until you mix.":v==="warm"?"8–10 h; the smaller seed is for a 27 °C+ kitchen.":"8–10 h at about 23 °C."}`],
+  return[[`Night before: stiff sweet starter (${c.variant.label.toLowerCase()})`,`${gt(q.seed)} starter + ${gt(q.shoney)} honey + ${gt(q.swater)} water + ${gt(q.sflour)} flour. ${v==="chill"?`3–4 h at room temperature, then ${chillH()} h in the fridge until you mix (8–12 h works).`:v==="warm"?"8–10 h; the smaller seed is for a 27 °C+ kitchen.":"8–10 h at about 23 °C."}`],
     ["Night before: tangzhong",`${gt(q.tflour)} flour + ${gt(q.milk)} milk, whisked over low heat to 65 °C (thick paste). Cover and chill.`],
     ["Mix 2–3 min slow",`${gt(q.water)} cold water, ${gt(q.honey)} honey, the tangzhong, all the starter, ${gt(q.flour)} flour, ${gt(q.salt)} salt.`],
     ["Knead 10–15 min",`Add the ${gt(q.oil)} oil after 3–4 min. Aim for a weak windowpane and 24–26 °C dough.`],
@@ -222,7 +223,7 @@ function awayCfg(){const a=S.plan.away;if(!a||!a.on)return null;const f=parseClo
 function awayOverlap(t0,t1,aw){if(!aw||t1<=t0)return 0;let tot=0;const d=new Date(t0);d.setHours(0,0,0,0);d.setDate(d.getDate()-1);
   while(d.getTime()<t1){const ws=new Date(d);ws.setHours(0,aw.f,0,0);const we=new Date(d);if(aw.t<aw.f)we.setDate(we.getDate()+1);we.setHours(0,aw.t,0,0);
     const o=Math.min(t1,we.getTime())-Math.max(t0,ws.getTime());if(o>0)tot+=o;d.setDate(d.getDate()+1)}return tot/60000}
-function planSig(rid){const a=S.plan.away;return[rid,S.plan.mode,S.plan.day[rid],S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start,S.plan.target[rid],S.cold[rid],S.temp,S.variant.sandwich,a.on?a.from+"-"+a.to:"off"].join("|")}
+function planSig(rid){const a=S.plan.away;return[rid,S.plan.mode,S.plan.day[rid],S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start,S.plan.target[rid],S.cold[rid],S.temp,S.variant.sandwich,rid==="sandwich"&&S.variant.sandwich==="chill"?chillH():"",a.on?a.from+"-"+a.to:"off"].join("|")}
 function timeline(rid,o){
   o=o||{};const mode=o.mode||S.plan.mode,date=o.date||S.plan.day[rid],target=o.target||S.plan.target[rid];
   const atS=o.at||(mode==="finish"?S.plan.anchor[rid]:S.plan.start);

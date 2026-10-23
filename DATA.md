@@ -16,11 +16,11 @@
 
 | key | type | meaning |
 |---|---|---|
-| `scale` | object | `loaf {mode:"loaves"\|"weight", n 1–8, w 300–12000 g}`, `focaccia {tray, cw, cl 10–80 cm}`, `pizza {balls 1–24, bw 150–400 g}`, `sandwich {tin:"large"\|"std", n 1–6}` |
+| `scale` | object | `loaf {mode:"loaves"\|"weight", n 1–8, w 300–12000 g}`, `focaccia {tray, cw, cl 10–80 cm}`, `pizza {balls 1–24, bw 150–400 g (default 280)}`, `sandwich {tin:"large"\|"std", n 1–6}` |
 | `hyd` | object | hydration % for `loaf`, `focaccia`, `pizza`, clamped to each recipe's range |
 | `temp` | number | kitchen °C, 16–40 |
 | `cold` | object | fridge-stage hours per recipe; must be one of the recipe's listed options |
-| `variant` | object | `sandwich: "std" \| "warm" \| "chill"` |
+| `variant` | object | `sandwich: "std" \| "warm" \| "chill"`, `chillH` 8–12 (whole hours the Chill starter spends in the fridge; default 8) |
 | `plan` | object | `mode`, `anchor`/`day` per recipe, `start`, `custom`, `target` per recipe (`oven` = out of the oven / first pizza in, `serve` = ready to slice or cut / all pizzas done), `away {on, from "HH:MM", to "HH:MM"}`, `accept` |
 | `starter` | object | `fedAt` (ms timestamp or null) |
 | `sound`, `wake`, `weekHot` | boolean | preferences |

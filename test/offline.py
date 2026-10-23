@@ -19,7 +19,7 @@ with sync_playwright() as p:
   ctx.set_offline(True);pg.reload();pg.wait_for_timeout(1500)
   ok("offline: app renders after reload with no network",pg.locator(".tabbar").count()==1)
   pg.evaluate("ACT.open('pizza')");pg.wait_for_timeout(300)
-  ok("offline: maths works (4 × 276.5 g = 1,106 g)","1,106" in pg.locator(".ing.total").inner_text())
+  ok("offline: maths works (4 × 280 g = 1,120 g)","1,120" in pg.locator(".ing.total").inner_text())
   pg.evaluate("ACT.planthis('loaf')");pg.wait_for_timeout(300)
   ok("offline: planner renders a compliant plan",pg.locator("[data-test=plan-ok]").count()==1)
   ok("offline: no console errors",not errs,errs[:3])
