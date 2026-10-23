@@ -62,7 +62,7 @@ input{font:inherit;color:inherit}
 .nav .left{left:6px}.nav .right{right:10px}
 .back{display:flex;align-items:center;gap:2px;color:var(--terra);font-weight:600;font-size:17px;padding:8px 10px;border-radius:12px}
 .back svg{width:22px;height:22px}
-.iconbtn{width:40px;height:40px;border-radius:20px;display:grid;place-items:center;color:var(--terra)}
+.iconbtn{width:44px;height:44px;border-radius:22px;display:grid;place-items:center;color:var(--terra)}
 .iconbtn svg{width:22px;height:22px}
 .large{padding:2px 18px 10px;max-width:640px;margin:0 auto}
 .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--terra)}
@@ -107,7 +107,7 @@ p{margin:0 0 10px}
 .nav.over:not(.solid) .back{padding:8px 12px 8px 6px}
 /* segmented */
 .seg{display:flex;background:var(--wheat);border-radius:12px;padding:3px;gap:2px;position:relative}
-.seg button{flex:1;min-height:38px;border-radius:9px;font-weight:600;font-size:14.5px;color:var(--ink2);transition:all .2s var(--ease);white-space:nowrap;padding:0 8px}
+.seg button{flex:1;min-height:44px;border-radius:9px;font-weight:600;font-size:14.5px;color:var(--ink2);transition:all .2s var(--ease);white-space:nowrap;padding:0 8px}
 .seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(59,42,32,.14),0 1px 1px rgba(59,42,32,.06)}
 .seg.sticky{position:sticky;top:calc(48px + var(--sat));z-index:15;margin:0 -18px;padding:8px 18px;border-radius:0;background:var(--nav);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
 .seg.sticky .inner{display:flex;background:var(--wheat);border-radius:12px;padding:3px;gap:2px;width:100%}
@@ -118,7 +118,7 @@ p{margin:0 0 10px}
 .ctrl .lab{font-weight:600}
 .ctrl .lab small{display:block;font-weight:400;color:var(--ink3);font-size:13px}
 .stepper{display:flex;align-items:center;background:var(--wheat);border-radius:14px;padding:3px;flex-shrink:0}
-.stepper button{width:44px;height:40px;border-radius:11px;display:grid;place-items:center;color:var(--terra);font-size:22px;font-weight:600;transition:background .15s}
+.stepper button{width:46px;height:44px;border-radius:11px;display:grid;place-items:center;color:var(--terra);font-size:22px;font-weight:600;transition:background .15s}
 .stepper button:active{background:var(--wheat2)}
 .stepper button:disabled{color:var(--ink3);opacity:.5}
 .stepper .val{min-width:76px;text-align:center;font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
@@ -305,7 +305,7 @@ ol.rules li::before{content:counter(r);flex-shrink:0;width:26px;height:26px;bord
 .tctl .play svg{width:36px;height:36px}
 .tctl button:active{transform:scale(.92)}
 .tsmall{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:8px 16px 0}
-.tsmall button{border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.08);color:#F3DCC8;font-weight:600;font-size:14px}
+.tsmall button{min-height:44px;border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.08);color:#F3DCC8;font-weight:600;font-size:14px}
 .tsmall button.on{background:rgba(217,115,63,.3);color:#fff}
 .nextbtn{display:block;margin:18px auto 0;width:calc(100% - 40px);max-width:420px}
 .done-pulse{animation:dp 1.4s infinite}
@@ -391,14 +391,11 @@ body.ontimer .tabbar .badge{box-shadow:0 0 0 2px #1E1510}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]) .btn:not(.sec):not(.ghost){background:#B5562F}}
 :root[data-theme=dark] .btn:not(.sec):not(.ghost){background:#B5562F}
 .timerv .btn:not(.sec):not(.ghost){background:#B5562F}
-.seg button{min-height:44px}
-.stepper button{height:44px;width:46px}
 .stepper input.val{width:84px;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:700;font-size:17px;text-align:center;font-variant-numeric:tabular-nums;padding:0;-moz-appearance:textfield;appearance:textfield;height:44px;border-radius:10px}
 .stepper input.val::-webkit-inner-spin-button,.stepper input.val::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .stepper input.val:focus{background:var(--card);outline:2px solid var(--terra)}
 .stepper .unit{font-weight:500;color:var(--ink3);font-size:13px;margin:0 4px 0 -6px}
-.back{min-height:44px}.iconbtn{width:44px;height:44px;border-radius:22px}
-.tsmall button{min-height:44px}
+.back{min-height:44px}
 .tstart .slist button{min-height:44px;min-width:60px;font-size:14px}
 input[type=range]{height:44px}
 .chip[data-act]{min-height:44px;padding:0 14px}
@@ -423,6 +420,54 @@ input[type=range]{height:44px}
 .tempdial{flex:1 1 150px;min-width:0}
 .ctrl>.stepper{margin-left:auto}
 @media (max-width:380px){.stepper .val{min-width:60px}.stepper input.val{width:68px}}
+
+/* ===== v2.1: planner conflicts, readiness check, dough temp, DDT, data ===== */
+.okbar{display:flex;gap:10px;align-items:flex-start;background:var(--olive-soft);color:var(--olive-ink);border-radius:14px;padding:10px 12px;font-size:14px;font-weight:600;margin-top:12px;line-height:1.35}
+.conflictbox{margin-top:12px;border-radius:18px;padding:14px;background:var(--heat);border:2px solid var(--heat2);color:var(--ink)}
+.conflictbox .h{display:block;font-size:17px;color:var(--heat-ink);margin-bottom:4px}
+.conflictbox p{margin:4px 0;font-size:14.5px;line-height:1.4}
+ul.clash{margin:6px 0 4px;padding-left:18px;font-size:14px;line-height:1.45}ul.clash b{color:var(--heat-ink)}
+.alts{display:grid;gap:8px}
+.alt{display:block;width:100%;text-align:left;min-height:44px;border-radius:14px;padding:10px 12px;background:var(--card);box-shadow:var(--shadow);border:2px solid transparent}
+.alt b{display:block;font-size:15px;color:var(--terra2)}.alt span{display:block;font-size:13.5px;color:var(--ink2);margin-top:2px}.alt small{display:block;font-size:12.5px;color:var(--ink3);margin-top:2px}
+.alt:active{border-color:var(--terra)}
+.warnbar.accepted ul.clash{margin-top:4px}
+.linkbtn{min-height:44px;padding:0 4px;color:var(--terra2);font-weight:700;text-decoration:underline;text-underline-offset:3px;font-size:14px}
+.ev.clash .in{box-shadow:0 0 0 2px var(--heat2),var(--shadow)}
+.ev.clash .rail i{background:var(--heat2)}
+.clashtag{margin-top:6px;font-size:13px;font-weight:700;color:var(--heat-ink)}
+.overview i.clash{background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.35) 0 3px,transparent 3px 6px)}
+.ev.target .in{box-shadow:0 0 0 2px var(--terra),var(--shadow)}
+.awayrow{display:flex;gap:10px;margin-top:10px}
+.awayrow label{flex:1;display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--ink2)}
+.awayrow input{appearance:none;-webkit-appearance:none;border:0;background:var(--wheat);border-radius:12px;height:46px;padding:0 10px;font-weight:700;font-size:18px;color:var(--ink);font-family:inherit;min-width:0}
+.ready{margin:14px 16px 0;padding:16px;border-radius:20px;background:rgba(242,178,127,.12);border:2px solid #D9733F;color:#FBEFE2}
+.ready h3{margin:0 0 6px;font-family:var(--serif);font-size:22px}
+.ready p{margin:0 0 10px;font-size:15px;line-height:1.4;color:rgba(251,239,226,.85)}
+.ready .ct{color:#F7C9A6}
+.rmore{display:flex;gap:8px;margin:4px 0 10px}
+.rmore button{flex:1;min-height:48px;border-radius:14px;background:rgba(255,255,255,.1);color:#FBEFE2;font-weight:700;font-size:16px}
+.ready .btn{margin-top:8px}
+.ready .btn.sec{background:rgba(255,255,255,.1);color:#F7C9A6}
+.ready .faint{color:rgba(251,239,226,.65)}
+.dtemp{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
+.dtemp label{font-weight:700;font-size:14.5px;display:block;margin-bottom:6px}
+.dtrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dtrow input{width:96px;height:46px;border:0;border-radius:12px;background:rgba(255,255,255,.1);color:#FBEFE2;font-size:20px;font-weight:700;padding:0 10px;font-family:inherit}
+.dtemp .faint{color:rgba(251,239,226,.65);margin-top:6px}
+.dtemp .linkbtn{color:#F7C9A6}
+.alarmtip{margin:10px 16px 0;padding:10px 12px;border-radius:14px;background:rgba(242,178,127,.1);color:rgba(251,239,226,.85);font-size:13.5px;line-height:1.4}
+.alarmtip b{color:#F7C9A6}
+.wakerow{display:flex;justify-content:center;margin:10px 16px 0}
+.chipbtn{min-height:44px;border-radius:999px;padding:8px 16px;background:rgba(255,255,255,.08);color:#F3DCC8;font-weight:600;font-size:14px}
+.chipbtn.on{background:rgba(110,123,75,.35);color:#fff}
+.chipbtn.warn{background:rgba(217,115,63,.3);color:#fff}
+.ddtres{display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px;padding:12px 14px;border-radius:14px;background:var(--wheat)}
+.ddtres span{font-weight:600}.ddtres b{font-size:26px;color:var(--terra2)}
+.filebtn{position:relative;cursor:pointer}
+.filebtn input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.filebtn:focus-within{outline:3px solid var(--terra);outline-offset:2px}
+.sheet:focus{outline:none}
 
 </style>
 </head>
@@ -450,9 +495,9 @@ const RECIPES = {
 };
 const RIDS=["loaf","focaccia","pizza","sandwich"];
 const LEAN={
-  loaf:{flours:[{name:"Strong white bread flour",note:"Doves",pct:1}],L:.2,salt:.02,oil:0,reserve:.04,baseFlour:750,baseDough:1415,H0:69.7,Hmin:64,Hmax:76,build:[20,70,70],need:150},
+  loaf:{flours:[{name:"Strong white bread flour",note:"Doves",pct:1}],L:.2,salt:.02,oil:0,reserve:.04,baseFlour:750,H0:69.7,Hmin:64,Hmax:76,build:[20,70,70],need:150},
   focaccia:{flours:[{name:"Strong white bread flour",note:"",pct:1}],L:.2,salt:.022,oil:.04,reserve:.06,baseFlour:500,H0:80,Hmin:74,Hmax:86,build:[20,50,50],need:100},
-  pizza:{flours:[{name:"Tipo 00",note:"Molino Casillo",pct:.6},{name:"Strong white bread flour",note:"Doves",pct:.4}],L:110/600,salt:16/600,oil:0,reserve:.05,baseFlour:600,baseDough:1104,H0:66.4,Hmin:62,Hmax:70,build:[20,55,55],need:110}
+  pizza:{flours:[{name:"Tipo 00",note:"Molino Casillo",pct:.6},{name:"Strong white bread flour",note:"Doves",pct:.4}],L:110/600,salt:16/600,oil:0,reserve:.05,baseFlour:600,H0:66.4,Hmin:62,Hmax:70,build:[20,55,55],need:110}
 };
 const TRAYS=[
   {id:"23x33",label:"23 × 33",sub:"Standard",area:759,w:33,h:23},
@@ -463,9 +508,9 @@ const TRAYS=[
   {id:"custom",label:"Custom",sub:"Your size",area:759}
 ];
 const SANDWICH=[
-  {group:"Stiff starter",name:"Active starter",g:15},{group:"Stiff starter",name:"Honey",g:15},{group:"Stiff starter",name:"Water",g:30},{group:"Stiff starter",name:"Bread flour",g:60},
-  {group:"Tangzhong",name:"Bread flour",g:35},{group:"Tangzhong",name:"Milk",g:175},
-  {group:"Main dough",name:"Cold water",g:225},{group:"Main dough",name:"Honey",g:75},{group:"Main dough",name:"Neutral oil",g:25},{group:"Main dough",name:"Bread flour",g:575},{group:"Main dough",name:"Fine salt",g:12}
+  {group:"Stiff starter",name:"Active starter",g:15,key:"seed"},{group:"Stiff starter",name:"Honey",g:15,key:"shoney"},{group:"Stiff starter",name:"Water",g:30,key:"swater"},{group:"Stiff starter",name:"Bread flour",g:60,key:"sflour"},
+  {group:"Tangzhong",name:"Bread flour",g:35,key:"tflour"},{group:"Tangzhong",name:"Milk",g:175,key:"milk"},
+  {group:"Main dough",name:"Cold water",g:225,key:"water"},{group:"Main dough",name:"Honey",g:75,key:"honey"},{group:"Main dough",name:"Neutral oil",g:25,key:"oil"},{group:"Main dough",name:"Bread flour",g:575,key:"flour"},{group:"Main dough",name:"Fine salt",g:12,key:"salt"}
 ];
 const BAND_LABELS=["23 °C or cooler","24–25 °C","26 °C","27–28 °C","29 °C or warmer"];
 function band(t){return t<=23?0:t<=25?1:t<=26?2:t<=28?3:4}
@@ -484,68 +529,6 @@ const SW_PROOF=[R("3–4 h",210),R("2–4 h",180),R("2–3 h",150),R("1½–3 h"
 const COLD_OPTS={loaf:[10,12,14,16],focaccia:[8,10,12,14,16],pizza:[20,24,28],sandwich:[8,10,12,14]};
 const ANCHOR_DEFAULT={loaf:"09:00",focaccia:"13:05",pizza:"16:30",sandwich:"10:15"};
 
-function buildPlan(id,b,coldH,balls){
-  const S=(t,d,k,detail,o)=>Object.assign({t,d,k,detail},o||{});
-  if(id==="loaf"){const lev=LEV[b].m,bulk=LOAF_BULK[b].m;return{anchor:11,steps:[
-    S("Build the levain",lev-45,"wait","Mother + flour + water (see Ingredients). Mark the level, cover.",{est:1,cue:"Heading for roughly doubled, bubbly, domed."}),
-    S("Autolyse",45,"wait","Flour + initial water, mixed until no dry flour. The levain finishes peaking meanwhile.",{cue:"Levain domed or just flattening when this ends."}),
-    S("Add levain — bulk starts",20,"prep","Dimple in with wet fingers, pinch and fold. Note the dough temperature."),
-    S("Salt + reserved water",30,"prep","Dissolve the salt in the reserved water, pinch and fold until absorbed."),
-    S("Stretch-and-folds, sets 1–4",90,"prep","One set now, then every 30 min (4 sets). Wet hand, all four sides.",{cue:"Smoother by set 3, cohesive by set 4."}),
-    S("Finish bulk, hands off",bulk-140,"wait",`Covered and undisturbed until ${LOAF_RISE[b]} rise.`,{est:1,cue:"Bubbles on the sides and base, domed edges, wobbles."}),
-    S("Pre-shape + bench rest",25,"prep","Loose round, light tension, uncovered.",{cue:"Relaxes but doesn't puddle."}),
-    S("Shape → banneton → fridge",10,"prep","Tight boule, smooth side down in a rice-floured banneton, covered, straight into the fridge."),
-    S("Cold proof",coldH*60-60,"cold","3–5 °C. Flexible: 10–16 h is ideal."),
-    S("Preheat oven + cloche to 250 °C",60,"oven","The loaf stays in the fridge until the oven is ready."),
-    S("Score cold, bake covered at 250 °C",30,"oven","Turn out onto a sling, one score 1–1.5 cm deep at 30–45°."),
-    S("Bake uncovered at 220–225 °C",27,"oven","Lid off. Drop to 210–215 °C if colouring too fast.",{cue:"Chestnut crust, 96–98 °C inside."}),
-    S("Cool on a rack",150,"rest","2½–3 h before slicing.")]}}
-  if(id==="focaccia"){const lev=LEV_FAST[b].m,bulk=LOAF_BULK[b].m,warm=FOC_WARM[b].m;return{anchor:11,steps:[
-    S("Build the levain",lev-35,"wait","Mother + flour + water (see Ingredients).",{est:1,cue:"At or just before peak."}),
-    S("Flour + water rest",35,"wait","Mix flour and initial water until no dry bits. Wet is right; don't add flour."),
-    S("Add levain — bulk starts",20,"prep","Dimple and fold until incorporated."),
-    S("Salt water, then olive oil",30,"prep","Salt dissolved in the reserved water in two goes, then fold in the dough oil."),
-    S("Coil folds, sets 1–3",90,"prep","One set now, then every 30 min. A 4th only if still slack.",{cue:"Smooth, glossy, elastic, still soft."}),
-    S("Finish bulk, hands off",bulk-140,"wait",`Until ${FOC_RISE[b]} rise.`,{est:1,cue:"Airy, bubbly sides and base, jiggles."}),
-    S("Oil the tray, stretch the dough",30,"prep","Generous tray oil, flip once, coax to the corners; rest 15–20 min if it springs back."),
-    S("Cold rest in the tray",coldH*60,"cold","Covered, 3–5 °C, 8–16 h."),
-    S("Warm-up proof",warm-40,"wait","Covered, at room temperature.",{est:1,cue:"Puffy, bubbly, big wobble."}),
-    S("Preheat 240–245 °C (fan 220–225 °C)",40,"oven","Dough keeps proofing meanwhile. At least 40 min."),
-    S("Oil, dimple, season",5,"prep","Top oil, oiled fingers down to the tray, flaky salt and rosemary."),
-    S("Bake",23,"oven","20–25 min (large tray 22–28). Check from 18 min.",{cue:"Deep golden top, crisp base."}),
-    S("Rest in the tray",5,"rest","Then lift onto a rack."),
-    S("Cool before cutting",25,"rest","20–30 min.")]}}
-  if(id==="pizza"){const lev=LEV_FAST[b].m,bulk=PIZ_BULK[b].m,warm=PIZ_WARM[b].m;return{anchor:9,steps:[
-    S("Build the levain",lev-28,"wait","Mother + flour + water (see Ingredients).",{est:1,cue:"At or just before peak."}),
-    S("Flour + water rest",28,"wait","Both flours + initial water, mixed until no dry flour."),
-    S("Add levain",15,"prep","Pinch and fold until incorporated."),
-    S("Salt + reserved water",30,"prep","Pinch and fold until absorbed."),
-    S("Folds 1–2",30,"prep","Fold 1 now, fold 2 at the end of this step. A 3rd only if batter-like."),
-    S("Finish bulk, hands off",bulk-75,"wait",`Until ${PIZ_RISE[b]} rise. Little rise is right for pizza.`,{est:1,cue:"Slightly domed, a few bubbles."}),
-    S("Divide and ball",15,"prep","Into equal balls, lightly oiled lidded containers."),
-    S("Cold ferment",coldH*60,"cold","3–5 °C, 20–28 h (24 h is the target)."),
-    S("Warm-up",warm-40,"wait","Balls out, covered. Don't re-ball. Prep sauce and drain mozzarella.",{est:1,cue:"Poke springs back slowly."}),
-    S("Heat the Ooni",40,"oven","30–40 min until the stone centre reads 420–450 °C."),
-    S("Bake the pizzas",Math.max(1,balls)*3,"oven","Open, top lightly, launch, flame down, 60–90 s each, rotating every 15–20 s.")]}}
-  const bulk=SW_BULK[b].m,proof=SW_PROOF[b].m,hot=b>=3;return{anchor:7,steps:[
-    S("Stiff starter + tangzhong",600,"wait",hot?"Warm kitchen: use 8 g starter, or ferment 3–4 h then refrigerate. Cook the tangzhong to 65 °C and chill it.":"Mix the stiff sweet starter; cook the tangzhong to 65 °C, cover and chill. Leave overnight 8–10 h.",{est:1,cue:"Starter domed and risen."}),
-    S("Mix and knead",20,"prep","Mix 2–3 min slow, add oil after 3–4 min of kneading, 10–15 min total.",{cue:"Weak windowpane, dough 24–26 °C."}),
-    S("Bulk ferment",bulk,"wait","Covered, until 40–50% rise.",{est:1,cue:"Puffy and soft, clear rise."}),
-    S("Shape → tin → fridge",15,"prep","25 × 35 cm rectangle, roll from the short end, seam down in the greased tin."),
-    S("Fridge overnight",coldH*60,"cold","Covered, 3–5 °C."),
-    S("Finish proof",proof-30,"wait","Covered, at room temperature.",{est:1,cue:"Dome about level with the rim."}),
-    S("Preheat to 175 °C (fan ~160 °C)",30,"oven","Loaf keeps proofing meanwhile."),
-    S("Bake",42,"oven","40–45 min; foil at 25–30 min if darkening.",{cue:"93–96 °C inside."}),
-    S("Butter, rest in the tin",8,"rest","Brush with ~15 g butter, 5–10 min in the tin."),
-    S("Cool on a rack",100,"rest","1–2 h before slicing.")]};
-}
-
-const METHOD={
-  loaf:[["Build the levain","20 g mother + 70 g flour + 70 g water (or the scaled build). 5–8 h at 24–26 °C. Ready when roughly doubled, bubbly throughout, domed or just flattening, smelling pleasantly tangy."],["Autolyse, 40–45 min","Flour + initial water, by hand until no dry flour remains. Rough and shaggy is fine. Cover."],["Add the levain — bulk starts","Spread it over, dimple in with wet fingers, pinch and fold. Note the time and dough temperature. Rest 15–20 min."],["Salt + reserved water","Dissolve the fine salt in the reserved 30 g water, add gradually, pinch and fold until the dough comes back together. Rest 30 min."],["Four sets of stretch-and-folds","Every 30 min: wet hand, lift one side to resistance, fold over, turn 90°, all four sides."],["Finish bulk by the dough","Straight-sided container with the level marked. Shape at the rise target for your dough temperature, not by the clock."],["Pre-shape, bench rest 20–25 min","Loose round, light tension, uncovered. It should relax but not puddle."],["Shape a boule","Flour the top, flip. Bottom up, sides in, top down, roll seam-down and drag to tighten until smooth and taut."],["Banneton, straight into the fridge","Rice-floured, smooth side down, covered. Only if clearly under-fermented give it 15–30 min at room temperature first."],["Cold proof 10–16 h at 3–5 °C","Overnight is ideal; 8 h works and it can stretch to 24 h."],["Preheat 45–60 min","Oven and cloche to 250 °C. The loaf stays in the fridge."],["Score cold","Turn out onto a sling, one confident score 1–1.5 cm deep, off-centre, blade at 30–45°."],["Bake","Covered 30 min at 250 °C, then uncovered 25–30 min at 220–225 °C (210–215 °C if dark). Done at 96–98 °C inside."],["Cool 2½–3 h","On a rack. Cutting early gives a gummy crumb."]],
-  focaccia:[["Build the levain","20 g mother + 50 g flour + 50 g water (large tray: 25 + 75 + 75). 4–6 h, use at or just before peak."],["Flour + water rest, 30–40 min","Mix until no dry flour. It's meant to be wet; don't add flour."],["Add the levain","Dimple and fold until incorporated. Rest 15–20 min."],["Salt water, then olive oil","Dissolve the salt in the reserved water, add in two goes; then fold in the dough oil until cohesive. Rest 30 min."],["Coil folds","3 sets 30 min apart (a 4th only if slack). Aim for smooth, glossy, elastic but soft."],["Finish bulk","Until 50–75% rise (lower end when warm): airy, bubbly sides and base, jiggly."],["Oil the tray and transfer","Generous tray oil, flip once to coat, coax towards the corners. If it springs back, rest 15–20 min and repeat."],["Cold rest 8–16 h","Covered in the fridge."],["Warm-up proof","2½–4 h at 23–25 °C, 1½–2½ h at 28–30 °C, until very puffy with a big wobble."],["Preheat","240–245 °C conventional / 220–225 °C fan, at least 40 min."],["Oil, dimple, season","Top oil, oiled fingers right down to the tray. Optional brine (20 g water + 20 g EVOO + pinch of salt). Flaky salt and rosemary."],["Bake 20–25 min","Large tray 22–28 min; check from 18 (large 20). Bottom rack for 2–5 min if pale underneath."],["Rest and cut","Out of the tray after 5 min onto a rack; cut after 20–30 min."]],
-  pizza:[["Build the levain","20 g mother + 55 g flour + 55 g water. 4–6 h, use at or just before peak."],["Flour + water rest, 25–30 min","Both flours + initial water until no dry flour."],["Add the levain","Pinch and fold. Rest 15 min."],["Salt + reserved water","Pinch and fold until absorbed. Rest 30 min."],["Two folds, 30 min apart","A 3rd only if it's still batter-like."],["Bulk to 20–30%","3–5 h at 23–25 °C. Stop at about 20% if the dough is 27 °C or warmer."],["Divide and ball","Equal balls (276 g each in the booklet batch), smooth and tight, into lightly oiled lidded containers."],["Cold ferment ~24 h","20–28 h at 3–5 °C."],["Warm-up","3½–4 h (2–3 h at 28–30 °C). Don't re-ball. Ready when a poke springs back slowly."],["Heat the Ooni 30–40 min","Stone centre at 420–450 °C."],["Open the dough","Press from the centre, leave the outer 1.5–2 cm alone; to 20–22 cm, then over the knuckles to 30–32 cm. No rolling pin."],["Top lightly, shake test","70–80 g uncooked sauce, 70–90 g drained mozzarella, basil, olive oil. Make sure it slides on the peel."],["Launch, flame down","Turn the flame low just after launching so the top catches up with the base."],["Bake 60–90 s","Rotate every 15–20 s."]],
-  sandwich:[["Night before: stiff sweet starter","15 g starter + 15 g honey + 30 g water + 60 g flour. 8–10 h at about 23 °C (at 27 °C+ use 8 g starter, or 3–4 h then fridge)."],["Night before: tangzhong","35 g flour + 175 g milk, whisked over low heat to 65 °C (thick paste). Cover and chill."],["Mix 2–3 min slow","Cold water, honey, tangzhong, starter, flour, salt."],["Knead 10–15 min","Add the oil after 3–4 min. Aim for a weak windowpane and 24–26 °C dough."],["Bulk to 40–50%","8–11 h at 23–24 °C, 5–7 h at 27–28 °C."],["Shape","Roll to 25 × 35 cm, roll up tightly from the short end, pinch the seam, seam down in the greased tin."],["Fridge overnight","Covered."],["Finish proof to the rim","2–4 h (1½–3 h if hot)."],["Bake","175 °C conventional / ~160 °C fan for 40–45 min; foil at 25–30 min if dark. Done at 93–96 °C."],["Butter and cool","Brush with ~15 g butter, 5–10 min in the tin, then 1–2 h on a rack."]]
-};
 const TROUBLE={
   loaf:[["Dense, tight crumb, pale","Under-fermented","Longer bulk or warmer spot; shape at the target rise"],["Flat, spreads, big irregular holes on top","Over-fermented","Shape at a lower rise when warm; cooler water"],["No ear, score seals","Shallow score or weak shaping","Score cold, 1–1.5 cm deep at 30–45°; tighter boule"],["Gummy crumb","Cut too soon or underbaked","Bake to 96–98 °C; cool 2½–3 h"],["Very sour","Hungry starter or long warm bulk","Feed the mother more often; levain at peak; shorten bulk"],["Dark base","Hot cloche base","Baking tray on the rack below for the uncovered stage"]],
   focaccia:[["Dense, few bubbles","Under-proofed","Longer warm-up; wait for the big wobble"],["Collapses when dimpled","Over-proofed","Shorter warm-up or bulk when warm"],["Pale, soft base","Oven not hot enough or too little oil","Full preheat; tray oil 25–30 g; bottom rack at the end"],["Dough won't stretch to corners","Gluten tight","Rest 15–20 min and try again"],["Dry, bready","Underproofed or overbaked","Check from 18 min; pull at deep golden"]],
@@ -562,12 +545,293 @@ const WARM_TIPS={
   loaf:["Mix with water at the temperature shown above.","Shape at a lower rise as the dough gets warmer.","Use the coolest spot in the house, away from windows."],
   focaccia:["Aim for the lower end of 50–75% rise when warm.","Shorter warm-up on day 2: 1½–2½ h at 28–30 °C.","Cool water for the main mix."],
   pizza:["Stop bulk at about 20% if the dough is 27 °C or warmer.","Warm-up 2–3 h at 28–30 °C.","Keep balls covered so they don't skin over in air-conditioning."],
-  sandwich:["Use 8 g starter overnight at 27 °C+, or 3–4 h then fridge.","Fridge-cold water for the main mix.","Bulk 5–7 h at 27–28 °C."]
+  sandwich:["At 27 °C+ pick the Warm (smaller seed) or Chill starter option above the ingredients.","Fridge-cold water for the main mix.","Bulk 5–7 h at 27–28 °C."]
 };
 const RULES=["Never use up the mother.","Build a separate levain for each bake.","For storage: feed, short start, fridge before peak.","Bake with the levain at peak.","Sour usually means hungry.","Follow the dough, not the clock.","Keep the ratios fixed.","Change one variable at a time, and log temperatures and times."];
 const WEEK=[["Mon / Tue","Refresh the mother if it's been 7+ days","rest"],["Thu 07:00","Build the loaf levain","wait"],["Thu 12:15","Autolyse; 13:00 levain in; folds until 15:20","prep"],["Thu 17:00–19:00","Shape → fridge","cold"],["Fri 07:00","Preheat 250 °C; build the pizza levain","oven"],["Fri 08:00","Bake the loaf (out ~09:00, slice ~11:30)","oven"],["Fri 12:30","Mix pizza; 2 folds; bulk 20–30% (~16:00–18:00); ball → fridge","prep"],["Sat 12:30–13:00","Pizza balls out","wait"],["Sat 15:50","Ooni on","oven"],["Sat 16:30","Pizza","oven"]];
+// booklet base builds (reference card); the recipe screens compute the build for the batch you set
 const LEVAIN_TABLE=[["Loaf","20 + 70 + 70","160 / 150 g"],["Focaccia 23 × 33","20 + 50 + 50","120 / 100 g"],["Focaccia 30 × 40","25 + 75 + 75","175 / 160 g"],["Pizza","20 + 55 + 55","130 / 110 g"],["Sandwich stiff starter","15 starter + 15 honey + 30 water + 60 flour","120 g / all"]];
 const OVENS=[["Loaf, covered","250 °C","230 °C","480 °F"],["Loaf, uncovered","220–225 °C","200–205 °C","430–435 °F"],["Focaccia","240–245 °C","220–225 °C","465–475 °F"],["Sandwich loaf","175 °C","~160 °C","350 °F"],["Pizza (Ooni stone)","420–450 °C","—","—"]];
+
+"use strict";
+/* =====================================================================
+   core.js: pure logic (no DOM). Formulas, method text, timings, planner.
+   Everything here reads the global state S and the clock through NOW(),
+   so the Node test-suite can load it with a fake state and a fake clock.
+   ===================================================================== */
+let NOW=()=>Date.now();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+/* one number formatter for every gram figure in the app (tables, method, planner, timer) */
+function gnum(x){if(x>=1000)return Math.round(x).toLocaleString("en-GB");if(x>=20)return String(Math.round(x));return String(Math.round(x*2)/2)}
+const gt=x=>`${gnum(x)} g`;
+const g1=x=>{const r=Math.round(x*10)/10;return Number.isInteger(r)?String(r):r.toFixed(1)}; // ball weight keeps its .5
+const pc=x=>`${(x*100).toFixed(1)}%`;
+function fmtDur(min){const m=Math.max(0,Math.round(min)),h=Math.floor(m/60),r=m%60;if(!h)return`${r} min`;return r?`${h} h ${r} min`:`${h} h`}
+function fmtHM(min){const m=Math.max(0,Math.round(min)),h=Math.floor(m/60),r=m%60;if(!h)return`${r} min`;return r?`${h} h ${r}`:`${h} h`}
+function fmtClock(min){const m=((Math.round(min)%1440)+1440)%1440;return`${String(Math.floor(m/60)).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`}
+const clockOf=d=>fmtClock(d.getHours()*60+d.getMinutes());
+function parseClock(s){const m=String(s||"").trim().match(/^(\d{1,2})[:.]?(\d{2})$/);if(!m)return null;const h=+m[1],mi=+m[2];if(h>23||mi>59)return null;return h*60+mi}
+function isoDate(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function fromIso(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)}
+const DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function dayName(d){return`${DOW[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`}
+function relDay(d){const t=new Date(NOW());t.setHours(0,0,0,0);const x=new Date(d);x.setHours(0,0,0,0);const diff=Math.round((x-t)/864e5);return diff===0?"Today":diff===1?"Tomorrow":diff===-1?"Yesterday":diff>1?`In ${diff} days`:`${-diff} days ago`}
+function tomorrowIso(){const d=new Date(NOW());d.setDate(d.getDate()+1);return isoDate(d)}
+function waterPct(L,H){return H/100*(1+L.L/2)-L.L/2}
+
+/* ---------- temperature → timing, continuous ----------
+   The booklet tables give a range per kitchen band. Each band is pinned to a reference
+   temperature and values are interpolated linearly between neighbours, so 25 °C and 26 °C no
+   longer jump. Outside 23–29 °C the end values are held (the UI warns below 18 / above 32). */
+const BAND_T=[23,24.5,26,27.5,29];
+const hrs=x=>parseFloat(String(x).replace("½",".5").replace("¼",".25").replace("¾",".75"));
+function rng(r){const p=r.replace(/\s*h$/,"").split("–");return[hrs(p[0])*60,hrs(p[1]??p[0])*60]}
+function interp(tab,T){const t=clamp(+T,BAND_T[0],BAND_T[4]);let i=0;while(i<3&&t>BAND_T[i+1])i++;
+  const f=(t-BAND_T[i])/(BAND_T[i+1]-BAND_T[i]),a=tab[i],b=tab[i+1],[al,ah]=rng(a.r),[bl,bh]=rng(b.r),L=(x,y)=>x+(y-x)*f,r5=x=>Math.round(x/5)*5;
+  return{lo:r5(L(al,bl)),hi:r5(L(ah,bh)),m:r5(L(a.m,b.m))}}
+const fmtWin=w=>`≈ ${fmtHM(w.lo)}–${fmtHM(w.hi)}`;
+
+/* ---------- one authoritative formula per recipe ---------- */
+const SANDWICH_VARIANTS={
+  std:{label:"Standard",sub:"15 g seed · 8–10 h",seed:15},
+  warm:{label:"Warm kitchen",sub:"8 g seed · 8–10 h",seed:8},
+  chill:{label:"Chill",sub:"15 g · 3–4 h, then fridge",seed:15}
+};
+// levain builds printed in the booklet; any other batch scales the nearest one in proportion
+const BUILDS={loaf:[{use:150,b:[20,70,70]}],focaccia:[{use:100,b:[20,50,50]},{use:158,b:[25,75,75]}],pizza:[{use:110,b:[20,55,55]}]};
+function levainBuild(rid,use){const opts=BUILDS[rid];
+  const exact=opts.find(o=>Math.abs(use-o.use)/o.use<0.01);if(exact){const [m,f,w]=exact.b;return{m,f,w,t:m+f+w,use,booklet:true}}
+  const base=opts[0],k=use/base.use,[m,f,w]=base.b.map(x=>x*k);return{m,f,w,t:m+f+w,use,booklet:false}}
+function sandwichFactor(st){return(st.tin==="large"?1:.75)*clamp(st.n,1,6)}
+function calc(rid,st){
+  st=st||S.scale[rid];
+  if(rid==="sandwich"){
+    const n=clamp(st.n,1,6),f=sandwichFactor(st),v=SANDWICH_VARIANTS[S.variant&&S.variant.sandwich]||SANDWICH_VARIANTS.std;
+    const base=SANDWICH.map(x=>x.name==="Active starter"?{...x,g:v.seed}:x),flour0=base.filter(x=>/flour/i.test(x.name)).reduce((a,x)=>a+x.g,0),sum0=base.reduce((a,x)=>a+x.g,0);
+    const q={};base.forEach(x=>{q[x.key]=x.g*f});q.butter=15*f;q.flourAll=flour0*f;q.starterTotal=(v.seed+15+30+60)*f;
+    return{rid,f,n,q,groups:["Stiff starter","Tangzhong","Main dough"].map(g=>({g,rows:base.filter(s=>s.group===g).map(s=>({name:s.name,g:s.g*f,p:s.g/flour0,key:s.key}))})),
+      total:sum0*f,totalPct:sum0/flour0,variant:v,
+      stats:[[gt(flour0*f),"Total flour"],["≈62%","Effective hydration"],[gt(sum0*f/n),"Per tin"],[gt(15*f),"Butter to brush"]],
+      build:null,extras:[],summary:`${n} ${st.tin==="large"?"large":"2 lb"} tin${n>1?"s":""} · ${gt(sum0*f)}`}
+  }
+  const L=LEAN[rid],H=S.hyd[rid],w=waterPct(L,H),sum=1+w+L.L+L.salt+L.oil;
+  let F=L.baseFlour,units=1,unit="Per loaf",perUnit=null;
+  if(rid==="loaf"){if(st.mode==="loaves"){units=clamp(st.n,1,8);F=750*units}else{F=clamp(st.w,300,12000)/sum;unit="Dough"}}
+  else if(rid==="focaccia"){const t=TRAYS.find(x=>x.id===st.tray)||TRAYS[0];const area=st.tray==="custom"?clamp(st.cw,10,80)*clamp(st.cl,10,80):t.area;F=500*area/759;unit="Per tray"}
+  else{units=clamp(st.balls,1,24);perUnit=clamp(st.bw,150,400);F=units*perUnit/sum;unit="Per ball"}   // mass from the formula: balls × weight = total
+  const water=w*F,reserve=Math.min(L.reserve*F,water),lev=L.L*F,salt=L.salt*F,oil=L.oil*F,total=F+water+lev+salt+oil;
+  const rows=L.flours.map(fl=>({name:fl.name,sub:fl.note,g:F*fl.pct,p:fl.pct,key:"flour"}));
+  rows.push({name:"Water",sub:"Initial mix",g:water-reserve,p:(water-reserve)/F,key:"water1"});
+  rows.push({name:"Water",sub:"Reserved, added with the salt",g:reserve,p:reserve/F,key:"reserve"});
+  rows.push({name:"Levain",sub:"100% hydration, at peak",g:lev,p:L.L,key:"lev"});
+  rows.push({name:"Fine salt",sub:"",g:salt,p:L.salt,key:"salt"});
+  if(oil>0)rows.push({name:"Extra-virgin olive oil",sub:"In the dough",g:oil,p:L.oil,key:"oil"});
+  const build=levainBuild(rid,lev),tf=F+lev/2,tw=water+lev/2,a=F/500,extras=[];
+  const q={flour:F,water1:water-reserve,reserve,lev,salt,oil,total,bm:build.m,bf:build.f,bw:build.w,bt:build.t};
+  if(rid==="focaccia"){Object.assign(q,{tray0:25*a,tray1:30*a,top0:15*a,top1:20*a,brine:20*a,large:F>=700});
+    extras.push(["Tray oil",`${gnum(q.tray0)}–${gt(q.tray1)}`],["Top oil",`${gnum(q.top0)}–${gt(q.top1)}`],["Optional brine",`${gt(q.brine)} water + ${gt(q.brine)} olive oil + pinch of salt`],["To finish","Flaky salt and rosemary"])}
+  if(rid==="pizza"){Object.assign(q,{n:units,ball:perUnit,tom:100*units,tomSalt:units,mz0:70*units,mz1:90*units});
+    extras.push(["Sauce, uncooked",`${gt(q.tom)} canned tomatoes + ${gt(q.tomSalt)} salt · 70–80 g per pizza`],["Mozzarella, drained",`${gnum(q.mz0)}–${gt(q.mz1)} · 70–90 g per pizza`],["To finish","Basil and a little olive oil"])}
+  let summary;
+  if(rid==="loaf")summary=st.mode==="loaves"?`${units} loa${units>1?"ves":"f"} · ${gt(total)}`:`${gt(total)} dough`;
+  else if(rid==="focaccia"){const t=TRAYS.find(x=>x.id===st.tray);summary=`${st.tray==="custom"?`${st.cw} × ${st.cl} cm`:t.label+" cm"} · ${gt(total)}`}
+  else summary=`${units} ball${units>1?"s":""} · ${g1(perUnit)} g each`;
+  return{rid,rows,total,totalPct:sum,F,units,q,
+    stats:[[pc(tw/tf),"True hydration"],[pc(salt/tf),"Salt of total flour"],[pc(lev/2/tf),"Prefermented flour"],[rid==="pizza"?`${g1(perUnit)} g`:gt(total/units),unit]],
+    build,extras,summary,tw,tf};
+}
+
+/* ---------- steps: the planner, the timer and the Method tab all come from here ----------
+   k: prep (hands-on), oven (attended), wait (rising), cold (fridge), rest (cooling)
+   hands: minutes of real work at the start of a wait step (mixing a build, cooking a tangzhong…)
+   check: a fermentation/proof stage that ends with a readiness check, never an automatic next step */
+function buildPlan(id,T,coldH,c,o){
+  o=o||{};const bT=o.bulkT??T,b=band(T),q=c.q;
+  const S_=(t,d,k,detail,x)=>Object.assign({t,d:Math.max(1,Math.round(d)),k,detail},x||{});
+  if(id==="loaf"){const lev=interp(LEV,T).m,bulk=interp(LOAF_BULK,bT).m;return{anchor:11,steps:[
+    S_("Build the levain",lev-45,"wait",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water. Mark the level, cover. You'll use ${gt(q.lev)}.`,{est:1,check:1,hands:15,key:"levain",cue:"Roughly doubled, bubbly, domed or just flattening."}),
+    S_("Autolyse",45,"wait",`${gt(q.flour)} flour + ${gt(q.water1)} water, mixed until no dry flour. Keep the ${gt(q.reserve)} reserved water aside. The levain finishes peaking meanwhile.`,{hands:10,cue:"Levain domed or just flattening when this ends."}),
+    S_("Add levain — bulk starts",20,"prep",`Spread ${gt(q.lev)} levain over, dimple in with wet fingers, pinch and fold. Note the dough temperature.`,{key:"bulkstart"}),
+    S_("Salt + reserved water",30,"prep",`Dissolve ${gt(q.salt)} salt in the ${gt(q.reserve)} reserved water, pinch and fold until absorbed.`),
+    S_("Stretch-and-folds, sets 1–4",90,"prep","One set now, then every 30 min (4 sets). Wet hand, all four sides.",{cue:"Smoother by set 3, cohesive by set 4."}),
+    S_("Finish bulk, hands off",bulk-140,"wait",`Covered and undisturbed until ${LOAF_RISE[band(bT)]} rise.`,{est:1,check:1,key:"bulk",cue:"Bubbles on the sides and base, domed edges, wobbles."}),
+    S_("Pre-shape + bench rest",25,"prep","Loose round, light tension, uncovered.",{cue:"Relaxes but doesn't puddle."}),
+    S_("Shape → banneton → fridge",10,"prep","Tight boule, smooth side down in a rice-floured banneton, covered, straight into the fridge."),
+    S_("Cold proof",coldH*60-60,"cold","3–5 °C. Flexible: 10–16 h is ideal."),
+    S_("Preheat oven + cloche to 250 °C",60,"oven","The loaf stays in the fridge until the oven is ready."),
+    S_("Score cold, bake covered at 250 °C",30,"oven","Turn out onto a sling, one score 1–1.5 cm deep at 30–45°."),
+    S_("Bake uncovered at 220–225 °C",27,"oven","Lid off. Drop to 210–215 °C if colouring too fast.",{cue:"Chestnut crust, 96–98 °C inside."}),
+    S_("Cool on a rack",150,"rest","2½–3 h before slicing; cutting early gives a gummy crumb.")]}}
+  if(id==="focaccia"){const lev=interp(LEV_FAST,T).m,bulk=interp(LOAF_BULK,bT).m,warm=interp(FOC_WARM,T).m;return{anchor:11,steps:[
+    S_("Build the levain",lev-35,"wait",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water. You'll use ${gt(q.lev)}.`,{est:1,check:1,hands:15,key:"levain",cue:"At or just before peak."}),
+    S_("Flour + water rest",35,"wait",`${gt(q.flour)} flour + ${gt(q.water1)} water until no dry bits (keep ${gt(q.reserve)} back). Wet is right; don't add flour.`,{hands:10}),
+    S_("Add levain — bulk starts",20,"prep",`Dimple in ${gt(q.lev)} levain and fold until incorporated.`,{key:"bulkstart"}),
+    S_("Salt water, then olive oil",30,"prep",`${gt(q.salt)} salt dissolved in the ${gt(q.reserve)} reserved water, added in two goes; then fold in ${gt(q.oil)} olive oil.`),
+    S_("Coil folds, sets 1–3",90,"prep","One set now, then every 30 min. A 4th only if still slack.",{cue:"Smooth, glossy, elastic, still soft."}),
+    S_("Finish bulk, hands off",bulk-140,"wait",`Until ${FOC_RISE[band(bT)]} rise.`,{est:1,check:1,key:"bulk",cue:"Airy, bubbly sides and base, jiggles."}),
+    S_("Oil the tray, stretch the dough",30,"prep",`${gnum(q.tray0)}–${gt(q.tray1)} olive oil in the tray, flip once, coax to the corners; rest 15–20 min if it springs back.`),
+    S_("Cold rest in the tray",coldH*60,"cold","Covered, 3–5 °C, 8–16 h."),
+    S_("Warm-up proof",warm-40,"wait","Covered, at room temperature.",{est:1,check:1,hands:5,key:"proof",cue:"Puffy, bubbly, big wobble."}),
+    S_("Preheat 240–245 °C (fan 220–225 °C)",40,"oven","Dough keeps proofing meanwhile. At least 40 min."),
+    S_("Oil, dimple, season",5,"prep",`${gnum(q.top0)}–${gt(q.top1)} olive oil over the top, oiled fingers down to the tray, flaky salt and rosemary. Optional brine: ${gt(q.brine)} water + ${gt(q.brine)} olive oil + a pinch of salt.`),
+    S_("Bake",q.large?25:23,"oven",q.large?"22–28 min for a large tray. Check from 20 min.":"20–25 min. Check from 18 min.",{cue:"Deep golden top, crisp base."}),
+    S_("Rest in the tray",5,"rest","Then lift onto a rack."),
+    S_("Cool before cutting",25,"rest","20–30 min.")]}}
+  if(id==="pizza"){const lev=interp(LEV_FAST,T).m,bulk=interp(PIZ_BULK,bT).m,warm=interp(PIZ_WARM,T).m;return{anchor:9,steps:[
+    S_("Build the levain",lev-28,"wait",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water. You'll use ${gt(q.lev)}.`,{est:1,check:1,hands:15,key:"levain",cue:"At or just before peak."}),
+    S_("Flour + water rest",28,"wait",`Both flours (${gt(q.flour)} total) + ${gt(q.water1)} water, mixed until no dry flour. Keep ${gt(q.reserve)} back.`,{hands:10}),
+    S_("Add levain",15,"prep",`Pinch and fold ${gt(q.lev)} levain in until incorporated.`,{key:"bulkstart"}),
+    S_("Salt + reserved water",30,"prep",`${gt(q.salt)} salt in the ${gt(q.reserve)} reserved water; pinch and fold until absorbed.`),
+    S_("Folds 1–2",30,"prep","Fold 1 now, fold 2 at the end of this step. A 3rd only if batter-like."),
+    S_("Finish bulk, hands off",bulk-75,"wait",`Until ${PIZ_RISE[band(bT)]} rise. Little rise is right for pizza.`,{est:1,check:1,key:"bulk",cue:"Slightly domed, a few bubbles."}),
+    S_("Divide and ball",15,"prep",`${q.n} ball${q.n>1?"s":""} of ${g1(q.ball)} g, into lightly oiled lidded containers.`),
+    S_("Cold ferment",coldH*60,"cold","3–5 °C, 20–28 h (24 h is the target)."),
+    S_("Warm-up",warm-40,"wait","Balls out, covered. Don't re-ball. Prep sauce and drain mozzarella.",{est:1,check:1,hands:5,key:"proof",cue:"Poke springs back slowly."}),
+    S_("Heat the Ooni",40,"oven","30–40 min until the stone centre reads 420–450 °C."),
+    S_("Bake the pizzas",Math.max(1,q.n)*3,"oven","Open, top lightly (70–80 g sauce, 70–90 g mozzarella per pizza), launch, flame down, 60–90 s each, rotating every 15–20 s.")]}}
+  // sandwich
+  const bulk=interp(SW_BULK,bT).m,proof=interp(SW_PROOF,T).m,v=o.variant||"std",V=SANDWICH_VARIANTS[v];
+  const build=`Stiff starter: ${gt(q.seed)} starter + ${gt(q.shoney)} honey + ${gt(q.swater)} water + ${gt(q.sflour)} flour. Tangzhong: ${gt(q.tflour)} flour + ${gt(q.milk)} milk, whisked to 65 °C, covered and chilled.`;
+  const first=v==="chill"?[
+    S_("Stiff starter + tangzhong",210,"wait",`${build} Starter 3–4 h at room temperature, then into the fridge.`,{est:1,check:1,hands:20,key:"levain",cue:"Starter visibly risen, about 50%."}),
+    S_("Starter in the fridge",480,"cold","Covered, 3–5 °C, until you mix in the morning (8–12 h).",{hands:0})]:[
+    S_("Stiff starter + tangzhong",600,"wait",`${build} ${v==="warm"?"Warm-kitchen version: the smaller seed keeps it from overshooting. ":""}Leave 8–10 h.`,{est:1,check:1,hands:20,key:"levain",cue:"Starter domed and risen."})];
+  const steps=[...first,
+    S_("Mix and knead",20,"prep",`${gt(q.water)} cold water, ${gt(q.honey)} honey, the tangzhong, all the starter, ${gt(q.flour)} flour and ${gt(q.salt)} salt. Mix 2–3 min slow; add ${gt(q.oil)} oil after 3–4 min of kneading, 10–15 min total.`,{key:"bulkstart",cue:"Weak windowpane, dough 24–26 °C."}),
+    S_("Bulk ferment",bulk,"wait","Covered, until 40–50% rise.",{est:1,check:1,key:"bulk",cue:"Puffy and soft, clear rise."}),
+    S_("Shape → tin → fridge",15,"prep","25 × 35 cm rectangle, roll from the short end, seam down in the greased tin."),
+    S_("Fridge overnight",coldH*60,"cold","Covered, 3–5 °C."),
+    S_("Finish proof",proof-30,"wait","Covered, at room temperature.",{est:1,check:1,hands:5,key:"proof",cue:"Dome about level with the rim."}),
+    S_("Preheat to 175 °C (fan ~160 °C)",30,"oven","Loaf keeps proofing meanwhile."),
+    S_("Bake",42,"oven","40–45 min; foil at 25–30 min if darkening.",{cue:"93–96 °C inside."}),
+    S_("Butter, rest in the tin",8,"rest",`Brush with ${gt(q.butter)} butter, 5–10 min in the tin.`),
+    S_("Cool on a rack",100,"rest","1–2 h before slicing.")];
+  return{anchor:steps.findIndex(s=>s.t==="Bake"),steps};
+}
+function currentPlan(rid,o){o=o||{};return buildPlan(rid,o.temp??S.temp,o.cold??S.cold[rid],o.c||calc(rid),{variant:S.variant.sandwich,bulkT:o.bulkT})}
+
+/* ---------- Method tab text, generated from the same numbers ---------- */
+function methodFor(rid,c){
+  c=c||calc(rid);const q=c.q,T=S.temp;
+  if(rid==="loaf")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtWin(interp(LEV,T))} at ${T} °C. Ready when roughly doubled, bubbly throughout, domed or just flattening, smelling pleasantly tangy.`],
+    ["Autolyse, 40–45 min",`${gt(q.flour)} flour + ${gt(q.water1)} water, by hand until no dry flour remains. Rough and shaggy is fine. Cover.`],
+    ["Add the levain — bulk starts",`Spread the ${gt(q.lev)} levain over, dimple in with wet fingers, pinch and fold. Note the time and dough temperature. Rest 15–20 min.`],
+    ["Salt + reserved water",`Dissolve the ${gt(q.salt)} fine salt in the ${gt(q.reserve)} reserved water, add gradually, pinch and fold until the dough comes back together. Rest 30 min.`],
+    ["Four sets of stretch-and-folds","Every 30 min: wet hand, lift one side to resistance, fold over, turn 90°, all four sides."],
+    ["Finish bulk by the dough",`Straight-sided container with the level marked. Shape at ${LOAF_RISE[band(T)]} rise (bulk ${fmtWin(interp(LOAF_BULK,T))} from levain in), not by the clock.`],
+    ["Pre-shape, bench rest 20–25 min","Loose round, light tension, uncovered. It should relax but not puddle."],
+    ["Shape a boule","Flour the top, flip. Bottom up, sides in, top down, roll seam-down and drag to tighten until smooth and taut."],
+    ["Banneton, straight into the fridge","Rice-floured, smooth side down, covered. Only if clearly under-fermented give it 15–30 min at room temperature first."],
+    ["Cold proof 10–16 h at 3–5 °C","Overnight is ideal; 8 h works and it can stretch to 24 h."],
+    ["Preheat 45–60 min","Oven and cloche to 250 °C. The loaf stays in the fridge."],
+    ["Score cold","Turn out onto a sling, one confident score 1–1.5 cm deep, off-centre, blade at 30–45°."],
+    ["Bake","Covered 30 min at 250 °C, then uncovered 25–30 min at 220–225 °C (210–215 °C if dark). Done at 96–98 °C inside."],
+    ["Cool 2½–3 h","On a rack. Cutting early gives a gummy crumb."]];
+  if(rid==="focaccia")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtWin(interp(LEV_FAST,T))} at ${T} °C; use at or just before peak.`],
+    ["Flour + water rest, 30–40 min",`${gt(q.flour)} flour + ${gt(q.water1)} water until no dry flour. It's meant to be wet; don't add flour.`],
+    ["Add the levain",`Dimple in the ${gt(q.lev)} levain and fold until incorporated. Rest 15–20 min.`],
+    ["Salt water, then olive oil",`Dissolve ${gt(q.salt)} salt in the ${gt(q.reserve)} reserved water, add in two goes; then fold in ${gt(q.oil)} olive oil until cohesive. Rest 30 min.`],
+    ["Coil folds","3 sets 30 min apart (a 4th only if slack). Aim for smooth, glossy, elastic but soft."],
+    ["Finish bulk",`Until ${FOC_RISE[band(T)]} rise (lower end when warm): airy, bubbly sides and base, jiggly.`],
+    ["Oil the tray and transfer",`${gnum(q.tray0)}–${gt(q.tray1)} olive oil in the tray, flip once to coat, coax towards the corners. If it springs back, rest 15–20 min and repeat.`],
+    ["Cold rest 8–16 h","Covered in the fridge."],
+    ["Warm-up proof",`${fmtWin(interp(FOC_WARM,T))} at ${T} °C, until very puffy with a big wobble.`],
+    ["Preheat","240–245 °C conventional / 220–225 °C fan, at least 40 min."],
+    ["Oil, dimple, season",`${gnum(q.top0)}–${gt(q.top1)} olive oil over the top, oiled fingers right down to the tray. Optional brine: ${gt(q.brine)} water + ${gt(q.brine)} olive oil + a pinch of salt. Flaky salt and rosemary.`],
+    [q.large?"Bake 22–28 min":"Bake 20–25 min",q.large?"Large tray: check from 20 min. Bottom rack for 2–5 min if pale underneath.":"Check from 18 min. Bottom rack for 2–5 min if pale underneath."],
+    ["Rest and cut","Out of the tray after 5 min onto a rack; cut after 20–30 min."]];
+  if(rid==="pizza")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtWin(interp(LEV_FAST,T))} at ${T} °C; use at or just before peak.`],
+    ["Flour + water rest, 25–30 min",`Both flours (${gt(q.flour)} total) + ${gt(q.water1)} water until no dry flour.`],
+    ["Add the levain",`Pinch and fold in the ${gt(q.lev)} levain. Rest 15 min.`],
+    ["Salt + reserved water",`${gt(q.salt)} salt in the ${gt(q.reserve)} reserved water; pinch and fold until absorbed. Rest 30 min.`],
+    ["Two folds, 30 min apart","A 3rd only if it's still batter-like."],
+    ["Bulk to 20–30%",`${fmtWin(interp(PIZ_BULK,T))} at ${T} °C. Stop at about 20% if the dough is 27 °C or warmer.`],
+    ["Divide and ball",`${q.n} equal ball${q.n>1?"s":""} of ${g1(q.ball)} g, smooth and tight, into lightly oiled lidded containers.`],
+    ["Cold ferment ~24 h","20–28 h at 3–5 °C."],
+    ["Warm-up",`${fmtWin(interp(PIZ_WARM,T))} at ${T} °C. Don't re-ball. Ready when a poke springs back slowly.`],
+    ["Heat the Ooni 30–40 min","Stone centre at 420–450 °C."],
+    ["Open the dough","Press from the centre, leave the outer 1.5–2 cm alone; to 20–22 cm, then over the knuckles to 30–32 cm. No rolling pin."],
+    ["Top lightly, shake test","Per pizza: 70–80 g uncooked sauce, 70–90 g drained mozzarella, basil, olive oil. Make sure it slides on the peel."],
+    ["Launch, flame down","Turn the flame low just after launching so the top catches up with the base."],
+    ["Bake 60–90 s","Rotate every 15–20 s."]];
+  const v=S.variant.sandwich;
+  return[[`Night before: stiff sweet starter (${c.variant.label.toLowerCase()})`,`${gt(q.seed)} starter + ${gt(q.shoney)} honey + ${gt(q.swater)} water + ${gt(q.sflour)} flour. ${v==="chill"?"3–4 h at room temperature, then into the fridge until you mix.":v==="warm"?"8–10 h; the smaller seed is for a 27 °C+ kitchen.":"8–10 h at about 23 °C."}`],
+    ["Night before: tangzhong",`${gt(q.tflour)} flour + ${gt(q.milk)} milk, whisked over low heat to 65 °C (thick paste). Cover and chill.`],
+    ["Mix 2–3 min slow",`${gt(q.water)} cold water, ${gt(q.honey)} honey, the tangzhong, all the starter, ${gt(q.flour)} flour, ${gt(q.salt)} salt.`],
+    ["Knead 10–15 min",`Add the ${gt(q.oil)} oil after 3–4 min. Aim for a weak windowpane and 24–26 °C dough.`],
+    ["Bulk to 40–50%",`${fmtWin(interp(SW_BULK,T))} at ${T} °C.`],
+    ["Shape","Roll to 25 × 35 cm, roll up tightly from the short end, pinch the seam, seam down in the greased tin."],
+    ["Fridge overnight","Covered."],
+    ["Finish proof to the rim",`${fmtWin(interp(SW_PROOF,T))} at ${T} °C.`],
+    ["Bake","175 °C conventional / ~160 °C fan for 40–45 min; foil at 25–30 min if dark. Done at 93–96 °C."],
+    ["Butter and cool",`Brush with ${gt(q.butter)} butter, 5–10 min in the tin, then 1–2 h on a rack.`]];
+}
+
+/* ---------- planner: interval-based scheduling ---------- */
+const TARGETS={loaf:[["oven","Out of the oven"],["serve","Ready to slice"]],focaccia:[["oven","Out of the oven"],["serve","Ready to cut"]],pizza:[["oven","First pizza in"],["serve","All pizzas done"]],sandwich:[["oven","Out of the oven"],["serve","Ready to slice"]]};
+const READY_WIN={loaf:[7*60,20*60],focaccia:[11*60,20*60],pizza:[12*60,21*60],sandwich:[8*60,20*60]};
+const attendMin=e=>e.k==="prep"||e.k==="oven"?e.d:(e.hands||0);
+function awayCfg(){const a=S.plan.away;if(!a||!a.on)return null;const f=parseClock(a.from),t=parseClock(a.to);return f===null||t===null||f===t?null:{f,t}}
+// minutes of [t0,t1) (ms) that fall inside the daily unavailable window
+function awayOverlap(t0,t1,aw){if(!aw||t1<=t0)return 0;let tot=0;const d=new Date(t0);d.setHours(0,0,0,0);d.setDate(d.getDate()-1);
+  while(d.getTime()<t1){const ws=new Date(d);ws.setHours(0,aw.f,0,0);const we=new Date(d);if(aw.t<aw.f)we.setDate(we.getDate()+1);we.setHours(0,aw.t,0,0);
+    const o=Math.min(t1,we.getTime())-Math.max(t0,ws.getTime());if(o>0)tot+=o;d.setDate(d.getDate()+1)}return tot/60000}
+function planSig(rid){const a=S.plan.away;return[rid,S.plan.mode,S.plan.day[rid],S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start,S.plan.target[rid],S.cold[rid],S.temp,S.variant.sandwich,a.on?a.from+"-"+a.to:"off"].join("|")}
+function timeline(rid,o){
+  o=o||{};const mode=o.mode||S.plan.mode,date=o.date||S.plan.day[rid],target=o.target||S.plan.target[rid];
+  const atS=o.at||(mode==="finish"?S.plan.anchor[rid]:S.plan.start);
+  const p=o.p||currentPlan(rid,{cold:o.cold}),steps=p.steps,cum=[];let acc=0;steps.forEach(s=>{cum.push(acc);acc+=s.d});
+  const ovenEnd=cum[p.anchor]+steps[p.anchor].d,at=parseClock(atS)??540;
+  let base=mode==="finish"?at-(target==="serve"?acc:ovenEnd):at;
+  const ev=steps.map((s,i)=>({...s,i,st:base+cum[i]}));
+  // a "ready by" plan rounds its start down to 5 min; the spare minutes go to the first (estimated) step, so the target stays exact
+  const base0=base,r=((base%5)+5)%5;if(r&&mode==="finish"){base-=r;ev[0].st=base;ev[0].d+=r}
+  const d0=fromIso(date),dt=m=>{const d=new Date(d0);d.setMinutes(d.getMinutes()+m);return d};
+  const aw=o.away!==undefined?o.away:awayCfg(),conflicts=[];
+  ev.forEach(e=>{const a=attendMin(e);if(!a)return;const t0=dt(e.st).getTime(),t1=t0+a*60000,m=awayOverlap(t0,t1,aw);if(m>0){e.conflict=m;conflicts.push({i:e.i,t:e.t,from:new Date(t0),to:new Date(t1),min:m,whole:a===e.d})}});
+  const startD=dt(base),ovenD=dt(base0+ovenEnd),serveD=dt(base0+acc);
+  return{ev,dt,p,total:acc,startD,ovenD,serveD,targetD:target==="serve"?serveD:ovenD,conflicts,conflictMin:conflicts.reduce((a,c)=>a+c.min,0),
+    past:startD.getTime()<NOW()+10*60000,ok:startD.getTime()>=NOW()+10*60000&&!conflicts.length,mode,target,date,at:atS}}
+function prefTimes(rid,target,p){const steps=p.steps,acc=steps.reduce((a,s)=>a+s.d,0),ovenEnd=steps.slice(0,p.anchor+1).reduce((a,s)=>a+s.d,0);
+  const sh=target==="serve"?Math.round((acc-ovenEnd)/15)*15:0,pref=parseClock(ANCHOR_DEFAULT[rid])+sh,[w0,w1]=READY_WIN[rid];
+  const win=[];for(let m=w0+sh;m<=w1+sh;m+=15)win.push(m);if(!win.includes(pref))win.push(pref);
+  const d=m=>Math.abs(m-pref),inWin=win.map(m=>((m%1440)+1440)%1440).sort((a,b)=>d(a)-d(b)||a-b);
+  const rest=[];for(let m=0;m<1440;m+=15)if(!inWin.includes(m))rest.push(m);rest.sort((a,b)=>d(a)-d(b)||a-b);
+  return[inWin,rest]}
+/* find the default plan: earliest day, preferred daytime target, no attended minute in the unavailable window.
+   Returns {ok:true,c} or {ok:false,c:best} where best is the least-conflicting achievable plan. Never silent. */
+function findPlan(rid,o){
+  o=o||{};const mode=o.mode||S.plan.mode,target=o.target||S.plan.target[rid],p=o.p||currentPlan(rid,{cold:o.cold});
+  const today=new Date(NOW());today.setHours(0,0,0,0);let best=null;const consider=(c)=>{const tl=timeline(rid,{...c,p,cold:o.cold});if(tl.past)return false;
+    if(tl.ok)return true;if(!best||tl.conflictMin<best.min)best={c,min:tl.conflictMin};return false};
+  if(mode==="start"){const t0=Math.ceil((NOW()+10*60000)/9e5)*9e5;
+    for(let i=0;i<8*96;i++){const d=new Date(t0+i*9e5),c={mode,target,date:isoDate(d),at:clockOf(d)};if(consider(c))return{ok:true,c}}
+    return{ok:false,c:best&&best.c,min:best&&best.min}}
+  const passes=prefTimes(rid,target,p);
+  for(const times of passes)for(let k=0;k<9;k++){const d=new Date(today);d.setDate(d.getDate()+k);const date=isoDate(d);
+    for(const m of times){const c={mode,target,date,at:fmtClock(m)};if(consider(c))return{ok:true,c}}}
+  return{ok:false,c:best&&best.c,min:best&&best.min}}
+/* alternatives for a plan that conflicts: later / earlier target, another day, another fridge option. */
+function alternatives(rid){
+  const tl=timeline(rid),out=[],seen=new Set(),p=tl.p,mode=tl.mode,target=tl.target,anchorT=mode==="finish"?tl.targetD:tl.startD;
+  const lbl=TARGETS[rid].find(x=>x[0]===target)[1];
+  const add=(label,c,pp,extra)=>{const k=c.date+c.at+(c.cold||"");if(seen.has(k))return;const t=timeline(rid,{...c,mode,target,p:pp});if(!t.ok)return;seen.add(k);
+    out.push({label,date:c.date,at:c.at,cold:c.cold,desc:`${mode==="finish"?lbl:"Start"} ${dayName(mode==="finish"?t.targetD:t.startD)}, ${clockOf(mode==="finish"?t.targetD:t.startD)} · start ${dayName(t.startD)} ${clockOf(t.startD)}`,...extra})};
+  const at=i=>{const d=new Date(anchorT.getTime()+i*9e5);return{date:isoDate(d),at:clockOf(d)}};
+  const fits=(c,pp)=>timeline(rid,{...c,mode,target,p:pp}).ok;
+  const scan=(dir,lim,pp)=>{for(let i=1;i<=lim;i++){const c=at(dir*i);if(dir<0&&timeline(rid,{...c,mode,target,p:pp}).past)return null;if(fits(c,pp))return c}return null};
+  const later=scan(1,8*96,p);if(later)add(mode==="finish"?"Later finish":"Later start",later,p);
+  const earlier=scan(-1,4*96,p);if(earlier)add(mode==="finish"?"Earlier finish":"Earlier start",earlier,p);
+  for(let k=1;k<=7;k++){const d=new Date(anchorT);d.setDate(d.getDate()+k);const c={date:isoDate(d),at:clockOf(anchorT)};if(fits(c,p)){add("Same time, another day",c,p);break}}
+  // another fridge option allowed by the recipe: the nearest time that fits with it
+  for(const h of COLD_OPTS[rid]){if(h===S.cold[rid])continue;const ph=currentPlan(rid,{cold:h});let c=null;
+    for(let i=0;i<=4*96&&!c;i++)for(const dir of i?[1,-1]:[1]){const x=at(dir*i);if(fits(x,ph)){c=x;break}}
+    if(c)add(`${h} h fridge stage instead`,{...c,cold:h},ph,{note:"Within the recipe's fridge range; fermentation times are unchanged."})}
+  return out}
+const DDT_DEFAULT={target:25,flour:null,lev:null,fric:2};
+// water °C = 4 × DDT − room − flour − levain − friction (the "4" is for doughs with a preferment)
+function ddtWater(d,room){const f=d.flour??room,l=d.lev??room;return 4*d.target-room-f-l-d.fric}
 
 "use strict";
 function art(rid,u){
@@ -666,134 +930,141 @@ const ICON={
 "use strict";
 /* ---------- helpers ---------- */
 const $=(s,r=document)=>r.querySelector(s);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-function gnum(x){if(x>=1000)return Math.round(x).toLocaleString("en-GB");if(x>=20)return String(Math.round(x));return String(Math.round(x*2)/2)}
 const G=x=>`${gnum(x)}<small>g</small>`;
-const gt=x=>`${gnum(x)} g`;
-const pc=x=>`${(x*100).toFixed(1)}%`;
-function fmtDur(min){const m=Math.max(0,Math.round(min)),h=Math.floor(m/60),r=m%60;if(!h)return`${r} min`;return r?`${h} h ${r} min`:`${h} h`}
-function fmtClock(min){const m=((Math.round(min)%1440)+1440)%1440;return`${String(Math.floor(m/60)).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`}
 function fmtCD(sec){const s=Math.max(0,Math.ceil(sec)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),r=s%60;const mm=String(m).padStart(2,"0"),ss=String(r).padStart(2,"0");return h?`${h}:${mm}:${ss}`:`${mm}:${ss}`}
-function parseClock(s){const m=String(s||"").trim().match(/^(\d{1,2})[:.]?(\d{2})$/);if(!m)return null;const h=+m[1],mi=+m[2];if(h>23||mi>59)return null;return h*60+mi}
-function isoDate(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
-function fromIso(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)}
-const DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-function dayName(d){return`${DOW[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`}
-function relDay(d){const t=new Date();t.setHours(0,0,0,0);const x=new Date(d);x.setHours(0,0,0,0);const diff=Math.round((x-t)/864e5);return diff===0?"Today":diff===1?"Tomorrow":diff===-1?"Yesterday":diff>1?`In ${diff} days`:`${-diff} days ago`}
-function waterPct(L,H){return H/100*(1+L.L/2)-L.L/2}
 function haptic(ms){try{navigator.vibrate&&navigator.vibrate(ms||8)}catch(e){}}
 
 /* ---------- state ---------- */
 const KEY="michael-baking-app.v1";
-function tomorrowIso(){const d=new Date();d.setDate(d.getDate()+1);return isoDate(d)}
+const newEpoch=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
 const DEFAULT={
   tab:"recipes",detail:null,seg:"ing",rid:"loaf",
-  scale:{loaf:{mode:"loaves",n:1,w:1415},focaccia:{tray:"23x33",cw:23,cl:33},pizza:{balls:4,bw:276},sandwich:{tin:"large",n:1}},
+  scale:{loaf:{mode:"loaves",n:1,w:1415},focaccia:{tray:"23x33",cw:23,cl:33},pizza:{balls:4,bw:276.5},sandwich:{tin:"large",n:1}},
   hyd:{loaf:69.7,focaccia:80,pizza:66.4},temp:25,
-  cold:{loaf:14,focaccia:14,pizza:24,sandwich:12},
-  plan:{mode:"finish",anchor:Object.assign({},ANCHOR_DEFAULT),start:"07:00",day:{loaf:tomorrowIso(),focaccia:tomorrowIso(),pizza:tomorrowIso(),sandwich:tomorrowIso()},custom:{}},
-  session:null,starter:{fedAt:null},sound:true,wake:true,notify:false,theme:"auto",weekHot:false,openAcc:{},v:2
+  cold:{loaf:14,focaccia:14,pizza:24,sandwich:12},variant:{sandwich:"std"},
+  plan:{mode:"finish",anchor:Object.assign({},ANCHOR_DEFAULT),start:"07:00",day:{loaf:tomorrowIso(),focaccia:tomorrowIso(),pizza:tomorrowIso(),sandwich:tomorrowIso()},custom:{},
+    target:{loaf:"oven",focaccia:"oven",pizza:"oven",sandwich:"oven"},away:{on:true,from:"23:00",to:"06:00"},accept:{}},
+  session:null,starter:{fedAt:null},sound:true,wake:true,notify:false,theme:"auto",weekHot:false,openAcc:{},ddt:Object.assign({},DDT_DEFAULT),v:3,epoch:"",rev:0
 };
-function merge(a,b){if(b===null||b===undefined)return a;if(typeof a!=="object"||a===null||Array.isArray(a))return b;const o={...a};for(const k in b)o[k]=(k in a)?merge(a[k],b[k]):b[k];return o}
-let S;
-try{S=merge(JSON.parse(JSON.stringify(DEFAULT)),JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){S=JSON.parse(JSON.stringify(DEFAULT))}
-if(S.session===undefined)S.session=null;
-sanitize();
-function sanitize(){
-  const num=(o,k,a,b,def)=>{const v=+o[k];o[k]=Number.isFinite(v)?clamp(v,a,b):def};
-  if(!S.v||S.v<2){S.wake=true;if(S.plan.date){for(const r of RIDS)S.plan.day[r]=S.plan.date}delete S.plan.date;S.v=2}
-  num(S,"temp",16,40,25);num(S.scale.loaf,"n",1,8,1);S.scale.loaf.n=Math.round(S.scale.loaf.n);num(S.scale.loaf,"w",300,12000,1415);
-  num(S.scale.pizza,"balls",1,24,4);S.scale.pizza.balls=Math.round(S.scale.pizza.balls);num(S.scale.pizza,"bw",150,400,276);
-  num(S.scale.focaccia,"cw",10,80,23);num(S.scale.focaccia,"cl",10,80,33);num(S.scale.sandwich,"n",1,6,1);S.scale.sandwich.n=Math.round(S.scale.sandwich.n);
-  for(const r of ["loaf","focaccia","pizza"])num(S.hyd,r,LEAN[r].Hmin,LEAN[r].Hmax,LEAN[r].H0);
-  if(!["loaves","weight"].includes(S.scale.loaf.mode))S.scale.loaf.mode="loaves";
-  if(!["large","std"].includes(S.scale.sandwich.tin))S.scale.sandwich.tin="large";
-  if(!TRAYS.some(t=>t.id===S.scale.focaccia.tray))S.scale.focaccia.tray="23x33";
-  if(!["finish","start"].includes(S.plan.mode))S.plan.mode="finish";if(parseClock(S.plan.start)===null)S.plan.start="07:00";
-  if(!S.plan.custom||typeof S.plan.custom!=="object")S.plan.custom={};
-  const today=new Date();today.setHours(0,0,0,0);
-  for(const r of RIDS){if(!COLD_OPTS[r].includes(+S.cold[r]))S.cold[r]=DEFAULT.cold[r];else S.cold[r]=+S.cold[r];
-    if(parseClock(S.plan.anchor[r])===null)S.plan.anchor[r]=ANCHOR_DEFAULT[r];
-    const d=S.plan.day[r];if(!/^\d{4}-\d\d-\d\d$/.test(d||"")||fromIso(d)<today){S.plan.day[r]=tomorrowIso();S.plan.custom[r]=false}}
-  if(!["recipes","plan","timer","starter","ref"].includes(S.tab))S.tab="recipes";
-  if(S.detail&&!RIDS.includes(S.detail))S.detail=null;if(!RIDS.includes(S.rid))S.rid="loaf";
-  if(!["ing","method","fix"].includes(S.seg))S.seg="ing";
-  const ss=S.session;if(ss&&(!RECIPES[ss.rid]||!Array.isArray(ss.steps)||!ss.steps.length||!ss.steps.every(x=>x&&Number.isFinite(+x.d))))S.session=null;
-  else if(ss){ss.idx=clamp(Math.round(+ss.idx||0),0,ss.steps.length-1);if(!Number.isFinite(+ss.remaining))ss.remaining=ss.steps[ss.idx].d*60;if(!Number.isFinite(+ss.endsAt))ss.endsAt=0}
-}
-let saveT=0,skipSave=false;function save(){if(skipSave){skipSave=false;return}clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}},120)}
-function saveNow(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const fresh=()=>JSON.parse(JSON.stringify(DEFAULT));
+function merge(a,b){if(b===null||b===undefined)return a;if(typeof a!=="object"||a===null||Array.isArray(a))return b;if(typeof b!=="object"||Array.isArray(b))return a;const o={...a};for(const k in b)o[k]=(k in a)?merge(a[k],b[k]):b[k];return o}
+function readStored(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){return null}}
+let S=merge(fresh(),readStored());
+sanitize(S);if(!S.epoch)S.epoch=newEpoch();
+let seenRev=S.rev||0,sessDirty=false;
+/* validate everything that comes from storage or an import file; never trust it */
+function sanitize(T){
+  const num=(o,k,a,b,def,step)=>{const v=+o[k];o[k]=Number.isFinite(v)?clamp(step?Math.round(v/step)*step:v,a,b):def};
+  if(!T.v||T.v<2){T.wake=true;if(T.plan&&T.plan.date){for(const r of RIDS)T.plan.day[r]=T.plan.date}if(T.plan)delete T.plan.date}
+  if(!T.v||T.v<3){if(+T.scale.pizza.bw===276)T.scale.pizza.bw=276.5;T.v=3}   // 276 was the rounded booklet ball; 276.5 × 4 = the booklet's 1,106 g
+  num(T,"temp",16,40,25,1);num(T.scale.loaf,"n",1,8,1,1);num(T.scale.loaf,"w",300,12000,1415,1);
+  num(T.scale.pizza,"balls",1,24,4,1);num(T.scale.pizza,"bw",150,400,276.5,.5);
+  num(T.scale.focaccia,"cw",10,80,23,1);num(T.scale.focaccia,"cl",10,80,33,1);num(T.scale.sandwich,"n",1,6,1,1);
+  for(const r of ["loaf","focaccia","pizza"])num(T.hyd,r,LEAN[r].Hmin,LEAN[r].Hmax,LEAN[r].H0,.5);T.hyd.loaf=+(+T.hyd.loaf).toFixed(1);T.hyd.pizza=+(+T.hyd.pizza).toFixed(1);
+  if(!["loaves","weight"].includes(T.scale.loaf.mode))T.scale.loaf.mode="loaves";
+  if(!["large","std"].includes(T.scale.sandwich.tin))T.scale.sandwich.tin="large";
+  if(!TRAYS.some(t=>t.id===T.scale.focaccia.tray))T.scale.focaccia.tray="23x33";
+  if(!T.variant||typeof T.variant!=="object")T.variant={sandwich:"std"};if(!SANDWICH_VARIANTS[T.variant.sandwich])T.variant.sandwich="std";
+  const P=T.plan;if(!["finish","start"].includes(P.mode))P.mode="finish";if(parseClock(P.start)===null)P.start="07:00";
+  for(const k of ["custom","accept","target","day","anchor"])if(!P[k]||typeof P[k]!=="object")P[k]={};
+  if(!P.away||typeof P.away!=="object")P.away={on:true,from:"23:00",to:"06:00"};P.away.on=P.away.on!==false;
+  if(parseClock(P.away.from)===null)P.away.from="23:00";if(parseClock(P.away.to)===null)P.away.to="06:00";
+  const today=new Date(NOW());today.setHours(0,0,0,0);
+  for(const r of RIDS){if(!COLD_OPTS[r].includes(+T.cold[r]))T.cold[r]=DEFAULT.cold[r];else T.cold[r]=+T.cold[r];
+    if(parseClock(P.anchor[r])===null)P.anchor[r]=ANCHOR_DEFAULT[r];if(!["oven","serve"].includes(P.target[r]))P.target[r]="oven";
+    if(typeof P.accept[r]!=="string")delete P.accept[r];P.custom[r]=!!P.custom[r];
+    const d=P.day[r];if(!/^\d{4}-\d\d-\d\d$/.test(d||"")||fromIso(d)<today){P.day[r]=tomorrowIso();P.custom[r]=false}}
+  if(!T.ddt||typeof T.ddt!=="object")T.ddt=Object.assign({},DDT_DEFAULT);num(T.ddt,"target",18,32,25,.5);num(T.ddt,"fric",0,20,2,1);
+  for(const k of ["flour","lev"]){if(T.ddt[k]===null||T.ddt[k]===undefined||T.ddt[k]==="")T.ddt[k]=null;else num(T.ddt,k,-5,45,null,1)}
+  if(!T.starter||typeof T.starter!=="object")T.starter={fedAt:null};if(T.starter.fedAt!==null&&!(Number.isFinite(+T.starter.fedAt)&&+T.starter.fedAt>0&&+T.starter.fedAt<NOW()+864e5))T.starter.fedAt=null;
+  if(!["auto","light","dark"].includes(T.theme))T.theme="auto";for(const k of ["sound","wake","notify","weekHot"])T[k]=!!T[k];
+  if(!["recipes","plan","timer","starter","ref"].includes(T.tab))T.tab="recipes";
+  if(T.detail&&!RIDS.includes(T.detail))T.detail=null;if(!RIDS.includes(T.rid))T.rid="loaf";
+  if(!["ing","method","fix"].includes(T.seg))T.seg="ing";
+  T.rev=Number.isFinite(+T.rev)?+T.rev:0;if(typeof T.epoch!=="string")T.epoch="";
+  const ss=T.session;if(ss&&(typeof ss!=="object"||!RECIPES[ss.rid]||!Array.isArray(ss.steps)||!ss.steps.length||!ss.steps.every(x=>x&&typeof x.t==="string"&&Number.isFinite(+x.d)&&+x.d>0)))T.session=null;
+  else if(ss){ss.idx=clamp(Math.round(+ss.idx||0),0,ss.steps.length-1);if(!Number.isFinite(+ss.remaining))ss.remaining=ss.steps[ss.idx].d*60;if(!Number.isFinite(+ss.endsAt))ss.endsAt=0;
+    ss.running=!!ss.running;ss.alerted=!!ss.alerted;if(ss.doughT!==null&&ss.doughT!==undefined&&!Number.isFinite(+ss.doughT))ss.doughT=null}
+  return T}
+/* one write path. Every save carries the data's epoch (changes on reset) and a revision number.
+   A tab whose epoch is stale adopts the stored data instead of writing its old copy back,
+   and a newer session written by another tab is never overwritten by an older one. */
+let saveT=0,skipSave=false;
+function persist(){
+  const cur=readStored();
+  if(cur&&cur.epoch&&cur.epoch!==S.epoch){adoptStored(cur,"This data was reset or replaced in another tab, so this tab now shows it.");return}
+  if(cur&&cur.epoch===S.epoch&&(+cur.rev||0)>seenRev&&!sessDirty)S.session=cur.session===undefined?null:cur.session;
+  S.rev=Math.max(cur&&+cur.rev||0,S.rev||0)+1;seenRev=S.rev;sessDirty=false;
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){if(skipSave){skipSave=false;return}clearTimeout(saveT);saveT=setTimeout(persist,120)}
+function saveNow(){clearTimeout(saveT);persist()}
+function keepUI(){return{tab:S.tab,detail:S.detail,seg:S.seg,rid:S.rid}}
+function adoptStored(cur,msg){const ui=keepUI();S=sanitize(merge(fresh(),cur));Object.assign(S,ui);seenRev=S.rev;closeSheet(true);wakeSync();skipSave=true;render();skipSave=false;if(msg)toast(msg)}
 
-/* ---------- calculations ---------- */
-function calc(rid){
-  const st=S.scale[rid];
-  if(rid==="sandwich"){
-    const n=clamp(st.n,1,6),f=(st.tin==="large"?1:.75)*n,total=SANDWICH.reduce((a,s)=>a+s.g,0)*f;
-    return{groups:["Stiff starter","Tangzhong","Main dough"].map(g=>({g,rows:SANDWICH.filter(s=>s.group===g).map(s=>({name:s.name,g:s.g*f,p:s.g/670}))})),
-      total,totalPct:SANDWICH.reduce((a,s)=>a+s.g,0)/670,
-      stats:[[gt(670*f),"Total flour"],["≈62%","Effective hydration"],[gt(total/n),"Per tin"],[gt(15*f),"Butter to brush"]],
-      build:null,extras:[],summary:`${n} ${st.tin==="large"?"large":"2 lb"} tin${n>1?"s":""} · ${gt(total)}`}
-  }
-  const L=LEAN[rid],H=S.hyd[rid],w=waterPct(L,H),sum=1+w+L.L+L.salt+L.oil,sum0=1+waterPct(L,L.H0)+L.L+L.salt+L.oil;
-  let F=L.baseFlour,units=1,unit="Per loaf",summary="";
-  if(rid==="loaf"){if(st.mode==="loaves"){units=clamp(st.n,1,8);F=750*units}else{F=750*(clamp(st.w,300,12000)/1415)*(sum0/sum);unit="Dough"}}
-  else if(rid==="focaccia"){const t=TRAYS.find(x=>x.id===st.tray)||TRAYS[0];const area=st.tray==="custom"?clamp(st.cw,10,80)*clamp(st.cl,10,80):t.area;F=500*area/759;unit="Per tray"}
-  else{units=clamp(st.balls,1,24);F=600*(units*clamp(st.bw,150,400)/1104)*(sum0/sum);unit="Per ball"}
-  const water=w*F,reserve=Math.min(L.reserve*F,water),lev=L.L*F,salt=L.salt*F,oil=L.oil*F,total=F+water+lev+salt+oil;
-  const rows=L.flours.map(fl=>({name:fl.name,sub:fl.note,g:F*fl.pct,p:fl.pct}));
-  rows.push({name:"Water",sub:"Initial mix",g:water-reserve,p:(water-reserve)/F});
-  rows.push({name:"Water",sub:"Reserved, added with the salt",g:reserve,p:reserve/F});
-  rows.push({name:"Levain",sub:"100% hydration, at peak",g:lev,p:L.L});
-  rows.push({name:"Fine salt",sub:"",g:salt,p:L.salt});
-  if(oil>0)rows.push({name:"Extra-virgin olive oil",sub:"In the dough",g:oil,p:L.oil});
-  const [bm,bf,bw]=L.build,bt=bm+bf+bw,k=lev*(bt/L.need)/bt;
-  const tf=F+lev/2,tw=water+lev/2;
-  const extras=[];
-  if(rid==="focaccia"){const a=F/500;extras.push(["Tray oil",`${gnum(25*a)}–${gt(30*a)}`],["Top oil",`${gnum(15*a)}–${gt(20*a)}`],["Optional brine",`${gt(20*a)} water + ${gt(20*a)} olive oil + pinch of salt`],["To finish","Flaky salt and rosemary"])}
-  if(rid==="pizza"){extras.push(["Sauce, uncooked",`${gt(100*units)} canned tomatoes + ${gt(units)} salt · 70–80 g per pizza`],["Mozzarella, drained",`${gnum(70*units)}–${gt(90*units)} · 70–90 g per pizza`],["To finish","Basil and a little olive oil"])}
-  if(rid==="loaf")summary=st.mode==="loaves"?`${units} loa${units>1?"ves":"f"} · ${gt(total)}`:`${gt(total)} dough`;
-  else if(rid==="focaccia"){const t=TRAYS.find(x=>x.id===st.tray);summary=`${st.tray==="custom"?`${st.cw} × ${st.cl} cm`:t.label+(t.round?" cm":" cm")} · ${gt(total)}`}
-  else summary=`${units} ball${units>1?"s":""} · ${gt(total/units)} each`;
-  return{rows,total,totalPct:sum,F,units,
-    stats:[[pc(tw/tf),"True hydration"],[pc(salt/tf),"Salt of total flour"],[pc(lev/2/tf),"Prefermented flour"],[gt(total/units),unit]],
-    build:{m:bm*k,f:bf*k,w:bw*k,t:bt*k,use:lev},extras,summary,tw,tf};
-}
-function currentPlan(rid){return buildPlan(rid,band(S.temp),S.cold[rid],S.scale.pizza.balls)}
+/* ---------- guidance ---------- */
 function guideFor(rid){
   const t=S.temp,b=band(t),wt=75-2*t;
   const water=wt<5?"Ice-cold + chilled flour":`≈ ${Math.round(wt)} °C`;
   const g=[["Mother after feeding",t>=27?"30–60 min out, then fridge":"1–2 h out, then fridge",0]];
-  if(rid==="loaf")g.push(["Levain to peak",LEV[b].r,1],["Mixing water",water,0],["Shape at rise",LOAF_RISE[b],0],["Bulk from levain in",LOAF_BULK[b].r,1]);
-  else if(rid==="focaccia")g.push(["Levain to peak",LEV_FAST[b].r,1],["Mixing water",water,0],["Bulk target rise",FOC_RISE[b],0],["Bulk from levain in",LOAF_BULK[b].r,1],["Day-2 warm-up",FOC_WARM[b].r,1]);
-  else if(rid==="pizza")g.push(["Levain to peak",LEV_FAST[b].r,1],["Mixing water",water,0],["Bulk target rise",PIZ_RISE[b],0],["Bulk from levain in",PIZ_BULK[b].r,1],["Warm-up before baking",PIZ_WARM[b].r,1]);
-  else g.push(["Stiff starter overnight",b>=3?"8 g starter, or 3–4 h then fridge":"15 g starter, 8–10 h",0],["Mixing water","Fridge-cold",0],["Bulk to 40–50%",SW_BULK[b].r,1],["Final proof from fridge",SW_PROOF[b].r,1]);
+  if(rid==="loaf")g.push(["Levain to peak",fmtWin(interp(LEV,t)),1],["Mixing water",water,0],["Shape at rise",LOAF_RISE[b],0],["Bulk from levain in",fmtWin(interp(LOAF_BULK,t)),1]);
+  else if(rid==="focaccia")g.push(["Levain to peak",fmtWin(interp(LEV_FAST,t)),1],["Mixing water",water,0],["Bulk target rise",FOC_RISE[b],0],["Bulk from levain in",fmtWin(interp(LOAF_BULK,t)),1],["Day-2 warm-up",fmtWin(interp(FOC_WARM,t)),1]);
+  else if(rid==="pizza")g.push(["Levain to peak",fmtWin(interp(LEV_FAST,t)),1],["Mixing water",water,0],["Bulk target rise",PIZ_RISE[b],0],["Bulk from levain in",fmtWin(interp(PIZ_BULK,t)),1],["Warm-up before baking",fmtWin(interp(PIZ_WARM,t)),1]);
+  else{const V=SANDWICH_VARIANTS[S.variant.sandwich];g.push(["Stiff starter",`${V.label}: ${V.sub}`,0],["Mixing water","Fridge-cold",0],["Bulk to 40–50%",fmtWin(interp(SW_BULK,t)),1],["Final proof from fridge",fmtWin(interp(SW_PROOF,t)),1])}
   return g;
 }
-function tempNote(){const t=S.temp;return t<18||t>32?`<div class="notebar" style="margin:10px 0 0"><span>ℹ︎</span><span>${t<18?"Below 18 °C":"Above 32 °C"} the timing tables are stretched beyond what they cover. Treat times as rough and go by the dough cues${t>32?"; use chilled water and the fridge to slow things down":"; a warmer spot (oven with the light on) helps"}.</span></div>`:""}
-function thermoColor(t){return t<=23?"#6F8796":t<=25?"#6E7B4B":t<=26?"#C9A24A":t<=28?"#D9733F":"#B23A2E"}
+function tempNote(){const t=S.temp;return t<18||t>32?`<div class="notebar" style="margin:10px 0 0"><span>ℹ︎</span><span>${t<18?"Below 18 °C":"Above 32 °C"} the timing tables are stretched beyond what they cover (estimates are held at the ${t<18?"23":"29"} °C values). Go by the dough cues${t>32?"; use chilled water and the fridge to slow things down":"; a warmer spot (oven with the light on) helps"}.</span></div>`:""}
+function thermoColor(t){return t<=23?"#56707F":t<=25?"#5C6A38":t<=26?"#8A6A1E":t<=28?"#A9522A":"#B23A2E"} // v2.1: all ≥4.5:1 against the white label
 
-/* ---------- timer ---------- */
+/* ---------- timer ----------
+   The session is a snapshot: steps, kitchen temp, fridge option and variant are copied at start,
+   so changing settings mid-bake never changes a running timer. A step that ends never starts the
+   next one by itself: rising/proof steps end in a readiness check, the others in a "Start next" tap. */
 function remNow(){const s=S.session;if(!s)return 0;return s.running?Math.max(0,(s.endsAt-Date.now())/1000):s.remaining}
-function startSession(rid,from){const p=currentPlan(rid);S.session={rid,steps:p.steps.map(x=>({t:x.t,d:x.d,k:x.k,detail:x.detail,cue:x.cue||"",est:!!x.est})),anchor:p.anchor,idx:from||0,running:false,remaining:p.steps[from||0].d*60,endsAt:0,startedAt:Date.now(),alerted:false,temp:S.temp};unlockAudio();tPlay();}
-function tPlay(){const s=S.session;if(!s)return;if(s.remaining<=0)s.remaining=s.steps[s.idx].d*60;s.endsAt=Date.now()+s.remaining*1000;s.running=true;s.alerted=false;saveNow();wakeSync()}
-function tPause(){const s=S.session;if(!s)return;s.remaining=remNow();s.running=false;saveNow();wakeSync()}
-function tGo(i,autoplay){const s=S.session;if(!s)return;s.idx=clamp(i,0,s.steps.length-1);s.remaining=s.steps[s.idx].d*60;s.running=false;s.alerted=false;if(autoplay)tPlay();saveNow()}
-function tAdd(min){const s=S.session;if(!s)return;if(s.running)s.endsAt+=min*60000;else s.remaining=Math.max(0,s.remaining+min*60);if(remNow()>0)s.alerted=false;saveNow()}
+function startSession(rid,from){const p=currentPlan(rid);
+  S.session={rid,steps:p.steps.map(x=>({t:x.t,d:x.d,k:x.k,detail:x.detail,cue:x.cue||"",est:!!x.est,check:!!x.check,key:x.key||"",hands:x.hands||0})),anchor:p.anchor,idx:from||0,running:false,
+    remaining:p.steps[from||0].d*60,endsAt:0,startedAt:Date.now(),alerted:false,temp:S.temp,cold:S.cold[rid],variant:S.variant.sandwich,doughT:null,summary:calc(rid).summary};
+  sessDirty=true;unlockAudio();tPlay()}
+function tPlay(){const s=S.session;if(!s)return;if(s.remaining<=0)s.remaining=s.steps[s.idx].d*60;s.endsAt=Date.now()+s.remaining*1000;s.running=true;s.alerted=false;sessDirty=true;saveNow();wakeSync()}
+function tPause(){const s=S.session;if(!s)return;s.remaining=remNow();s.running=false;sessDirty=true;saveNow();wakeSync()}
+function tGo(i,autoplay){const s=S.session;if(!s)return;s.idx=clamp(i,0,s.steps.length-1);s.remaining=s.steps[s.idx].d*60;s.running=false;s.alerted=false;s.closedEnd=false;sessDirty=true;if(autoplay)tPlay();else saveNow()}
+function tAdd(min){const s=S.session;if(!s)return;if(s.running)s.endsAt+=min*60000;else s.remaining=Math.max(0,s.remaining+min*60);if(remNow()>0)s.alerted=false;sessDirty=true;saveNow()}
+/* readiness check "not yet": run this same step on for m more minutes */
+function tMore(m){const s=S.session;if(!s)return;s.remaining=m*60;s.closedEnd=false;sessDirty=true;tPlay();toast(`${m} more minutes, then check again`)}
+/* measured dough temperature drives the bulk estimate (never shortens below what has already passed) */
+function setDoughT(v){const s=S.session;if(!s)return;const bi=s.steps.findIndex(x=>x.key==="bulk");if(bi<0)return;
+  if(s.idx>bi){toast("Bulk is already finished");return}
+  const T=v===null?null:clamp(v,15,35);const p=buildPlan(s.rid,s.temp,s.cold,calc(s.rid),{variant:s.variant,bulkT:T===null?s.temp:T});
+  const nd=p.steps.find(x=>x.key==="bulk").d,delta=nd-s.steps[bi].d;s.steps[bi].d=nd;s.steps[bi].detail=p.steps.find(x=>x.key==="bulk").detail;
+  if(s.idx===bi&&!(s.alerted&&remNow()<=0)){if(s.running)s.endsAt+=delta*60000;else s.remaining=Math.max(60,s.remaining+delta*60)}
+  s.doughT=T;sessDirty=true;saveNow();render();toast(T===null?"Back to the kitchen-temperature estimate":`Bulk estimate now uses ${T} °C dough: ${fmtDur(nd)}`)}
 let AC=null;function unlockAudio(){try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}AC&&AC.state==="suspended"&&AC.resume()}catch(e){}}
 function chime(){if(!S.sound||!AC)return;try{const t0=AC.currentTime;[0,.32,.64].forEach((o,i)=>{const os=AC.createOscillator(),g=AC.createGain();os.type="sine";os.frequency.value=[784,988,1175][i];g.gain.setValueAtTime(0,t0+o);g.gain.linearRampToValueAtTime(.28,t0+o+.02);g.gain.exponentialRampToValueAtTime(.001,t0+o+.6);os.connect(g).connect(AC.destination);os.start(t0+o);os.stop(t0+o+.65)})}catch(e){}}
 function stepDone(){const s=S.session,late=Date.now()-s.endsAt;
   // another tab may already have rung for this step
-  try{const o=JSON.parse(localStorage.getItem(KEY)||"null");if(o&&o.session&&o.session.startedAt===s.startedAt&&o.session.idx===s.idx&&o.session.alerted){s.running=false;s.remaining=0;s.alerted=true;return}}catch(e){}
-  s.running=false;s.remaining=0;s.alerted=true;saveNow();haptic([300,120,300,120,500]);chime();
-  const at=new Date(s.endsAt);toast(late>60000?`Step ${s.idx+1} finished at ${fmtClock(at.getHours()*60+at.getMinutes())}: ${s.steps[s.idx].t}`:`Step done: ${s.steps[s.idx].t}`);wakeSync();
-  notify(`Step ${s.idx+1} done: ${s.steps[s.idx].t}`,s.idx<s.steps.length-1?`Next: ${s.steps[s.idx+1].t}`:"That was the last step.")}
+  const o=readStored();if(o&&o.session&&o.session.startedAt===s.startedAt&&o.session.idx===s.idx&&o.session.alerted){s.running=false;s.remaining=0;s.alerted=true;wakeSync();return}
+  s.running=false;s.remaining=0;s.alerted=true;sessDirty=true;saveNow();haptic([300,120,300,120,500]);chime();
+  const st=s.steps[s.idx],at=new Date(s.endsAt);
+  toast(st.check?`Time to check: ${st.t}`:late>60000?`Step ${s.idx+1} finished at ${clockOf(at)}: ${st.t}`:`Step done: ${st.t}`);wakeSync();
+  notify(st.check?`Check the dough: ${st.t}`:`Step ${s.idx+1} done: ${st.t}`,st.check?"Open the app for the readiness check.":s.idx<s.steps.length-1?`Next: ${s.steps[s.idx+1].t}`:"That was the last step.")}
 const CAN_VIBRATE="vibrate"in navigator,CAN_WAKE="wakeLock"in navigator,CAN_NOTIFY="Notification"in window&&"serviceWorker"in navigator&&location.protocol.startsWith("http");
 function notify(title,body){if(!S.notify||!CAN_NOTIFY||Notification.permission!=="granted"||!document.hidden)return;
   try{navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,tag:"bake-step",renotify:true,icon:"icons/icon-192.png",badge:"icons/icon-192.png",vibrate:[300,120,300]})).catch(()=>{})}catch(e){}}
-let wakeLock=null;async function wakeSync(){try{const want=S.wake&&S.session&&S.session.running&&!document.hidden;if(want&&!wakeLock&&navigator.wakeLock){wakeLock=await navigator.wakeLock.request("screen");wakeLock.addEventListener("release",()=>{wakeLock=null})}else if(!want&&wakeLock){await wakeLock.release();wakeLock=null}}catch(e){wakeLock=null}}
+/* screen wake lock: requested whenever a timer runs and the page is visible (boot, restore, tab return),
+   re-requested after the browser releases it, and the button shows what is actually held */
+let wakeLock=null,wakeErr="",wakeBusy=false,wakeRetry=0;
+async function wakeSync(){if(!CAN_WAKE)return;const want=S.wake&&S.session&&S.session.running&&!document.hidden;
+  if(wakeBusy)return;wakeBusy=true;
+  try{if(want&&!wakeLock){const l=await navigator.wakeLock.request("screen");wakeLock=l;wakeErr="";
+      l.addEventListener("release",()=>{if(wakeLock===l)wakeLock=null;wakeUI();if(!document.hidden&&wakeRetry<3){wakeRetry++;setTimeout(wakeSync,800)}});wakeUI();wakeRetry=0}
+    else if(!want&&wakeLock){const l=wakeLock;wakeLock=null;await l.release();wakeUI()}}
+  catch(e){wakeLock=null;wakeErr=(e&&e.name)||"Error";wakeUI()}
+  finally{wakeBusy=false}}
+function wakeBtn(){if(!CAN_WAKE)return"";const s=S.session,held=!!wakeLock;
+  const [lbl,cls]=held?["Screen kept on","on"]:!S.wake?["Screen may sleep",""]:s&&s.running&&!document.hidden?["Screen lock not held · tap to retry","warn"]:["Keeps screen on while running",""];
+  return`<button id="wakebtn" class="chipbtn ${cls}" data-act="twake" aria-pressed="${S.wake}" data-held="${held}">${held?"☀︎":"☾"} ${lbl}</button>`}
+function wakeUI(){const b=$("#wakebtn");if(b)b.outerHTML=wakeBtn()}
 setInterval(()=>{const s=S.session;if(!s)return;if(s.running&&remNow()<=0&&!s.alerted)stepDone();updateTimerDom()},250);
-document.addEventListener("visibilitychange",()=>{wakeSync();updateTimerDom()});
+document.addEventListener("visibilitychange",()=>{wakeRetry=0;wakeSync();updateTimerDom()});
 
 /* ---------- UI primitives ---------- */
 function stepper(act,val,unit,opts){opts=opts||{};const lb=opts.label||"value";
@@ -832,8 +1103,9 @@ function vDetail(rid){
     let ctl="";
     if(rid==="loaf"){ctl=seg("loafmode",[["loaves","Loaves"],["weight","Dough weight"]],st.mode)+`<div class="spacer"></div>`+(st.mode==="loaves"?`<div class="ctrl"><div class="lab">Loaves<small>${gt(c.total/c.units)} each</small></div>${stepper("loafn",st.n,"",{label:"Loaves",min:st.n<=1,max:st.n>=8})}</div>`:`<div class="ctrl"><div class="lab">Total dough<small>Type it, or ±50 g</small></div>${stepper("loafw",gnum(st.w),"g",{label:"Total dough",input:Math.round(st.w),lo:300,hi:12000,min:st.w<=300,max:st.w>=12000})}</div>`)}
     if(rid==="focaccia"){ctl=`<div class="pillrow">${TRAYS.map(t=>`<button class="pill ${st.tray===t.id?"on":""}" data-act="tray" data-arg="${t.id}">${t.label}${t.id!=="custom"?" cm":""}<small>${t.sub}</small></button>`).join("")}</div>`+(st.tray==="custom"?`<div class="ctrl"><div class="lab">Width</div>${stepper("trayw",st.cw,"cm",{label:"Tray width",input:st.cw,lo:10,hi:80,min:st.cw<=10,max:st.cw>=80})}</div><div class="ctrl"><div class="lab">Length</div>${stepper("trayl",st.cl,"cm",{label:"Tray length",input:st.cl,lo:10,hi:80,min:st.cl<=10,max:st.cl>=80})}</div>`:"")}
-    if(rid==="pizza"){ctl=`<div class="ctrl"><div class="lab">Pizza balls<small>One per 30–32 cm pizza</small></div>${stepper("balls",st.balls,"",{label:"Pizza balls",min:st.balls<=1,max:st.balls>=24})}</div><div class="ctrl"><div class="lab">Ball weight<small>276 g in the booklet · 250–280 g suits 30–32 cm</small></div>${stepper("bw",st.bw,"g",{label:"Ball weight",input:st.bw,lo:150,hi:400,min:st.bw<=150,max:st.bw>=400})}</div>`}
+    if(rid==="pizza"){ctl=`<div class="ctrl"><div class="lab">Pizza balls<small>One per 30–32 cm pizza</small></div>${stepper("balls",st.balls,"",{label:"Pizza balls",min:st.balls<=1,max:st.balls>=24})}</div><div class="ctrl"><div class="lab">Ball weight<small>276.5 g = the booklet's 1,106 g ÷ 4 · 250–280 g suits 30–32 cm</small></div>${stepper("bw",g1(st.bw),"g",{label:"Ball weight",input:g1(st.bw),dec:1,lo:150,hi:400,min:st.bw<=150,max:st.bw>=400})}</div><div class="faint">Total dough = balls × ball weight; the flour, water and levain are worked back from it.</div>`}
     if(rid==="sandwich"){ctl=seg("tin",[["large","Large 3–3.5 L"],["std","2 lb tin (0.75×)"]],st.tin)+`<div class="spacer"></div><div class="ctrl"><div class="lab">Tins<small>${st.tin==="large"?"33 cm Pullman or ~28 × 12 × 10 cm":"Standard 2 lb loaf tin"}</small></div>${stepper("tinn",st.n,"",{label:"Tins",min:st.n<=1,max:st.n>=6})}</div>`}
+    if(rid==="sandwich")ctl+=`</div><div class="card"><div class="ct">Starter version</div>${variantPick()}`;
     let hyd="";
     if(rid!=="sandwich"){const L=LEAN[rid],H=S.hyd[rid],p=(H-L.Hmin)/(L.Hmax-L.Hmin)*100;
       hyd=`<div class="card"><div class="ct">Hydration</div><div class="slider"><div class="top"><div class="big num" id="hval">${H.toFixed(1)}<small>%</small></div>${Math.abs(H-L.H0)>.01?`<button class="chip t" data-act="hreset">Reset to ${L.H0}%</button>`:`<span class="mark">Booklet value</span>`}</div>
@@ -843,7 +1115,7 @@ function vDetail(rid){
     body=`<div class="card"><div class="ct">Batch size</div>${ctl}</div>${hyd}<div id="ingbox">${ingBox(rid,c)}</div>
     <div class="btnrow" style="margin-top:6px"><button class="btn sec" data-act="planthis" data-arg="${rid}">${ICON.cal}Plan it</button><button class="btn" data-act="startthis" data-arg="${rid}">${ICON.play}Start bake</button></div>`;
   }else if(segv==="method"){
-    body=`<div class="card"><div class="steps">${METHOD[rid].map(([t,d],i)=>`<div class="step"><div class="dot">${i+1}</div><div class="tx"><b>${esc(t)}</b><span>${esc(d)}</span></div></div>`).join("")}</div></div>
+    body=`<div class="card"><div class="steps">${methodFor(rid,c).map(([t,d],i)=>`<div class="step"><div class="dot">${i+1}</div><div class="tx"><b>${esc(t)}</b><span>${esc(d)}</span></div></div>`).join("")}</div></div>
     <div class="card heat"><div class="ct">Your kitchen · ${S.temp} °C</div>${guideFor(rid).map(([l,v,e])=>`<div class="ctrl" style="padding:7px 0;border-color:rgba(0,0,0,.06)"><div class="lab" style="font-weight:500">${l}${e?`<span class="est">est.</span>`:""}</div><b style="text-align:right">${v}</b></div>`).join("")}
     <ul class="clean" style="margin-top:6px">${WARM_TIPS[rid].map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
   }else{
@@ -862,68 +1134,62 @@ function ingBox(rid,c){
   const b=c.build;
   return`<div class="stats">${c.stats.map(([v,l])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("")}</div>
   <div class="card"><div class="ct" style="display:flex;justify-content:space-between"><span>Ingredients</span><span>Baker's %</span></div>${list}</div>
-  ${b?`<div class="card tint"><div class="ct">Levain build · start it first</div><div class="build"><div class="b"><b>${gnum(b.m)}</b><span>mother g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.f)}</b><span>flour g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.w)}</b><span>water g</span></div></div><div class="faint" style="margin-top:8px">Makes ≈ ${gt(b.t)}, use ${gt(b.use)} at peak. ${rid==="loaf"?"5–8 h":"4–6 h"} at 24–26 °C.</div></div>`:
-  `<div class="card tint"><div class="ct">Night before</div><p style="margin:0">The stiff sweet starter is the levain: build it the night before and use it all. Cook the tangzhong to 65 °C, then chill.</p></div>`}
+  ${b?`<div class="card tint"><div class="ct">Levain build · start it first</div><div class="build"><div class="b"><b>${gnum(b.m)}</b><span>mother g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.f)}</b><span>flour g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.w)}</b><span>water g</span></div></div><div class="faint" style="margin-top:8px">Makes ≈ ${gt(b.t)}, use ${gt(b.use)} at peak. ${fmtWin(interp(rid==="loaf"?LEV:LEV_FAST,S.temp))} at ${S.temp} °C <span class="est">est.</span>${b.booklet?"":` · scaled from the booklet's ${BUILDS[rid][0].b.join(" + ")} for this batch`}</div></div>`:
+  `<div class="card tint"><div class="ct">Night before · ${esc(c.variant.label)}</div><p style="margin:0">Stiff starter: ${gt(c.q.seed)} starter + ${gt(c.q.shoney)} honey + ${gt(c.q.swater)} water + ${gt(c.q.sflour)} flour${S.variant.sandwich==="chill"?", 3–4 h out then into the fridge":", 8–10 h"}. It's the levain: use it all. Tangzhong: ${gt(c.q.tflour)} flour + ${gt(c.q.milk)} milk cooked to 65 °C, then chilled.</p></div>`}
   ${c.extras.length?`<div class="card"><div class="ct">Also needed</div>${c.extras.map(([a,v])=>`<div class="ing"><div class="n">${a}</div><div style="text-align:right;font-weight:600;font-size:14.5px;max-width:60%">${v}</div></div>`).join("")}</div>`:""}`;
 }
-function timeline(rid,o){
-  const mode=o?o.mode:S.plan.mode,date=o?o.date:S.plan.day[rid],atS=o?o.at:(mode==="finish"?S.plan.anchor[rid]:S.plan.start);
-  const p=o&&o.p||currentPlan(rid),steps=p.steps,cum=[];let acc=0;steps.forEach(s=>{cum.push(acc);acc+=s.d});
-  const anchorEnd=cum[p.anchor]+steps[p.anchor].d;
-  const at=parseClock(atS);
-  let base0,base=mode==="finish"?(at??540)-anchorEnd:(at??420);
-  const d0=fromIso(date);
-  const ev=steps.map((s,i)=>({...s,i,st:base+cum[i]}));
-  // round an estimated start down to a 5-minute mark; the extra minutes go to the first (estimated) step so the ready time stays put
-  base0=base;const r=((base%5)+5)%5;if(r&&mode==="finish"){base-=r;ev[0].st=base;ev[0].d+=r}
-  ev.splice(p.anchor+1,0,{anchorMark:1,st:base0+anchorEnd,t:rid==="pizza"?"First pizza goes in":"Out of the oven",d:0,k:"oven"});
-  const dt=m=>{const d=new Date(d0);d.setMinutes(d.getMinutes()+m);return d};
-  return{ev,dt,total:acc,startD:dt(base),anchorD:dt(base0+anchorEnd),p};
-}
-/* planner defaults: never open on a start that has passed; keep hands-on moments out of 23:00–06:00 */
-const READY_WIN={loaf:[7*60,20*60],focaccia:[11*60,20*60],pizza:[12*60,21*60],sandwich:[8*60,20*60]};
-const isNight=d=>{const m=d.getHours()*60+d.getMinutes();return m>=23*60||m<6*60};
-function planScore(tl){if(tl.startD.getTime()<Date.now()+10*60000)return 0;return tl.ev.some(e=>!e.anchorMark&&isNight(tl.dt(e.st)))||isNight(tl.anchorD)?1:2}
-function autoPlan(rid){
-  const p=currentPlan(rid),today=new Date();today.setHours(0,0,0,0);let fb=null;
-  if(S.plan.mode==="start"){const t0=Math.ceil(Date.now()/9e5)*9e5+9e5;
-    for(let i=0;i<7*96;i++){const d=new Date(t0+i*9e5),c={mode:"start",date:isoDate(d),at:fmtClock(d.getHours()*60+d.getMinutes()),p},sc=planScore(timeline(rid,c));if(sc===2){fb=c;break}if(sc&&!fb)fb=c}
-    if(fb){S.plan.day[rid]=fb.date;S.plan.start=fb.at}return}
-  const pref=parseClock(ANCHOR_DEFAULT[rid]),[w0,w1]=READY_WIN[rid],times=[pref];
-  for(let m=w0;m<=w1;m+=15)if(m!==pref)times.push(m);times.sort((a,b)=>Math.abs(a-pref)-Math.abs(b-pref)||a-b);
-  for(let k=0;k<8;k++){const d=new Date(today);d.setDate(d.getDate()+k);const date=isoDate(d);
-    for(const m of times){const c={mode:"finish",date,at:fmtClock(m),p},sc=planScore(timeline(rid,c));if(sc===2){fb=c;k=99;break}if(sc&&!fb)fb=c}}
-  if(fb){S.plan.day[rid]=fb.date;S.plan.anchor[rid]=fb.at}
-}
-// opening the planner: untouched plans always follow the clock; a custom plan that has gone stale is moved on
-function ensurePlan(rid,announce){
-  const past=timeline(rid).startD.getTime()<Date.now()-60000;
-  if(!S.plan.custom[rid]||past){const wasCustom=S.plan.custom[rid];autoPlan(rid);S.plan.custom[rid]=false;
-    if(past&&wasCustom&&announce){const tl=timeline(rid);setTimeout(()=>toast(`Your saved plan had passed, so it moved to ${S.plan.mode==="finish"?"ready":"start"} ${dayName(S.plan.mode==="finish"?tl.anchorD:tl.startD)}, ${S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start}.`),350)}}
-}
+function variantPick(){const v=S.variant.sandwich,V=SANDWICH_VARIANTS[v];
+  return seg("variant",Object.entries(SANDWICH_VARIANTS).map(([k,x])=>[k,x.label]),v)+`<div class="faint" style="margin-top:8px">${esc(V.sub)}.${v==="std"&&S.temp>=27?` <b>Your kitchen is ${S.temp} °C: Warm kitchen or Chill keeps the starter from overshooting.</b>`:""}${v==="chill"?" The planner adds the fridge stage.":""}</div>`}
+/* planner: the user's plan is checked interval by interval against the unavailable window.
+   Untouched plans are chosen automatically; if nothing complies the app says so (never a silent fallback). */
+let PLAN_NONE={};
+function applyAuto(rid){const r=findPlan(rid);PLAN_NONE[rid]=!r.ok;if(r.c){S.plan.day[rid]=r.c.date;if(S.plan.mode==="finish")S.plan.anchor[rid]=r.c.at;else S.plan.start=r.c.at}S.plan.custom[rid]=false}
+function ensurePlan(rid,announce){const tl=timeline(rid),past=tl.startD.getTime()<Date.now()-60000;
+  if(!S.plan.custom[rid]||past){const wasCustom=S.plan.custom[rid];applyAuto(rid);
+    if(past&&wasCustom&&announce){const t=timeline(rid);setTimeout(()=>toast(`Your saved plan had passed, so it moved to ${S.plan.mode==="finish"?"ready":"start"} ${dayName(S.plan.mode==="finish"?t.targetD:t.startD)}, ${S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start}.`),350)}}}
+const tgtLabel=rid=>TARGETS[rid].find(x=>x[0]===S.plan.target[rid])[1];
+function conflictBox(rid,tl){
+  const a=S.plan.away,accepted=S.plan.accept[rid]===planSig(rid),n=tl.conflicts.length;
+  if(!awayCfg())return`<div class="notebar" style="margin:12px 0 0"><span>ℹ︎</span><span>No unavailable hours set, so steps can land at any time.</span></div>`;
+  if(!n)return`<div class="okbar" data-test="plan-ok"><span>✓</span><span>Every hands-on and oven step is outside ${a.from}–${a.to}. Rising, fridge and cooling may run through it.</span></div>`;
+  const list=`<ul class="clash">${tl.conflicts.map(c=>`<li><b class="num">${clockOf(c.from)}–${clockOf(c.to)}</b> ${esc(c.t)}${c.whole?"":" (first minutes of hands-on work)"}</li>`).join("")}</ul>`;
+  if(accepted)return`<div class="warnbar accepted" data-test="plan-accepted"><span>!</span><span><b>Kept with ${n} clash${n>1?"es":""} in your unavailable hours</b>${list}<button class="linkbtn" data-act="punaccept">Show alternatives again</button></span></div>`;
+  const alts=alternatives(rid),none=!S.plan.custom[rid]&&PLAN_NONE[rid];
+  return`<div class="conflictbox" role="alert" data-test="${none?"plan-none":"plan-conflict"}"><b class="h">${none?"No plan fits your unavailable hours":"This plan needs you while you're unavailable"}</b>
+   <p>${none?`In the next 8 days there's no time where every hands-on and oven step stays outside ${a.from}–${a.to} with the ${S.cold[rid]} h fridge stage. This is the closest plan (${fmtDur(tl.conflictMin)} inside), with the clashes marked:`:`You're unavailable ${a.from}–${a.to}, but this plan has:`}</p>${list}
+   ${alts.length?`<div class="ct" style="margin:10px 0 6px">Plans that fit</div><div class="alts">${alts.map(x=>`<button class="alt" data-act="palt" data-arg="${x.date}|${x.at}|${x.cold||""}"><b>${esc(x.label)}</b><span>${esc(x.desc)}</span>${x.note?`<small>${esc(x.note)}</small>`:""}</button>`).join("")}</div>`:`<p class="faint">Nothing fits within 8 days with these settings. A shorter unavailable window would help.</p>`}
+   <button class="btn sec" data-act="paccept" style="margin-top:10px">Keep this plan anyway</button><div class="faint" style="margin-top:6px;text-align:center">Fermentation times are not shortened to make a plan fit.</div></div>`}
 function vPlan(){
-  const rid=S.rid;if(!S.plan.custom[rid])autoPlan(rid);const tl=timeline(rid),mode=S.plan.mode,maxd=Math.max(...tl.ev.map(e=>e.d));
+  const rid=S.rid;if(!S.plan.custom[rid])applyAuto(rid);const tl=timeline(rid),mode=S.plan.mode,maxd=Math.max(...tl.ev.map(e=>e.d)),c=calc(rid),T=TARGETS[rid];
   const days=[];for(let i=0;i<8;i++){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+i);days.push(d)}
   let lastDay="",items="";
+  const mark=(d,label,sub,on)=>{const key=isoDate(d);if(key!==lastDay){lastDay=key;items+=`<div class="daytag"><span class="dd">${dayName(d)}</span><span class="rel">${relDay(d)}</span></div>`}
+    items+=`<div class="ev anchor k-${on?"oven":"rest"}${on?" target":""}"><div class="tm num">${clockOf(d)}</div><div class="rail"><i></i></div><div class="bx"><div class="in"><b>${label}${on?` <span class="chip t">your target</span>`:""}</b><div class="d">${sub}</div></div></div></div>`};
   tl.ev.forEach(e=>{const d=tl.dt(e.st),key=isoDate(d);if(key!==lastDay){lastDay=key;items+=`<div class="daytag"><span class="dd">${dayName(d)}</span><span class="rel">${relDay(d)}</span></div>`}
-    const tm=`${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-    if(e.anchorMark){items+=`<div class="ev anchor k-oven"><div class="tm num">${tm}</div><div class="rail"><i></i></div><div class="bx"><div class="in"><b>${e.t}</b><div class="d">${RECIPES[rid].name} · ${calc(rid).summary}</div></div></div></div>`;return}
-    const w=Math.max(4,Math.sqrt(e.d/maxd)*100);
-    items+=`<div class="ev k-${e.k}"><div class="tm num">${tm}</div><div class="rail"><i></i></div><div class="bx"><div class="in"><b>${esc(e.t)}</b><div class="d">${esc(e.detail)}</div><div class="meta"><span class="chip ${e.k==="cold"?"c":e.k==="oven"?"h":e.k==="rest"?"o":e.k==="prep"?"t":""}">${e.est?"≈ ":""}${fmtDur(e.d)}</span>${e.est?`<span class="est">estimate</span>`:""}<div class="bar" style="width:${w*.45}%"></div></div></div></div></div>`});
-  const ov=tl.ev.filter(e=>!e.anchorMark).map(e=>`<i class="k-${e.k}" style="flex:${Math.max(e.d,8)}"></i>`).join("");
-  const at=S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start;
+    const w=Math.max(4,Math.sqrt(e.d/maxd)*100),hands=attendMin(e),handNote=e.k!=="prep"&&e.k!=="oven"&&hands?`<span class="chip t">${hands} min hands-on at the start</span>`:"";
+    items+=`<div class="ev k-${e.k}${e.conflict?" clash":""}"><div class="tm num">${clockOf(d)}</div><div class="rail"><i></i></div><div class="bx"><div class="in"><b>${esc(e.t)}</b><div class="d">${esc(e.detail)}</div><div class="meta"><span class="chip ${e.k==="cold"?"c":e.k==="oven"?"h":e.k==="rest"?"o":e.k==="prep"?"t":""}">${e.est?"≈ ":""}${fmtDur(e.d)}</span>${e.est?`<span class="est">estimate</span>`:""}${handNote}<div class="bar" style="width:${w*.45}%"></div></div>${e.conflict?`<div class="clashtag">⚠ ${fmtDur(e.conflict)} inside your unavailable hours</div>`:""}</div></div></div>`;
+    if(e.i===tl.p.anchor)mark(tl.ovenD,T[0][1],`${RECIPES[rid].name} · ${c.summary}`,S.plan.target[rid]==="oven")});
+  mark(tl.serveD,T[1][1],rid==="pizza"?`${c.q.n} pizza${c.q.n>1?"s":""}, about 3 min each`:"After cooling",S.plan.target[rid]==="serve");
+  const ov=tl.ev.map(e=>`<i class="k-${e.k}${e.conflict?" clash":""}" style="flex:${Math.max(e.d,8)}"></i>`).join("");
+  const at=mode==="finish"?S.plan.anchor[rid]:S.plan.start,aw=S.plan.away,other=S.plan.target[rid]==="oven"?[T[1][1],tl.serveD]:[T[0][1],tl.ovenD];
   return nav("Plan")+large("Start-time planner","Plan a bake","Pick a recipe, set your kitchen and when you want it ready.")+
   `<div class="wrap">${rpick("prid",rid)}
   <div class="card"><div class="ct">Your kitchen</div><div class="ctrl"><div class="tempdial"><div class="thermo num" style="background:${thermoColor(S.temp)}">${S.temp}°</div><div class="lab">${BAND_LABELS[band(S.temp)]}<small>Kitchen temperature</small></div></div>${stepper("temp",S.temp,"°C",{label:"Kitchen temperature",min:S.temp<=16,max:S.temp>=40})}</div>${tempNote()}</div>
   <div class="guide">${guideFor(rid).map(([l,v,e],i)=>`<div class="g${i===0?" wide":""}"><span>${l}${e?`<span class="est">est.</span>`:""}</span><b>${v}</b></div>`).join("")}</div>
+  ${rid==="sandwich"?`<div class="card"><div class="ct">Starter version</div>${variantPick()}</div>`:""}
   <h2 class="sh">When</h2>
-  <div class="card">${seg("pmode",[["finish",rid==="pizza"?"Pizza time":"Ready at"],["start","Start at"]],mode)}
-   <div class="spacer"></div><div class="faint" style="font-weight:600;margin-bottom:6px">${mode==="finish"?(rid==="pizza"?"First pizza on":"Out of the oven on"):"Levain build starts on"}</div>
+  <div class="card">${seg("pmode",[["finish","Ready at"],["start","Start at"]],mode)}
+   ${mode==="finish"?`<div class="spacer"></div><div class="ctrl" style="display:block;border:0;padding-top:4px"><div class="lab" style="margin-bottom:8px">The time means</div>${seg("ptarget",T,S.plan.target[rid])}</div>`:""}
+   <div class="spacer"></div><div class="faint" style="font-weight:600;margin-bottom:6px">${mode==="finish"?tgtLabel(rid)+" on":"Levain build starts on"}</div>
    <div class="pillrow">${days.map(d=>`<button class="pill ${isoDate(d)===S.plan.day[rid]?"on":""}" aria-pressed="${isoDate(d)===S.plan.day[rid]}" data-act="pdate" data-arg="${isoDate(d)}">${DOW[d.getDay()]}<small>${relDay(d)==="Today"||relDay(d)==="Tomorrow"?relDay(d):d.getDate()+" "+MON[d.getMonth()]}</small></button>`).join("")}</div>
-   <div class="ctrl"><div class="lab">At</div><div class="timepick"><button class="sm" data-act="ptime" data-arg="-15" aria-label="15 minutes earlier">−15</button><input type="time" id="ptime" value="${esc(at)}" step="300" aria-label="${mode==="finish"?"Ready time":"Start time"}"><button class="sm" data-act="ptime" data-arg="15" aria-label="15 minutes later">+15</button></div></div>
-   <div class="ctrl" style="display:block"><div class="lab" style="margin-bottom:8px">Fridge stage</div>${seg("pcold",COLD_OPTS[rid].map(h=>[h,h+" h"]),S.cold[rid])}</div></div>
-  <div class="sum"><div><span>Start</span><b class="num">${fmtClock(tl.startD.getHours()*60+tl.startD.getMinutes())}</b><div class="faint">${dayName(tl.startD)}</div></div><div class="arrow">${ICON.chev}</div><div><span>${rid==="pizza"?"Pizza":"Ready"}</span><b class="num">${fmtClock(tl.anchorD.getHours()*60+tl.anchorD.getMinutes())}</b><div class="faint">${dayName(tl.anchorD)}</div></div></div>
-  ${tl.startD.getTime()<Date.now()-60000?`<div class="warnbar"><span>!</span><span>That start time has already passed. Pick a later ${S.plan.mode==="finish"?"ready time or day":"start time"}, or start the timer from a later step.</span></div>`:""}
+   <div class="ctrl"><div class="lab">At</div><div class="timepick"><button class="sm" data-act="ptime" data-arg="-15" aria-label="15 minutes earlier">−15</button><input type="time" id="ptime" value="${esc(at)}" step="300" aria-label="${mode==="finish"?tgtLabel(rid)+" time":"Start time"}"><button class="sm" data-act="ptime" data-arg="15" aria-label="15 minutes later">+15</button></div></div>
+   <div class="ctrl" style="display:block"><div class="lab" style="margin-bottom:8px">Fridge stage</div>${seg("pcold",COLD_OPTS[rid].map(h=>[h,h+" h"]),S.cold[rid])}</div>
+   <div class="ctrl" style="display:block"><div class="lab" style="margin-bottom:8px">I'm unavailable<small>Hands-on and oven steps stay out of these hours; rising, fridge and cooling can run through them.</small></div>
+    ${seg("pawayon",[["1","Set hours"],["0","Any time"]],aw.on?"1":"0")}
+    ${aw.on?`<div class="awayrow"><label>From<input type="time" id="pawayf" value="${esc(aw.from)}" step="900"></label><label>To<input type="time" id="pawayt" value="${esc(aw.to)}" step="900"></label></div>`:""}</div></div>
+  <div class="sum"><div><span>Start</span><b class="num">${clockOf(tl.startD)}</b><div class="faint">${dayName(tl.startD)}</div></div><div class="arrow">${ICON.chev}</div><div><span>${esc(T.find(x=>x[0]===S.plan.target[rid])[1])}</span><b class="num">${clockOf(tl.targetD)}</b><div class="faint">${dayName(tl.targetD)}</div></div></div>
+  <div class="faint" style="text-align:center;margin-top:6px">${esc(other[0])}: ${dayName(other[1])}, ${clockOf(other[1])}</div>
+  ${tl.past?`<div class="warnbar"><span>!</span><span>That start time has already passed. Pick a later ${mode==="finish"?"time or day":"start time"}, or start the timer from a later step.</span></div>`:conflictBox(rid,tl)}
   <div class="overview">${ov}</div><div class="legend"><span class="k-prep">Hands-on</span><span class="k-wait">Rising</span><span class="k-cold">Fridge</span><span class="k-oven">Oven</span><span class="k-rest">Cooling</span></div>
   <div class="faint" style="margin-top:6px">≈ marks estimates for ${S.temp} °C. If the dough runs ahead or behind, follow its cues; later steps shift with it.</div>
   <div class="tl" style="margin-top:6px">${items}</div>
@@ -944,16 +1210,35 @@ function vTimer(){
   return nav(RECIPES[s.rid].name,{left:`<div class="left"><button class="back" data-act="tend" style="color:#F7C9A6">${ICON.close}End</button></div>`,right:`<button class="iconbtn" data-act="focus" aria-label="${document.body.classList.contains("focus")?"Exit focus mode":"Focus mode"}">${document.body.classList.contains("focus")?ICON.shrink:ICON.expand}</button>`})+
   `<div class="overall"><div class="bar"><i data-live="obar" style="width:${(doneMin/totalAll*100).toFixed(1)}%"></i></div><div class="lab"><span>Step ${s.idx+1} of ${s.steps.length}</span><span data-live="oleft">≈ ${fmtDur(totalAll-doneMin)} to go</span></div></div>
   <div class="ringwrap ${done?"done":""}" id="ringwrap">${ringSVG(frac,"ringfg")}<div class="ctr"><div class="lbl" data-live="rlbl">${done?"Step done":s.running?"Remaining":"Paused"}</div><div class="cd num" data-live="cd" role="timer" aria-label="Time remaining">${fmtCD(rem)}</div><div class="of" data-live="rof">${done?"Check the cue below":`of ${fmtDur(st.d)}${st.est?" (estimate)":""} · ${s.running?"ends "+endLbl:"tap play"}`}</div></div></div>
-  <div class="tstep"><div class="no">Step ${s.idx+1}${st.est?" · follow the dough":""}</div><h2>${esc(st.t)}</h2><p>${esc(st.detail)}</p>${st.cue?`<div class="cue"><span>✓</span><span><b>Ready when:</b> ${esc(st.cue)}</span></div>`:""}</div>
+  <div class="tstep"><div class="no">Step ${s.idx+1}${st.est?" · follow the dough":""}</div><h2>${esc(st.t)}</h2><p>${esc(st.detail)}</p>${st.cue?`<div class="cue"><span>✓</span><span><b>Ready when:</b> ${esc(st.cue)}</span></div>`:""}${doughTBox(s)}</div>
+  ${done&&st.check?readyBox(s,st):""}
   <div class="tctl"><button class="rb" data-act="tprev" ${s.idx===0?"disabled":""} aria-label="Previous step">${ICON.prev}</button>
-   <button class="play ${done?"done-pulse":""}" data-act="${done?"tnext":"tplay"}" aria-label="${s.running?"Pause":"Start"}" id="playbtn">${done?ICON.next:s.running?ICON.pause:ICON.play}</button>
+   <button class="play ${done?"done-pulse":""}" data-act="${done?(st.check?"tchk":"tnext"):"tplay"}" aria-label="${done?(st.check?"Go to the readiness check":"Start the next step"):s.running?"Pause":"Start"}" id="playbtn">${done?(st.check?"?":ICON.next):s.running?ICON.pause:ICON.play}</button>
    <button class="rb" data-act="tnext" ${s.idx>=s.steps.length-1?"disabled":""} aria-label="Next step">${ICON.next}</button></div>
-  <div class="tsmall"><button data-act="tadd" data-arg="-5">−5 min</button><button data-act="tadd" data-arg="5">+5 min</button><button data-act="treset">Restart step</button><button data-act="tsound" class="${S.sound?"on":""}" aria-pressed="${S.sound}">Sound ${S.sound?"on":"off"}</button>${CAN_WAKE?`<button data-act="twake" class="${S.wake?"on":""}" aria-pressed="${S.wake}">Screen ${S.wake?"stays on":"may sleep"}</button>`:""}${CAN_NOTIFY&&!IS_IOS?`<button data-act="tnotify" class="${S.notify&&Notification.permission==="granted"?"on":""}" aria-pressed="${S.notify&&Notification.permission==="granted"}">Alerts ${S.notify&&Notification.permission==="granted"?"on":"off"}</button>`:""}</div>
-  ${alertNote()}
-  ${done&&s.idx<s.steps.length-1?`<button class="btn nextbtn done-pulse" data-act="tnext">Next: ${esc(s.steps[s.idx+1].t)}</button>`:""}
+  <div class="tsmall"><button data-act="tadd" data-arg="-5">−5 min</button><button data-act="tadd" data-arg="5">+5 min</button><button data-act="treset">Restart step</button><button data-act="tsound" class="${S.sound?"on":""}" aria-pressed="${S.sound}">Sound ${S.sound?"on":"off"}</button>${CAN_NOTIFY&&!IS_IOS?`<button data-act="tnotify" class="${S.notify&&Notification.permission==="granted"?"on":""}" aria-pressed="${S.notify&&Notification.permission==="granted"}">Alerts ${S.notify&&Notification.permission==="granted"?"on":"off"}</button>`:""}</div>
+  <div class="wakerow">${wakeBtn()}</div>
+  ${alertNote()}${!done&&s.running&&(st.check||st.k==="oven"||st.d>=20)?`<div class="alarmtip" data-test="alarmtip">⏰ <b>Backup alarm:</b> set your Clock app for <b class="num">${endLbl}</b>${st.check?" to check the dough":""}. A web app can't guarantee an alert while the phone is locked.</div>`:""}
+  ${done&&!st.check&&s.idx<s.steps.length-1?`<button class="btn nextbtn done-pulse" data-act="tnext">Start next: ${esc(s.steps[s.idx+1].t)}</button>`:""}
   ${done&&s.idx===s.steps.length-1?`<button class="btn nextbtn" data-act="tend">Finish bake</button>`:""}
   <div class="scards" id="scards">${s.steps.map((x,i)=>`<button class="scard ${i===s.idx?"cur":i<s.idx?"past":""}" data-act="tgo" data-arg="${i}"><div class="sn">STEP ${i+1}</div><b>${esc(x.t)}</b><span>${x.est?"≈ ":""}${fmtDur(x.d)}</span></button>`).join("")}</div>`;
 }
+function readyBox(s,st){const last=s.idx>=s.steps.length-1,nx=last?null:s.steps[s.idx+1];
+  return`<div class="ready" role="group" aria-labelledby="rdyh" data-test="readiness"><h3 id="rdyh">Is it ready?</h3>${Number.isFinite(+s.endsAt)&&!s.running?(()=>{const at=new Date(+s.endsAt),rd=relDay(at);return`<p class="faint" data-test="ended-at">Timer ended at ${fmtClock(at.getHours()*60+at.getMinutes())}${rd==="Today"?"":" "+esc(rd.toLowerCase())}${s.closedEnd?" while the app was closed":""}.</p>`})():""}${st.cue?`<p><b>Look for:</b> ${esc(st.cue)}</p>`:""}
+   <div class="ct">Not ready yet</div><div class="rmore">${[15,30,60].map(m=>`<button data-act="tmore" data-arg="${m}">+${m} min</button>`).join("")}</div>
+   <button class="btn" data-act="${last?"tend":"tnext"}">${last?"Ready: finish":`Ready: start ${esc(nx.t)}`}</button>
+   <button class="btn sec" data-act="tguide">Unsure: how to judge it</button>
+   <div class="faint" style="margin-top:6px">Nothing starts until you choose. The time was an estimate; the dough decides.</div></div>`}
+function doughTBox(s){const bi=s.steps.findIndex(x=>x.key==="bulk"),si=s.steps.findIndex(x=>x.key==="bulkstart");if(bi<0||si<0||s.idx<si||s.idx>bi)return"";
+  return`<div class="dtemp"><label for="dtin">Dough temperature after mixing</label><div class="dtrow"><input id="dtin" type="number" inputmode="decimal" step="0.5" min="15" max="35" value="${s.doughT??""}" placeholder="${s.temp}"><span>°C</span>${s.doughT!=null?`<button class="linkbtn" data-act="dtclear">Use kitchen temp</button>`:""}</div>
+   <div class="faint">${s.doughT!=null?`Bulk estimate uses your ${s.doughT} °C dough: ≈ ${fmtDur(s.steps[bi].d)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then follows the dough instead of the ${s.temp} °C kitchen.`}</div></div>`}
+function guideSheet(s,st){const r=s.rid,b=band(s.temp),key=st.key;
+  let h,li;
+  if(key==="levain"&&r==="sandwich"){h="Is the stiff starter ready?";li=["Clearly risen, about 50% or more, and domed","Webby, bubbly inside when you pull a bit back","Smells sweet-tangy, not sharp or alcoholic","Not risen at all: leave it longer; it's still alive, just slow"]}
+  else if(key==="levain"){h="Is the levain at peak?";li=["Roughly doubled from the mark (80–100% rise)","Bubbly all through when you look at the side of the jar","Dome is just starting to flatten: use it now","Collapsed and very sour: it's past peak. Use it soon, or build again for a milder loaf"]}
+  else if(key==="bulk"){const tgt=r==="loaf"?LOAF_RISE[b]:r==="focaccia"?FOC_RISE[b]:r==="pizza"?PIZ_RISE[b]:"40–50%";h="Is bulk fermentation done?";
+    li=[`Risen about ${tgt} from the mark on the container`,r==="pizza"?"Only slightly domed with a few bubbles; pizza dough should look under-risen":"Domed edges where the dough meets the container","Bubbles on the sides and underneath",r==="sandwich"?"Soft and puffy; a floured finger leaves a dent that slowly fills":"The whole mass wobbles when you shake the container","Warm kitchen and right at the target: move on. Over-fermented dough is harder to rescue than slightly under"]}
+  else{h="Is the proof done?";li=r==="sandwich"?["The dome has reached about the rim of the tin","Poke test: springs straight back → wait; fills back slowly → bake; stays dented → bake now"]:r==="pizza"?["Balls have relaxed and spread a little","Poke springs back slowly and leaves a slight dent","Still tight and springy: give it 30 more minutes"]:["Very puffy, with bubbles under the surface","The whole sheet jiggles when you move the tray","Still tight at the edges: 15–30 more minutes, or let the preheat run longer"]}
+  return`<h3>${h}</h3><ul class="clean">${li.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="faint" style="margin:10px 0">Times are estimates for ${s.temp} °C${s.doughT!=null?` with ${s.doughT} °C dough`:""}. These cues decide.</div><button class="btn" data-act="sheetclose">Back to the check</button>`}
 const IS_IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 function alertNote(){const bits=[];
   if(IS_IOS)bits.push("iPhone can't vibrate for web apps, and the chime can't play while the screen is locked or another app is open. Keep this screen open and the ring/silent switch off.");
@@ -961,6 +1246,7 @@ function alertNote(){const bits=[];
   if(!CAN_WAKE)bits.push("Set Auto-Lock to Never (or a long time) while you bake.");
   else if(!S.wake)bits.push("Screen sleep is allowed, so a locked phone may miss the chime.");
   if(!S.sound)bits.push("Sound is off.");
+  bits.push("Lock-screen alerts would need a push server, which this offline app doesn't use; set a Clock alarm for the key steps.");
   return bits.length?`<div class="ionote" role="note"><b>Alerts:</b> ${bits.join(" ")}</div>`:""}
 function vStarter(){
   const days=S.starter.fedAt?Math.floor((Date.now()-S.starter.fedAt)/864e5):null;
@@ -975,10 +1261,22 @@ function vStarter(){
   <div class="card"><div class="steps">${[["Feed","Mix 20 g starter + 40 g flour + 35 g water in a clean jar. Mark the level."],["Short start at room temperature",`1–2 h (30–60 min at 28 °C+) until the first bubbles. Your kitchen is ${S.temp} °C: ${S.temp>=27?"30–60 min":"1–2 h"}.`],["Fridge before peak","3–5 °C. Refresh every 7–10 days."],["Revive if sluggish","A recovery feed left out until about doubled; repeat if needed. Emergency rebuild: 10 g + 20 g flour + 17–18 g water."]].map(([t,d],i)=>`<div class="step"><div class="dot">${i+1}</div><div class="tx"><b>${t}</b><span>${d}</span></div></div>`).join("")}</div></div>
   <h2 class="sh">Levain builds</h2>
   <div class="card"><table class="tbl"><thead><tr><th>For</th><th>Mother + flour + water</th><th class="r">Makes / use</th></tr></thead><tbody>${LEVAIN_TABLE.map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="r">${r[2]}</td></tr>`).join("")}</tbody></table></div>
-  <div class="card"><div class="ct">When is it ready?</div><p>5–8 h at 24–26 °C (3½–5 h at 28–30 °C). Use it at peak or as the dome just starts to flatten: 80–100% rise.</p><div class="chips"><span class="chip t">Your kitchen: ${LEV[band(S.temp)].r} <span class="est">est.</span></span></div></div>
+  <div class="card"><div class="ct">When is it ready?</div><p>5–8 h at 24–26 °C (3½–5 h at 28–30 °C). Use it at peak or as the dome just starts to flatten: 80–100% rise.</p><div class="chips"><span class="chip t">Your kitchen (${S.temp} °C): ${fmtWin(interp(LEV,S.temp))} <span class="est">est.</span></span></div></div>
   <div class="card heat"><div class="ct">Slow it down in the heat</div><ul class="clean"><li>Use 20 °C water for the build.</li><li>Halve the mother: 10 g + 75 + 75 (roughly 2–3 h longer, an estimate).</li><li>Let it rise about 50%, then refrigerate until needed.</li></ul></div>
   <div class="card"><div class="ct">Healthy</div><ul class="clean ok"><li>Bubbly, domed, predictable rise</li><li>Yogurty or mildly vinegary smell</li><li>Grey liquid on top: hungry, pour off and feed</li></ul><div class="ct" style="margin-top:12px">Discard if you see</div><ul class="clean bad"><li>Fuzzy mould</li><li>Pink, orange or red growth</li><li>A putrid smell</li></ul></div></div>`;
 }
+function ddtCard(){const d=S.ddt,room=S.temp,w=ddtWater(d,room),wr=Math.round(w*2)/2;
+  const row=(act,lab,sub,val,lo,hi,isNull)=>`<div class="ctrl"><div class="lab">${lab}<small>${sub}</small></div>${stepper(act,val,"°C",{label:lab,input:val,dec:1,lo,hi,min:val<=lo,max:val>=hi})}</div>`;
+  const warn=w<2?"That's colder than tap water can go: use iced water, chilled flour, or a cooler room.":w>40?"Water above about 40 °C stresses the culture. Mix with 35–38 °C water and give the dough a warmer spot instead.":"";
+  return`<h2 class="sh">Dough temperature calculator <small>optional</small></h2><div class="card" data-test="ddt">
+   ${row("ddtT","Target dough temp","After mixing",d.target,18,32)}
+   <div class="ctrl"><div class="lab">Kitchen<small>From your kitchen setting</small></div><b class="num">${room} °C</b></div>
+   ${row("ddtF","Flour temp",d.flour===null?"Assumed = kitchen":"Measured",d.flour??room,-5,45)}
+   ${row("ddtL","Levain temp",d.lev===null?"Assumed = kitchen":"Measured",d.lev??room,-5,45)}
+   ${row("ddtX","Friction factor","Needs calibrating to your mixing",d.fric,0,20)}
+   <div class="ddtres"><span>Water temperature</span><b class="num" data-test="ddt-water">${g1(wr)} °C</b></div>${warn?`<div class="warnbar"><span>!</span><span>${warn}</span></div>`:""}
+   <div class="eq">Water = 4 × target − kitchen − flour − levain − friction</div>
+   <div class="faint">Hand-mixing adds little heat (start at 1–3 °C). Calibrate once: friction = 4 × target − kitchen − flour − levain − water you used, using the dough temperature you actually measured as the target. ${d.flour!==null||d.lev!==null||d.fric!==2||d.target!==25?`<button class="linkbtn" data-act="ddtreset">Reset</button>`:""}</div></div>`}
 function acc(id,title,body){const o=S.openAcc[id];return`<div class="acc ${o?"open":""}"><button data-act="acc" data-arg="${id}">${title}<span class="ch">${ICON.chev}</span></button><div class="ab">${body}</div></div>`}
 function vRef(){
   const wk=S.weekHot;const tb=[22,24,26,28,30,32];const near=tb.reduce((a,b)=>Math.abs(b-S.temp)<Math.abs(a-S.temp)?b:a);
@@ -988,6 +1286,7 @@ function vRef(){
   ${wk?`<p>Build the levain about <b>08:00</b> with 20 °C water, mix <b>11:30–12:00</b> with 15–19 °C water, and expect bulk to end about <b>15:00–16:00</b>. Shape, fridge, and bake the next morning as usual.</p>`:`<div class="tl">${WEEK.map(([w,t,k])=>`<div class="ev k-${k}" style="grid-template-columns:86px 22px 1fr"><div class="tm num" style="font-size:14px">${w}</div><div class="rail"><i></i></div><div class="bx"><div class="in" style="box-shadow:none;background:var(--bg)"><b style="font-size:14.5px;font-weight:600">${esc(t)}</b></div></div></div>`).join("")}</div>`}</div>
   <h2 class="sh">Oven temperatures</h2><div class="card"><table class="tbl"><thead><tr><th>Bake</th><th class="r">Conv.</th><th class="r">Fan</th><th class="r">°F</th></tr></thead><tbody>${OVENS.map(r=>`<tr><td>${r[0]}</td><td class="r">${r[1]}</td><td class="r">${r[2]}</td><td class="r">${r[3]}</td></tr>`).join("")}</tbody></table></div>
   <h2 class="sh">Water temperature <small>for a 25 °C dough</small></h2><div class="card"><div class="wtable">${tb.map(t=>`<div class="${t===near?"on":""}"><span>room ${t}°</span><b>${75-2*t}°</b></div>`).join("")}</div><div class="eq" style="margin-top:10px">Water °C = (25 × 3) − room °C − flour °C</div></div>
+  ${ddtCard()}
   <div class="card"><div class="ct">True hydration</div><div class="eq">Hydration = <span class="fr"><span>water + ½ levain</span><span>flour + ½ levain</span></span> × 100</div><div class="faint">Levain at 100% hydration is half flour, half water.</div></div>
   <h2 class="sh">Cues</h2><div class="card">
    <div class="ing"><div class="n">Lean loaf done</div><b>96–98 °C</b></div><div class="ing"><div class="n">Sandwich loaf done</div><b>93–96 °C</b></div>
@@ -996,7 +1295,10 @@ function vRef(){
    <div class="faint" style="margin-top:8px">Scaling: multiply by new flour ÷ old flour; trays by the area ratio.</div></div>
   <h2 class="sh">Troubleshooting</h2>${RIDS.map(r=>acc("t"+r,RECIPES[r].name,TROUBLE[r].map(([p,c,f])=>`<div class="trow"><b>${esc(p)}</b><div class="cause">${esc(c)}</div><div class="fix">${esc(f)}</div></div>`).join(""))).join("")}
   <h2 class="sh">App</h2><div class="card"><div class="ctrl" style="display:block"><div class="lab" style="margin-bottom:8px">Appearance</div>${seg("theme",[["auto","Auto"],["light","Light"],["dark","Dark"]],S.theme)}</div>
-   <div class="faint" style="margin-top:10px">Everything is saved on this device only. Add to Home Screen for a full-screen app.</div><div class="spacer"></div><button class="btn ghost" data-act="resetall">Reset all settings</button></div></div>`;
+   <div class="faint" style="margin-top:10px">Everything is saved on this device only. Add to Home Screen for a full-screen app.</div>
+   <div class="ct" style="margin-top:14px">Your data</div><div class="btnrow"><button class="btn sec" data-act="export">Export</button><label class="btn sec filebtn">Import<input type="file" id="impfile" accept="application/json,.json"></label></div>
+   <div class="faint" style="margin-top:6px">A JSON file with your settings, scales, plans and starter feed. A running timer isn't included. You'll see a preview before anything is replaced.</div>
+   <div class="spacer"></div><button class="btn ghost" data-act="resetall">Reset all settings</button></div></div>`;
 }
 
 /* ---------- render ---------- */
@@ -1035,9 +1337,52 @@ function updateTimerDom(){
 }
 function onScroll(){const v=$("#view"),n=v.querySelector(".nav");if(n)n.classList.toggle("solid",v.scrollTop>(S.tab==="recipes"&&S.detail?170:36))}
 
-/* ---------- sheet ---------- */
-function sheet(html){const bg=document.createElement("div");bg.className="sheet-bg";const sh=document.createElement("div");sh.className="sheet";sh.innerHTML=`<div class="grab"></div>${html}`;bg.onclick=closeSheet;document.body.append(bg,sh)}
-function closeSheet(){document.querySelectorAll(".sheet,.sheet-bg").forEach(e=>e.remove())}
+/* ---------- sheet: a modal dialog ---------- */
+let sheetReturn=null;
+const FOCUSABLE='button:not([disabled]),[href],input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])';
+function sheet(html,label){const ret=document.querySelector(".sheet")?sheetReturn:document.activeElement;closeSheet(true);sheetReturn=ret;
+  const bg=document.createElement("div");bg.className="sheet-bg";bg.setAttribute("aria-hidden","true");
+  const sh=document.createElement("div");sh.className="sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-modal","true");sh.tabIndex=-1;
+  sh.innerHTML=`<div class="grab" aria-hidden="true"></div>${html}`;const h=sh.querySelector("h3");
+  if(h){h.id="sheet-title";sh.setAttribute("aria-labelledby","sheet-title")}else sh.setAttribute("aria-label",label||"Dialog");
+  bg.onclick=()=>closeSheet();document.body.append(bg,sh);const app=$("#app");if(app){app.inert=true;app.setAttribute("aria-hidden","true")}
+  const f=sh.querySelector(FOCUSABLE);(f||sh).focus({preventScroll:true})}
+function closeSheet(silent){const had=!!document.querySelector(".sheet");document.querySelectorAll(".sheet,.sheet-bg").forEach(e=>e.remove());
+  const app=$("#app");if(app){app.inert=false;app.removeAttribute("aria-hidden")}
+  if(had&&!silent){const r=sheetReturn;if(r&&document.contains(r))r.focus({preventScroll:true});else{const v=$("#view");v&&v.focus&&v.focus({preventScroll:true})}}
+  if(!silent)sheetReturn=null}
+document.addEventListener("keydown",e=>{const sh=document.querySelector(".sheet");if(!sh)return;
+  if(e.key==="Escape"){e.preventDefault();closeSheet();return}
+  if(e.key==="Tab"){const f=[...sh.querySelectorAll(FOCUSABLE)];if(!f.length){e.preventDefault();sh.focus();return}
+    const first=f[0],last=f[f.length-1];if(e.shiftKey&&(document.activeElement===first||document.activeElement===sh)){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}},true);
+
+/* ---------- export / import ---------- */
+const EXPORT_KEYS=["scale","hyd","temp","cold","variant","plan","starter","sound","wake","theme","weekHot","ddt"];
+function exportObj(){const data={};EXPORT_KEYS.forEach(k=>data[k]=JSON.parse(JSON.stringify(S[k])));return{format:"michaels-baking-export",version:1,app:"2.1",exportedAt:new Date().toISOString(),data}}
+function exportData(){const o=exportObj(),blob=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=`michaels-baking-${isoDate(new Date())}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast("Exported. Keep the file somewhere safe.")}
+/* returns {ok,cand,problems} — the candidate is fully sanitised; nothing is applied here */
+function parseImport(text){let o;try{o=JSON.parse(text)}catch(e){return{ok:false,problems:["This isn't a JSON file."]}}
+  if(!o||typeof o!=="object"||o.format!=="michaels-baking-export")return{ok:false,problems:["This file wasn't exported from this app."]};
+  if(o.version!==1)return{ok:false,problems:[`Export format version ${esc(String(o.version))} isn't supported (this app reads version 1).`]};
+  if(!o.data||typeof o.data!=="object"||Array.isArray(o.data))return{ok:false,problems:["The file has no data section."]};
+  const d={};EXPORT_KEYS.forEach(k=>{if(k in o.data)d[k]=o.data[k]});if(!Object.keys(d).length)return{ok:false,problems:["The file's data section is empty."]};
+  const cand=sanitize(merge(fresh(),d)),problems=[];
+  const chk=(lab,a,b)=>{if(JSON.stringify(a)!==JSON.stringify(b))problems.push(lab)};
+  if("temp" in d)chk("Kitchen temperature was out of range and has been adjusted.",+d.temp,cand.temp);
+  if(d.scale)for(const r of RIDS)if(d.scale[r])for(const k in cand.scale[r])if(k in d.scale[r]&&String(d.scale[r][k])!==String(cand.scale[r][k]))problems.push(`${RECIPES[r].short}: ${k} adjusted to ${cand.scale[r][k]}.`);
+  return{ok:true,cand,problems,exportedAt:o.exportedAt}}
+let pendingImport=null;
+function previewImport(text){const r=parseImport(text);
+  if(!r.ok){sheet(`<h3>Can't import this file</h3><p class="muted">${r.problems.join(" ")}</p><p class="faint">Nothing was changed.</p><button class="btn" data-act="sheetclose">OK</button>`);return}
+  pendingImport=r.cand;const keep=S;S=Object.assign({},keep,r.cand,{session:keep.session});let rows;
+  try{rows=RIDS.map(x=>[RECIPES[x].short,calc(x).summary+(x!=="sandwich"?` · ${S.hyd[x]}%`:` · ${SANDWICH_VARIANTS[S.variant.sandwich].label}`)])}finally{S=keep}
+  const c=r.cand,when=Date.parse(r.exportedAt);
+  rows.unshift(["Kitchen",`${c.temp} °C`]);rows.push(["Unavailable",c.plan.away.on?`${c.plan.away.from}–${c.plan.away.to}`:"Not set"],["Starter fed",c.starter.fedAt?dayName(new Date(c.starter.fedAt)):"Not logged"]);
+  sheet(`<h3>Replace your data with this file?</h3><p class="muted">Exported ${Number.isFinite(when)?dayName(new Date(when))+", "+clockOf(new Date(when)):"(date unknown)"}. Your settings, scales, plans and starter log will be replaced${S.session?"; the running bake is kept":""}.</p>
+   <div class="card" style="margin:10px 0">${rows.map(([a,b])=>`<div class="ing"><div class="n">${esc(a)}</div><div style="text-align:right;font-weight:600">${esc(b)}</div></div>`).join("")}</div>
+   ${r.problems.length?`<div class="warnbar"><span>!</span><span>${r.problems.map(esc).join(" ")}</span></div>`:""}
+   <div class="btnrow"><button class="btn sec" data-act="sheetclose">Cancel</button><button class="btn" data-act="importok">Replace</button></div>`)}
 
 /* ---------- actions ---------- */
 const ACT={
@@ -1059,29 +1404,40 @@ const ACT={
   hreset(){const r=S.detail;S.hyd[r]=LEAN[r].H0;render()},
   planthis(a){haptic();S.rid=a;S.tab="plan";S.detail=null;ensurePlan(a,true);render("enter")},
   startthis(a){haptic();S.rid=a;if(S.session){sheet(`<h3>Replace the current bake?</h3><p class="muted">${RECIPES[S.session.rid].name} is on step ${S.session.idx+1}. Starting ${RECIPES[a].name} ends it.</p><div class="btnrow"><button class="btn sec" data-act="sheetclose">Keep it</button><button class="btn" data-act="replace" data-arg="${a}">Start new</button></div>`);return}S.tab="timer";S.detail=null;render("enter")},
-  replace(a){closeSheet();S.session=null;S.rid=a;S.tab="timer";render("enter")},
+  replace(a){closeSheet();S.session=null;sessDirty=true;S.rid=a;S.tab="timer";render("enter")},
   sheetclose(){closeSheet()},
   prid(a){S.rid=a;ensurePlan(a,true);render()},trid(a){S.rid=a;render()},
   pmode(a){if(S.plan.mode===a)return;const tl=timeline(S.rid);S.plan.mode=a;
     // keep the same bake when switching: carry the start (or ready) time across
-    if(a==="start"){S.plan.day[S.rid]=isoDate(tl.startD);S.plan.start=fmtClock(tl.startD.getHours()*60+tl.startD.getMinutes())}else{S.plan.day[S.rid]=isoDate(tl.anchorD);S.plan.anchor[S.rid]=fmtClock(tl.anchorD.getHours()*60+tl.anchorD.getMinutes())}
+    if(a==="start"){S.plan.day[S.rid]=isoDate(tl.startD);S.plan.start=clockOf(tl.startD)}else{S.plan.day[S.rid]=isoDate(tl.targetD);S.plan.anchor[S.rid]=clockOf(tl.targetD)}
     S.plan.custom[S.rid]=true;render()},
   pdate(a){S.plan.day[S.rid]=a;S.plan.custom[S.rid]=true;haptic(5);render()},
   ptime(d){const k=S.plan.mode==="finish";const cur=parseClock(k?S.plan.anchor[S.rid]:S.plan.start)??540;const nv=fmtClock(cur+ +d);if(k)S.plan.anchor[S.rid]=nv;else S.plan.start=nv;S.plan.custom[S.rid]=true;haptic(5);render()},
   pcold(a){S.cold[S.rid]=+a;render()},
+  ptarget(a){const r=S.rid;if(S.plan.target[r]===a)return;S.plan.target[r]=a;render()},
+  pawayon(a){S.plan.away.on=a==="1";render()},
+  palt(a){const [d,t,c]=a.split("|"),r=S.rid;S.plan.day[r]=d;if(S.plan.mode==="finish")S.plan.anchor[r]=t;else S.plan.start=t;if(c)S.cold[r]=+c;S.plan.custom[r]=true;haptic(8);render();toast(c?`Plan moved to the ${c} h fridge option`:"Plan moved")},
+  paccept(){const r=S.rid;S.plan.custom[r]=true;S.plan.accept[r]=planSig(r);render()},
+  punaccept(){delete S.plan.accept[S.rid];render()},
+  variant(a){S.variant.sandwich=a;haptic(5);render()},
   tstart(a){startSession(S.rid,+a);render();const v=$("#view");v&&v.scrollTo(0,0)},
   tplay(){unlockAudio();haptic(12);if(S.session.running)tPause();else tPlay();render()},
-  tnext(){unlockAudio();haptic(12);const s=S.session;if(s.idx<s.steps.length-1)tGo(s.idx+1,true);render()},
+  tnext(){unlockAudio();haptic(12);const s=S.session;if(s.idx<s.steps.length-1)tGo(s.idx+1,true);render();const v=$("#view");v&&v.scrollTo(0,0)},
+  tmore(m){unlockAudio();tMore(+m);render()},
+  tchk(){const r=$(".ready");if(r){r.scrollIntoView({block:"center"});const b=r.querySelector("button");b&&b.focus({preventScroll:true})}},
+  tguide(){const s=S.session;sheet(guideSheet(s,s.steps[s.idx]))},
+  dtclear(){setDoughT(null)},
   tprev(){haptic();tGo(S.session.idx-1,false);render()},
   tgo(a){haptic();tGo(+a,false);render()},
   treset(){tGo(S.session.idx,false);render()},
   tadd(d){tAdd(+d);render()},
   tsound(){S.sound=!S.sound;if(S.sound){unlockAudio();chime()}render()},
-  twake(){S.wake=!S.wake;wakeSync();render()},
+  twake(){if(S.wake&&!wakeLock&&S.session&&S.session.running&&!document.hidden){wakeRetry=0;wakeSync().then(()=>{if(!wakeLock)toast(`The browser refused the screen lock${wakeErr?` (${wakeErr})`:""}. Set Auto-Lock to a long time instead.`)});return}
+    S.wake=!S.wake;wakeSync();wakeUI();render()},
   tnotify(){if(!CAN_NOTIFY)return;if(S.notify&&Notification.permission==="granted"){S.notify=false;render();return}
     Notification.requestPermission().then(p=>{S.notify=p==="granted";if(p==="denied")toast("Notifications are blocked for this site in your browser settings.");render()}).catch(()=>{})},
   tend(){sheet(`<h3>End this bake?</h3><p class="muted">The timer and step progress will be cleared.</p><div class="btnrow"><button class="btn sec" data-act="sheetclose">Keep going</button><button class="btn" data-act="tendok">End bake</button></div>`)},
-  tendok(){closeSheet();S.session=null;wakeSync();document.body.classList.remove("focus");render()},
+  tendok(){closeSheet();S.session=null;sessDirty=true;wakeSync();document.body.classList.remove("focus");render()},
   focus(){const b=document.body;b.classList.toggle("focus");try{if(b.classList.contains("focus"))document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{});else document.fullscreenElement&&document.exitFullscreen()}catch(e){}render()},
   fed(){S.starter.fedAt=Date.now();haptic(20);toast("Feed logged. Fridge it after 1–2 h (30–60 min if 28 °C+).");render()},
   week(a){S.weekHot=a==="1";render()},
@@ -1089,7 +1445,14 @@ const ACT={
   theme(a){S.theme=a;render()},
   updreload(){location.reload()},
   resetall(){sheet(`<h3>Reset everything?</h3><p class="muted">Scaling, plans, starter log and any running bake will be cleared.</p><div class="btnrow"><button class="btn sec" data-act="sheetclose">Cancel</button><button class="btn" data-act="resetok">Reset</button></div>`)},
-  resetok(){closeSheet();localStorage.removeItem(KEY);S=JSON.parse(JSON.stringify(DEFAULT));sanitize();render()}
+  resetok(){closeSheet(true);S=sanitize(fresh());S.epoch=newEpoch();S.rev=1;seenRev=1;sessDirty=false;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}PLAN_NONE={};wakeSync();document.body.classList.remove("focus");skipSave=true;render();skipSave=false;toast("Everything was reset")},
+  export(){exportData()},
+  importok(){if(!pendingImport)return;const ui=keepUI(),sess=S.session;S=Object.assign(pendingImport,ui,{session:sess,epoch:S.epoch,rev:S.rev});pendingImport=null;closeSheet();PLAN_NONE={};render();saveNow();toast("Imported")},
+  ddtT(d){S.ddt.target=clamp(S.ddt.target+.5*d,18,32);render()},
+  ddtF(d){S.ddt.flour=clamp((S.ddt.flour??S.temp)+ +d,-5,45);render()},
+  ddtL(d){S.ddt.lev=clamp((S.ddt.lev??S.temp)+ +d,-5,45);render()},
+  ddtX(d){S.ddt.fric=clamp(S.ddt.fric+ +d,0,20);render()},
+  ddtreset(){S.ddt=Object.assign({},DDT_DEFAULT);render()}
 };
 /* press-and-hold on steppers repeats; the click that ends a hold is swallowed */
 let repT=0,repFired=false,swallowUntil=0;
@@ -1105,15 +1468,25 @@ document.addEventListener("change",e=>{
   if(e.target.id==="hyd")render();
   const inp=e.target.dataset&&e.target.dataset.inp;
   if(inp){const v=parseFloat(String(e.target.value).replace(",","."));if(Number.isFinite(v)){const sc=S.scale;
-    const lo=+e.target.min,hi=+e.target.max,c=clamp(Math.round(v),lo,hi);
-    if(inp==="loafw")sc.loaf.w=c;else if(inp==="bw")sc.pizza.bw=c;else if(inp==="trayw")sc.focaccia.cw=c;else if(inp==="trayl")sc.focaccia.cl=c;
-    if(c!==Math.round(v))toast(`Kept within ${gnum(lo)}–${gnum(hi)}`)}render();return}
+    const step={bw:.5,ddtT:.5}[inp]||1,r=Math.round(v/step)*step,lo=+e.target.min,hi=+e.target.max,c=clamp(r,lo,hi);
+    ({loafw:()=>sc.loaf.w=c,bw:()=>sc.pizza.bw=c,trayw:()=>sc.focaccia.cw=c,trayl:()=>sc.focaccia.cl=c,ddtT:()=>S.ddt.target=c,ddtF:()=>S.ddt.flour=c,ddtL:()=>S.ddt.lev=c,ddtX:()=>S.ddt.fric=c}[inp]||(()=>0))();
+    if(c!==r)toast(`Kept within ${gnum(lo)}–${gnum(hi)}`)}render();return}
+  if(e.target.id==="dtin"){const t=String(e.target.value).trim();if(t===""){setDoughT(null);return}const v=parseFloat(t.replace(",","."));if(Number.isFinite(v))setDoughT(Math.round(v*2)/2);return}
+  if(e.target.id==="pawayf"||e.target.id==="pawayt"){const v=e.target.value;if(parseClock(v)!==null){S.plan.away[e.target.id==="pawayf"?"from":"to"]=v;render()}return}
+  if(e.target.id==="impfile"){const f=e.target.files&&e.target.files[0];e.target.value="";if(!f)return;if(f.size>1e6){toast("That file is too big to be an export from this app.");return}f.text().then(previewImport).catch(()=>toast("Couldn't read that file."));return}
   if(e.target.id==="ptime"){const v=e.target.value;if(parseClock(v)!==null){if(S.plan.mode==="finish")S.plan.anchor[S.rid]=v;else S.plan.start=v;S.plan.custom[S.rid]=true;render()}}
 });
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.inp){e.target.blur();return}if(S.tab==="timer"&&S.session&&e.code==="Space"&&e.target===document.body){e.preventDefault();ACT.tplay()}});
 document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&document.body.classList.contains("focus")){document.body.classList.remove("focus");render()}});
-// another tab changed the data: take its data but keep this tab's own screen
-window.addEventListener("storage",e=>{if(e.key===KEY&&e.newValue){try{const ui={tab:S.tab,detail:S.detail,seg:S.seg,rid:S.rid};S=merge(JSON.parse(JSON.stringify(DEFAULT)),JSON.parse(e.newValue));Object.assign(S,ui);sanitize();if(!document.querySelector(".sheet")&&!(document.activeElement&&document.activeElement.dataset&&document.activeElement.dataset.inp)){skipSave=true;render();skipSave=false}}catch(x){}}});
+// another tab changed the data: take its data but keep this tab's own screen.
+// Removal (storage cleared elsewhere) resets this tab to defaults without writing anything back.
+window.addEventListener("storage",e=>{if(e.key!==KEY&&e.key!==null)return;
+  if(e.newValue===null||e.key===null){const ui=keepUI();S=sanitize(fresh());Object.assign(S,ui);S.epoch=newEpoch();seenRev=0;PLAN_NONE={};closeSheet(true);wakeSync();skipSave=true;render();skipSave=false;toast("The app's data was cleared in another tab");return}
+  let o;try{o=JSON.parse(e.newValue)}catch(x){return}if(!o)return;
+  const resetElsewhere=o.epoch!==S.epoch;
+  if(resetElsewhere){adoptStored(o,"Everything was reset or replaced in another tab");return}
+  const ui=keepUI();S=sanitize(merge(fresh(),o));Object.assign(S,ui);seenRev=S.rev;
+  if(!document.querySelector(".sheet")&&!(document.activeElement&&document.activeElement.matches&&document.activeElement.matches("input"))){skipSave=true;render();skipSave=false}else updateTimerDom()});
 window.addEventListener("popstate",()=>{if(document.querySelector(".sheet")){closeSheet();return}if(S.detail){S.detail=null;render("pop")}});
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>render());
 
@@ -1121,9 +1494,10 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>render(
 function boot(){
   $("#view").addEventListener("scroll",onScroll,{passive:true});
   if(S.detail){try{history.replaceState(null,"");history.pushState({v:"detail"},"")}catch(e){}}
-  const ss=S.session;if(ss&&ss.running&&remNow()<=0&&!ss.alerted){const at=new Date(ss.endsAt);ss.running=false;ss.remaining=0;ss.alerted=true;saveNow();
+  const ss=S.session;if(ss&&ss.running&&remNow()<=0&&!ss.alerted){const at=new Date(ss.endsAt);ss.running=false;ss.remaining=0;ss.alerted=true;ss.closedEnd=true;sessDirty=true;saveNow();
     setTimeout(()=>toast(`Step ${ss.idx+1} finished at ${fmtClock(at.getHours()*60+at.getMinutes())}${relDay(at)==="Today"?"":" "+relDay(at).toLowerCase()} while the app was closed.`),400)}
   if(S.tab==="plan")ensurePlan(S.rid,true);
+  wakeSync();
   registerSW();
   render("enter");
 }

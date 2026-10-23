@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Michael's Baking</title>
+<meta name="description" content="Sourdough loaf, focaccia, pizza and sandwich loaf: scaling, planner and bake-day timer.">
+<meta name="theme-color" content="#FBF6EE">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Baking">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<style>
+__CSS__
+</style>
+</head>
+<body>
+<div id="app">
+  <noscript><p style="padding:24px">This app needs JavaScript.</p></noscript>
+  <main id="view" class="view"></main>
+  <button id="pill" class="nowpill" data-act="tab" data-arg="timer" style="display:none" type="button"></button>
+  <nav class="tabbar" aria-label="Main">
+    <button data-act="tab" data-arg="recipes" class="on" aria-label="Recipes"><span id="i-recipes"></span>Recipes</button>
+    <button data-act="tab" data-arg="plan" aria-label="Plan"><span id="i-plan"></span>Plan</button>
+    <button data-act="tab" data-arg="timer" aria-label="Timer"><span id="i-timer"></span>Timer<span class="badge" id="tbadge" style="display:none"></span></button>
+    <button data-act="tab" data-arg="starter" aria-label="Starter"><span id="i-starter"></span>Starter</button>
+    <button data-act="tab" data-arg="ref" aria-label="Reference"><span id="i-ref"></span>Reference</button>
+  </nav>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+__DATA__
+__CORE__
+__ART__
+["recipes","plan","timer","starter","ref"].forEach(k=>{document.getElementById("i-"+k).outerHTML=ICON[k]});
+__APP__
+</script>
+</body>
+</html>
