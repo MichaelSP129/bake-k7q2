@@ -10,6 +10,7 @@ The two open flags below are now decided:
    - A saved 276 g or 276.5 g (the old defaults) is migrated to 280 g; any other saved weight is kept.
    - Proven by unit `pizza 280: *` (9 checks) and v21 `pizza: ball weight shows 280 g and the total is 1,120 g`, `pizza: the 280 g table shows …`, `pizza: the levain build on screen is 20 + 56 + 56`, `migration: a saved … g ball weight loads as …`.
 2. **Sandwich "Chill" fridge stage is user-selectable, 8–12 h, default 8 h** (Baking bot's call; Michael delegated it). A stepper appears on the sandwich recipe and in the planner when Chill is picked. The planner, the method text and the timer use the chosen hours; a running timer keeps the hours it started with. Proven by unit `chill: *` and v21 `chill: *`.
+3. **Found while checking the 280 g screen: the booklet hydrations weren't kept on load.** `sanitize()` snapped every saved hydration to the slider's 0.5 % step, so a fresh start showed loaf 69.5 % and pizza 66.5 % instead of the booklet's 69.7 % and 66.4 % (the unit tests use the formula directly, so they didn't see it). The booklet values are now kept exactly; other values still snap to 0.5 %. Proven by v21 `hydration: *`.
 
 
 v2.1 fixes the problems the independent critique of v2 found. It adds no new features beyond what those fixes needed. The rule for this section: **an item is only "Fixed" if a test proves it**, and each one names its tests. The recipe ratios are unchanged.
@@ -18,14 +19,15 @@ Test runs on the final build:
 
 | suite | result |
 |---|---|
-| `test/unit.js` (Node; run under `TZ=Asia/Qatar` and `TZ=Europe/London`) | **68,130 passed, 0 failed** in each time zone |
-| `test/v21.py` (Playwright/Chromium: 3 viewports × light/dark, planner, timer, storage, import/export, formula on screen) | **182 passed, 0 failed** |
+| `test/unit.js` (Node; run under `TZ=Asia/Qatar` and `TZ=Europe/London`) | **68,526 passed, 0 failed** in each time zone |
+| `test/v21.py` (Playwright/Chromium: 3 viewports × light/dark, planner, timer, storage, import/export, formula on screen) | **201 passed, 0 failed** |
 | `test/audit21.py` (axe-core serious/critical + every visible control ≥44×44 on 20 screens and sheets, light + dark) | **88 passed, 0 failed** |
 | `test/offline.py` (service worker installs, cache named after the build version, reload offline, maths + planner work) | **6 passed, 0 failed** |
 | `test/smoke.py` | 0 console errors |
+| `test/pizza_session.js` (`TZ=Asia/Qatar` / `TZ=Europe/London`) | **1,851 / 1,842 passed, 0 failed** |
 
 The unit suite covers:
-- **Formulas:** 120 recipe/scale/option combinations and 3,840 gram figures extracted from the method, planner and timer text.
+- **Formulas:** 132 recipe/scale/option combinations and 4,296 gram figures extracted from the method, planner and timer text.
 - **Planner sweep:** 21,312 plans (4 recipes × 9 kitchen temperatures × every fridge option × a "now" every 15 minutes, plus "start at" mode). Each plan is checked by an independent minute-by-minute walk.
 
 | # | Critique item | Status | Proven by |
