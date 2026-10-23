@@ -8,7 +8,7 @@ def ok(n,c,d=""):
   global P,F
   print(("PASS " if c else "FAIL ")+n,"" if c else d);P+=bool(c);F+=not c
 with sync_playwright() as p:
-  b=p.chromium.launch(executable_path="/usr/bin/google-chrome",args=["--no-sandbox"])
+  b=p.chromium.launch(executable_path=os.environ.get("CHROME","/usr/bin/google-chrome"),args=["--no-sandbox"])
   ctx=b.new_context(viewport={"width":390,"height":844},timezone_id="Asia/Qatar",service_workers="allow")
   pg=ctx.new_page();errs=[];pg.on("console",lambda m:errs.append(m.text) if m.type=="error" else None)
   pg.goto(U)

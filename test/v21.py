@@ -32,7 +32,7 @@ def scroll_to(pg,sel): pg.evaluate(f"(()=>{{const e=document.querySelector('{sel
 def overflow(pg): return pg.evaluate("(()=>{const v=document.querySelector('#view');if(document.documentElement.scrollWidth>innerWidth+1||v.scrollWidth>v.clientWidth+1)return 'page scrolls sideways';const bad=[...v.querySelectorAll('*')].filter(e=>{if(e.closest('svg'))return false;const r=e.getBoundingClientRect();return r.width>0&&r.right>innerWidth+2&&getComputedStyle(e).position!=='fixed'&&!e.closest('.pillrow,.rpick,.scards,.overview,.seg.sticky,.tbl')});return bad.length?bad.slice(0,3).map(e=>e.tagName+'.'+e.className).join(','):false})()")
 
 with sync_playwright() as p:
-  b=p.chromium.launch(executable_path="/usr/bin/google-chrome",args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])
+  b=p.chromium.launch(executable_path=os.environ.get("CHROME","/usr/bin/google-chrome"),args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])
 
   # ---------- A. every screen at 3 viewports × light/dark: no console errors, no sideways overflow ----------
   for (w,h) in SIZES:
