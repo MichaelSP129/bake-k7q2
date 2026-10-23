@@ -438,6 +438,11 @@ ul.clash{margin:6px 0 4px;padding-left:18px;font-size:14px;line-height:1.45}ul.c
 .dtrow input{width:96px;height:46px;border:0;border-radius:12px;background:rgba(255,255,255,.1);color:#FBEFE2;font-size:20px;font-weight:700;padding:0 10px;font-family:inherit}
 .dtemp .faint{color:rgba(251,239,226,.65);margin-top:6px}
 .dtemp .linkbtn{color:#F7C9A6}
+.dtwarn:empty{display:none}
+.dtwarn{display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(247,201,166,.14);color:#FBEFE2;font-size:14px;line-height:1.4}
+.dtwarn .linkbtn{display:block;min-height:44px;padding:0;margin-top:2px;text-align:left}
+#ddth:focus{outline:none}
+#ddth:focus-visible{outline:2px solid var(--terra2);outline-offset:4px}
 .alarmtip{margin:10px 16px 0;padding:10px 12px;border-radius:14px;background:rgba(242,178,127,.1);color:rgba(251,239,226,.85);font-size:13.5px;line-height:1.4}
 .alarmtip b{color:#F7C9A6}
 .wakerow{display:flex;justify-content:center;margin:10px 16px 0}

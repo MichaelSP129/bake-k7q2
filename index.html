@@ -456,6 +456,11 @@ ul.clash{margin:6px 0 4px;padding-left:18px;font-size:14px;line-height:1.45}ul.c
 .dtrow input{width:96px;height:46px;border:0;border-radius:12px;background:rgba(255,255,255,.1);color:#FBEFE2;font-size:20px;font-weight:700;padding:0 10px;font-family:inherit}
 .dtemp .faint{color:rgba(251,239,226,.65);margin-top:6px}
 .dtemp .linkbtn{color:#F7C9A6}
+.dtwarn:empty{display:none}
+.dtwarn{display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(247,201,166,.14);color:#FBEFE2;font-size:14px;line-height:1.4}
+.dtwarn .linkbtn{display:block;min-height:44px;padding:0;margin-top:2px;text-align:left}
+#ddth:focus{outline:none}
+#ddth:focus-visible{outline:2px solid var(--terra2);outline-offset:4px}
 .alarmtip{margin:10px 16px 0;padding:10px 12px;border-radius:14px;background:rgba(242,178,127,.1);color:rgba(251,239,226,.85);font-size:13.5px;line-height:1.4}
 .alarmtip b{color:#F7C9A6}
 .wakerow{display:flex;justify-content:center;margin:10px 16px 0}
@@ -529,6 +534,8 @@ const SW_PROOF=[R("3–4 h",210),R("2–4 h",180),R("2–3 h",150),R("1½–3 h"
 const COLD_OPTS={loaf:[10,12,14,16],focaccia:[8,10,12,14,16],pizza:[20,24,28],sandwich:[8,10,12,14]};
 // sandwich "Chill" variant: hours the stiff starter spends in the fridge before mixing (Michael, 23 Oct: user picks 8–12 h, default 8 h)
 const CHILL_H={def:8,min:8,max:12};
+// dough vs kitchen: a notice appears when the measured dough temperature is more than this many °C from the kitchen setting (Claude's suggestion, v2.1 review)
+const TEMP_GAP=2;
 const ANCHOR_DEFAULT={loaf:"09:00",focaccia:"13:05",pizza:"16:30",sandwich:"10:15"};
 
 const TROUBLE={
@@ -832,6 +839,8 @@ function alternatives(rid){
     for(let i=0;i<=4*96&&!c;i++)for(const dir of i?[1,-1]:[1]){const x=at(dir*i);if(fits(x,ph)){c=x;break}}
     if(c)add(`${h} h fridge stage instead`,{...c,cold:h},ph,{note:"Within the recipe's fridge range; fermentation times are unchanged."})}
   return out}
+// measured dough temperature vs the kitchen setting: the signed gap (dough − kitchen) when it is more than TEMP_GAP °C, else null
+function tempMismatch(doughT,kitchenT){if(doughT===null||doughT===undefined||doughT===""||kitchenT===null||kitchenT===undefined)return null;const d=+doughT-+kitchenT;if(!Number.isFinite(d))return null;return Math.abs(d)>TEMP_GAP+1e-9?Math.round(d*10)/10:null}
 const DDT_DEFAULT={target:25,flour:null,lev:null,fric:2};
 // water °C = 4 × DDT − room − flour − levain − friction (the "4" is for doughs with a preferment)
 function ddtWater(d,room){const f=d.flour??room,l=d.lev??room;return 4*d.target-room-f-l-d.fric}
@@ -1236,7 +1245,9 @@ function readyBox(s,st){const last=s.idx>=s.steps.length-1,nx=last?null:s.steps[
    <div class="faint" style="margin-top:6px">Nothing starts until you choose. The time was an estimate; the dough decides.</div></div>`}
 function doughTBox(s){const bi=s.steps.findIndex(x=>x.key==="bulk"),si=s.steps.findIndex(x=>x.key==="bulkstart");if(bi<0||si<0||s.idx<si||s.idx>bi)return"";
   return`<div class="dtemp"><label for="dtin">Dough temperature after mixing</label><div class="dtrow"><input id="dtin" type="number" inputmode="decimal" step="0.5" min="15" max="35" value="${s.doughT??""}" placeholder="${s.temp}"><span>°C</span>${s.doughT!=null?`<button class="linkbtn" data-act="dtclear">Use kitchen temp</button>`:""}</div>
-   <div class="faint">${s.doughT!=null?`Bulk estimate uses your ${s.doughT} °C dough: ≈ ${fmtDur(s.steps[bi].d)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then follows the dough instead of the ${s.temp} °C kitchen.`}</div></div>`}
+   <div class="faint">${s.doughT!=null?`Bulk estimate uses your ${s.doughT} °C dough: ≈ ${fmtDur(s.steps[bi].d)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then follows the dough instead of the ${s.temp} °C kitchen.`}</div>${tempGapNote(s)}</div>`}
+/* non-blocking notice when the dough and the kitchen differ by more than TEMP_GAP °C; the timer keeps running */
+function tempGapNote(s){const g=tempMismatch(s.doughT,s.temp);return`<div class="dtwarn" role="status" aria-live="polite" data-test="temp-gap">${g===null?"":`<span aria-hidden="true">ℹ︎</span><span>Your dough is ${g1(s.doughT)} °C, ${g1(Math.abs(g))} °C ${g>0?"warmer":"cooler"} than the ${s.temp} °C kitchen. Fermentation follows the dough's temperature, so the bulk estimate uses ${g1(s.doughT)} °C; the other steps still use the kitchen setting, so expect them to run ${g>0?"faster":"slower"}. Next time, change the mixing water temperature to land the dough nearer the kitchen. <button class="linkbtn" data-act="ddtgo">Open the water temperature helper</button></span>`}</div>`}
 function guideSheet(s,st){const r=s.rid,b=band(s.temp),key=st.key;
   let h,li;
   if(key==="levain"&&r==="sandwich"){h="Is the stiff starter ready?";li=["Clearly risen, about 50% or more, and domed","Webby, bubbly inside when you pull a bit back","Smells sweet-tangy, not sharp or alcoholic","Not risen at all: leave it longer; it's still alive, just slow"]}
@@ -1274,7 +1285,7 @@ function vStarter(){
 function ddtCard(){const d=S.ddt,room=S.temp,w=ddtWater(d,room),wr=Math.round(w*2)/2;
   const row=(act,lab,sub,val,lo,hi,isNull)=>`<div class="ctrl"><div class="lab">${lab}<small>${sub}</small></div>${stepper(act,val,"°C",{label:lab,input:val,dec:1,lo,hi,min:val<=lo,max:val>=hi})}</div>`;
   const warn=w<2?"That's colder than tap water can go: use iced water, chilled flour, or a cooler room.":w>40?"Water above about 40 °C stresses the culture. Mix with 35–38 °C water and give the dough a warmer spot instead.":"";
-  return`<h2 class="sh">Dough temperature calculator <small>optional</small></h2><div class="card" data-test="ddt">
+  return`<h2 class="sh" id="ddth" tabindex="-1">Dough temperature calculator <small>optional</small></h2><div class="card" data-test="ddt">
    ${row("ddtT","Target dough temp","After mixing",d.target,18,32)}
    <div class="ctrl"><div class="lab">Kitchen<small>From your kitchen setting</small></div><b class="num">${room} °C</b></div>
    ${row("ddtF","Flour temp",d.flour===null?"Assumed = kitchen":"Measured",d.flour??room,-5,45)}
@@ -1459,6 +1470,7 @@ const ACT={
   ddtF(d){S.ddt.flour=clamp((S.ddt.flour??S.temp)+ +d,-5,45);render()},
   ddtL(d){S.ddt.lev=clamp((S.ddt.lev??S.temp)+ +d,-5,45);render()},
   ddtX(d){S.ddt.fric=clamp(S.ddt.fric+ +d,0,20);render()},
+  ddtgo(){haptic(5);S.tab="ref";S.detail=null;render("enter");setTimeout(()=>{const h=document.getElementById("ddth");if(h){h.scrollIntoView({block:"start"});const v=document.getElementById("view");if(v)v.scrollBy(0,-12);h.focus({preventScroll:true})}},60)},
   ddtreset(){S.ddt=Object.assign({},DDT_DEFAULT);render()}
 };
 /* press-and-hold on steppers repeats; the click that ends a hold is swallowed */
