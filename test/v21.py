@@ -246,6 +246,10 @@ with sync_playwright() as p:
 
   # ---------- F. one formula on every screen ----------
   errs=[];ctx=new(b);pg=page(ctx,errs);fresh(pg)
+  ok("hydration: a fresh start keeps the booklet values (loaf 69.7 %, pizza 66.4 %), not the nearest 0.5 % step",ev(pg,"JSON.stringify(S.hyd)")=='{"loaf":69.7,"focaccia":80,"pizza":66.4}',ev(pg,"JSON.stringify(S.hyd)"))
+  pg.reload();pg.wait_for_timeout(500)
+  ok("hydration: …and still after a reload",ev(pg,"JSON.stringify(S.hyd)")=='{"loaf":69.7,"focaccia":80,"pizza":66.4}',ev(pg,"JSON.stringify(S.hyd)"))
+  ok("hydration: other values still snap to 0.5 % steps",ev(pg,"(()=>{const t=sanitize(Object.assign(JSON.parse(JSON.stringify(DEFAULT)),{hyd:{loaf:70.2,focaccia:80,pizza:66.6}}));return t.hyd.loaf===70&&t.hyd.pizza===66.5})()"))
   ev(pg,"ACT.open('sandwich');ACT.variant('warm')")
   ok("variant: warm shows an 8 g starter in the table",pg.locator(".ing").filter(has_text="Active starter").inner_text().split("\n")[1].strip().startswith("8"))
   ev(pg,"ACT.seg('method')");ok("variant: warm shows 8 g in the method",pg.locator(".steps").inner_text().find("8 g starter + 15 g honey")>=0)

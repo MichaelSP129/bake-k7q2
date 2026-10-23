@@ -32,7 +32,8 @@ function sanitize(T){
   num(T,"temp",16,40,25,1);num(T.scale.loaf,"n",1,8,1,1);num(T.scale.loaf,"w",300,12000,1415,1);
   num(T.scale.pizza,"balls",1,24,4,1);num(T.scale.pizza,"bw",150,400,280,.5);
   num(T.scale.focaccia,"cw",10,80,23,1);num(T.scale.focaccia,"cl",10,80,33,1);num(T.scale.sandwich,"n",1,6,1,1);
-  for(const r of ["loaf","focaccia","pizza"])num(T.hyd,r,LEAN[r].Hmin,LEAN[r].Hmax,LEAN[r].H0,.5);T.hyd.loaf=+(+T.hyd.loaf).toFixed(1);T.hyd.pizza=+(+T.hyd.pizza).toFixed(1);
+  for(const r of ["loaf","focaccia","pizza"]){const raw=+T.hyd[r];num(T.hyd,r,LEAN[r].Hmin,LEAN[r].Hmax,LEAN[r].H0,.5);if(Math.abs(raw-LEAN[r].H0)<.01)T.hyd[r]=LEAN[r].H0}   // the slider moves in 0.5 % steps, but the booklet values (69.7 %, 66.4 %) are kept exactly
+ T.hyd.loaf=+(+T.hyd.loaf).toFixed(1);T.hyd.pizza=+(+T.hyd.pizza).toFixed(1);
   if(!["loaves","weight"].includes(T.scale.loaf.mode))T.scale.loaf.mode="loaves";
   if(!["large","std"].includes(T.scale.sandwich.tin))T.scale.sandwich.tin="large";
   if(!TRAYS.some(t=>t.id===T.scale.focaccia.tray))T.scale.focaccia.tray="23x33";
