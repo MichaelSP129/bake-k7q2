@@ -190,7 +190,7 @@ function vDetail(rid){
   }else if(segv==="method"){
     body=`<div class="card"><div class="steps">${methodFor(rid,c).map(([t,d],i)=>`<div class="step"><div class="dot">${i+1}</div><div class="tx"><b>${esc(t)}</b><span>${esc(d)}</span></div></div>`).join("")}</div></div>
     <div class="card heat"><div class="ct">Your kitchen · ${S.temp} °C</div>${guideFor(rid).map(([l,v,e])=>`<div class="ctrl" style="padding:7px 0;border-color:rgba(0,0,0,.06)"><div class="lab" style="font-weight:500">${l}${e?`<span class="est">est.</span>`:""}</div><b style="text-align:right">${v}</b></div>`).join("")}
-    <ul class="clean" style="margin-top:6px">${WARM_TIPS[rid].map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
+    <ul class="clean" style="margin-top:6px">${warmTips(rid,S.temp).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
   }else{
     body=`<div class="card"><div class="ct">Troubleshooting</div>${TROUBLE[rid].map(([p,c2,f])=>`<div class="trow"><b>${esc(p)}</b><div class="cause">${esc(c2)}</div><div class="fix">${esc(f)}</div></div>`).join("")}</div>
     <div class="card olive"><div class="ct">What's improved</div><ul class="clean ok">${IMPROVED[rid].map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;

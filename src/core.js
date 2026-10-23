@@ -36,6 +36,7 @@ function interp(tab,T){const t=clamp(+T,BAND_T[0],BAND_T[4]);let i=0;while(i<3&&
   const f=(t-BAND_T[i])/(BAND_T[i+1]-BAND_T[i]),a=tab[i],b=tab[i+1],[al,ah]=rng(a.r),[bl,bh]=rng(b.r),L=(x,y)=>x+(y-x)*f,r5=x=>Math.round(x/5)*5;
   return{lo:r5(L(al,bl)),hi:r5(L(ah,bh)),m:r5(L(a.m,b.m))}}
 const fmtWin=w=>`≈ ${fmtHM(w.lo)}–${fmtHM(w.hi)}`;
+function warmTips(rid,T){return WARM_TIPS[rid].map(x=>typeof x==="function"?x(T):x)}
 
 /* ---------- one authoritative formula per recipe ---------- */
 const SANDWICH_VARIANTS={
