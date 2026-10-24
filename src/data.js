@@ -59,8 +59,8 @@ const IMPROVED={
 const WARM_TIPS={
   loaf:["Mix with water at the temperature shown above.","Shape at a lower rise as the dough gets warmer.","Use the coolest spot in the house, away from windows."],
   focaccia:["Aim for the lower end of 50–75% rise when warm.","Day-2 warm-up: go by the puffiness and the big wobble rather than the clock (the time is in the Day-2 warm-up row).","Cool water for the main mix."],
-  pizza:["Stop bulk at about 20% if the dough is 27 °C or warmer.",T=>`Warm-up ${fmtWin(interp(PIZ_WARM,T))} at ${T} °C.`,"Keep balls covered so they don't skin over in air-conditioning."],
-  sandwich:["At 27 °C+ pick the Warm (smaller seed) or Chill starter option above the ingredients.","Fridge-cold water for the main mix.",T=>`Bulk ${fmtWin(interp(SW_BULK,T))} at ${T} °C.`]
+  pizza:["Stop bulk at about 20% if the dough is 27 °C or warmer.",T=>`Warm-up ${fmtT(PIZ_WARM,T)} at ${T} °C.`,"Keep balls covered so they don't skin over in air-conditioning."],
+  sandwich:["At 27 °C+ pick the Warm (smaller seed) or Chill starter option above the ingredients.","Fridge-cold water for the main mix.",T=>`Bulk ${fmtT(SW_BULK,T)} at ${T} °C.`]
 };
 const RULES=["Never use up the mother.","Build a separate levain for each bake.","For storage: feed, short start, fridge before peak.","Bake with the levain at peak.","Sour usually means hungry.","Follow the dough, not the clock.","Keep the ratios fixed.","Change one variable at a time, and log temperatures and times."];
 const WEEK=[["Mon / Tue","Refresh the mother if it's been 7+ days","rest"],["Thu 07:00","Build the loaf levain","wait"],["Thu 12:15","Autolyse; 13:00 levain in; folds until 15:20","prep"],["Thu 17:00–19:00","Shape → fridge","cold"],["Fri 07:00","Preheat 250 °C; build the pizza levain","oven"],["Fri 08:00","Bake the loaf (out ~09:00, slice ~11:30)","oven"],["Fri 12:30","Mix pizza; 2 folds; bulk 20–30% (~16:00–18:00); ball → fridge","prep"],["Sat 14:00","Pizza balls out, 20–22 h after balling","wait"],["Sat 16:50","Ooni on","oven"],["Sat 17:30","Pizza","oven"]];

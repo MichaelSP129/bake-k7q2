@@ -547,8 +547,8 @@ const IMPROVED={
 const WARM_TIPS={
   loaf:["Mix with water at the temperature shown above.","Shape at a lower rise as the dough gets warmer.","Use the coolest spot in the house, away from windows."],
   focaccia:["Aim for the lower end of 50–75% rise when warm.","Day-2 warm-up: go by the puffiness and the big wobble rather than the clock (the time is in the Day-2 warm-up row).","Cool water for the main mix."],
-  pizza:["Stop bulk at about 20% if the dough is 27 °C or warmer.",T=>`Warm-up ${fmtWin(interp(PIZ_WARM,T))} at ${T} °C.`,"Keep balls covered so they don't skin over in air-conditioning."],
-  sandwich:["At 27 °C+ pick the Warm (smaller seed) or Chill starter option above the ingredients.","Fridge-cold water for the main mix.",T=>`Bulk ${fmtWin(interp(SW_BULK,T))} at ${T} °C.`]
+  pizza:["Stop bulk at about 20% if the dough is 27 °C or warmer.",T=>`Warm-up ${fmtT(PIZ_WARM,T)} at ${T} °C.`,"Keep balls covered so they don't skin over in air-conditioning."],
+  sandwich:["At 27 °C+ pick the Warm (smaller seed) or Chill starter option above the ingredients.","Fridge-cold water for the main mix.",T=>`Bulk ${fmtT(SW_BULK,T)} at ${T} °C.`]
 };
 const RULES=["Never use up the mother.","Build a separate levain for each bake.","For storage: feed, short start, fridge before peak.","Bake with the levain at peak.","Sour usually means hungry.","Follow the dough, not the clock.","Keep the ratios fixed.","Change one variable at a time, and log temperatures and times."];
 const WEEK=[["Mon / Tue","Refresh the mother if it's been 7+ days","rest"],["Thu 07:00","Build the loaf levain","wait"],["Thu 12:15","Autolyse; 13:00 levain in; folds until 15:20","prep"],["Thu 17:00–19:00","Shape → fridge","cold"],["Fri 07:00","Preheat 250 °C; build the pizza levain","oven"],["Fri 08:00","Bake the loaf (out ~09:00, slice ~11:30)","oven"],["Fri 12:30","Mix pizza; 2 folds; bulk 20–30% (~16:00–18:00); ball → fridge","prep"],["Sat 14:00","Pizza balls out, 20–22 h after balling","wait"],["Sat 16:50","Ooni on","oven"],["Sat 17:30","Pizza","oven"]];
@@ -594,6 +594,9 @@ function interp(tab,T){const t=clamp(+T,BAND_T[0],BAND_T[4]);let i=0;while(i<3&&
   const f=(t-BAND_T[i])/(BAND_T[i+1]-BAND_T[i]),a=tab[i],b=tab[i+1],[al,ah]=rng(a.r),[bl,bh]=rng(b.r),L=(x,y)=>x+(y-x)*f,r5=x=>Math.round(x/5)*5;
   return{lo:r5(L(al,bl)),hi:r5(L(ah,bh)),m:r5(L(a.m,b.m))}}
 const fmtWin=w=>`≈ ${fmtHM(w.lo)}–${fmtHM(w.hi)}`;
+// outside 23–29 °C interp() holds the end rows, so every timing shown there says so (issue #9); no extrapolation beyond the booklet (Rule 5)
+const tblNote=T=>+T>BAND_T[4]?` (table stops at ${BAND_T[4]} °C: expect faster, check early)`:+T<BAND_T[0]?` (table stops at ${BAND_T[0]} °C: expect slower)`:"";
+const fmtT=(tab,T)=>fmtWin(interp(tab,T))+tblNote(T);
 function warmTips(rid,T){return WARM_TIPS[rid].map(x=>typeof x==="function"?x(T):x)}
 
 /* ---------- one authoritative formula per recipe ---------- */
@@ -719,12 +722,12 @@ function currentPlan(rid,o){o=o||{};return buildPlan(rid,o.temp??S.temp,o.cold??
 /* ---------- Method tab text, generated from the same numbers ---------- */
 function methodFor(rid,c){
   c=c||calc(rid);const q=c.q,T=S.temp;
-  if(rid==="loaf")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtWin(interp(LEV,T))} at ${T} °C. Ready when roughly doubled, bubbly throughout, domed or just flattening, smelling pleasantly tangy.`],
+  if(rid==="loaf")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtT(LEV,T)} at ${T} °C. Ready when roughly doubled, bubbly throughout, domed or just flattening, smelling pleasantly tangy.`],
     ["Autolyse, 40–45 min",`${gt(q.flour)} flour + ${gt(q.water1)} water, by hand until no dry flour remains. Rough and shaggy is fine. Cover.`],
     ["Add the levain — bulk starts",`Spread the ${gt(q.lev)} levain over, dimple in with wet fingers, pinch and fold. Note the time and dough temperature. Rest 15–20 min.`],
     ["Salt + reserved water",`Dissolve the ${gt(q.salt)} fine salt in the ${gt(q.reserve)} reserved water, add gradually, pinch and fold until the dough comes back together. Rest 30 min.`],
     ["Four sets of stretch-and-folds","Every 30 min: wet hand, lift one side to resistance, fold over, turn 90°, all four sides."],
-    ["Finish bulk by the dough",`Straight-sided container with the level marked. Shape at ${LOAF_RISE[band(T)]} rise (bulk ${fmtWin(interp(LOAF_BULK,T))} from levain in), not by the clock.`],
+    ["Finish bulk by the dough",`Straight-sided container with the level marked. Shape at ${LOAF_RISE[band(T)]} rise (bulk ${fmtT(LOAF_BULK,T)} from levain in), not by the clock.`],
     ["Pre-shape, bench rest 20–25 min","Loose round, light tension, uncovered. It should relax but not puddle."],
     ["Shape a boule","Flour the top, flip. Bottom up, sides in, top down, roll seam-down and drag to tighten until smooth and taut."],
     ["Banneton, straight into the fridge","Rice-floured, smooth side down, covered. Only if clearly under-fermented give it 15–30 min at room temperature first."],
@@ -733,7 +736,7 @@ function methodFor(rid,c){
     ["Score cold","Turn out onto a sling, one confident score 1–1.5 cm deep, off-centre, blade at 30–45°."],
     ["Bake","Covered 30 min at 250 °C, then uncovered 25–30 min at 220–225 °C (210–215 °C if dark). Done at 96–98 °C inside."],
     ["Cool 2½–3 h","On a rack. Cutting early gives a gummy crumb."]];
-  if(rid==="focaccia")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtWin(interp(LEV_FAST,T))} at ${T} °C; use at or just before peak.`],
+  if(rid==="focaccia")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtT(LEV_FAST,T)} at ${T} °C; use at or just before peak.`],
     ["Flour + water rest, 30–40 min",`${gt(q.flour)} flour + ${gt(q.water1)} water until no dry flour. It's meant to be wet; don't add flour.`],
     ["Add the levain",`Dimple in the ${gt(q.lev)} levain and fold until incorporated. Rest 15–20 min.`],
     ["Salt water, then olive oil",`Dissolve ${gt(q.salt)} salt in the ${gt(q.reserve)} reserved water, add in two goes; then fold in ${gt(q.oil)} olive oil until cohesive. Rest 30 min.`],
@@ -741,20 +744,20 @@ function methodFor(rid,c){
     ["Finish bulk",`Until ${FOC_RISE[band(T)]} rise (lower end when warm): airy, bubbly sides and base, jiggly.`],
     ["Oil the tray and transfer",`${gnum(q.tray0)}–${gt(q.tray1)} olive oil in the tray, flip once to coat, coax towards the corners. If it springs back, rest 15–20 min and repeat.`],
     ["Cold rest 8–16 h","Covered in the fridge."],
-    ["Warm-up proof",`${fmtWin(interp(FOC_WARM,T))} at ${T} °C, until very puffy with a big wobble.`],
+    ["Warm-up proof",`${fmtT(FOC_WARM,T)} at ${T} °C, until very puffy with a big wobble.`],
     ["Preheat","240–245 °C conventional / 220–225 °C fan, at least 40 min."],
     ["Oil, dimple, season",`${gnum(q.top0)}–${gt(q.top1)} olive oil over the top, oiled fingers right down to the tray. Optional brine: ${gt(q.brine)} water + ${gt(q.brine)} olive oil + a pinch of salt. Flaky salt and rosemary.`],
     [q.large?"Bake 22–28 min":"Bake 20–25 min",q.large?"Large tray: check from 20 min. Bottom rack for 2–5 min if pale underneath.":"Check from 18 min. Bottom rack for 2–5 min if pale underneath."],
     ["Rest and cut","Out of the tray after 5 min onto a rack; cut after 20–30 min."]];
-  if(rid==="pizza")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtWin(interp(LEV_FAST,T))} at ${T} °C; use at or just before peak.`],
+  if(rid==="pizza")return[["Build the levain",`${gt(q.bm)} mother + ${gt(q.bf)} flour + ${gt(q.bw)} water (makes ${gt(q.bt)}; you use ${gt(q.lev)}). ${fmtT(LEV_FAST,T)} at ${T} °C; use at or just before peak.`],
     ["Flour + water rest, 25–30 min",`Both flours (${gt(q.flour)} total) + ${gt(q.water1)} water until no dry flour.`],
     ["Add the levain",`Pinch and fold in the ${gt(q.lev)} levain. Rest 15 min.`],
     ["Salt + reserved water",`${gt(q.salt)} salt in the ${gt(q.reserve)} reserved water; pinch and fold until absorbed. Rest 30 min.`],
     ["Two folds, 30 min apart","A 3rd only if it's still batter-like."],
-    ["Bulk to 20–30%",`${fmtWin(interp(PIZ_BULK,T))} at ${T} °C. Stop at about 20% if the dough is 27 °C or warmer.`],
+    ["Bulk to 20–30%",`${fmtT(PIZ_BULK,T)} at ${T} °C. Stop at about 20% if the dough is 27 °C or warmer.`],
     ["Divide and ball",`${q.n} equal ball${q.n>1?"s":""} of ${g1(q.ball)} g, smooth and tight, into lightly oiled lidded containers.`],
     ["Cold ferment ~24 h","20–28 h at 3–5 °C."],
-    ["Warm-up",`${fmtWin(interp(PIZ_WARM,T))} at ${T} °C. Don't re-ball. Ready when a poke springs back slowly.`],
+    ["Warm-up",`${fmtT(PIZ_WARM,T)} at ${T} °C. Don't re-ball. Ready when a poke springs back slowly.`],
     ["Heat the Ooni 30–40 min","Stone centre at 420–450 °C."],
     ["Open the dough","Press from the centre, leave the outer 1.5–2 cm alone; to 20–22 cm, then over the knuckles to 30–32 cm. No rolling pin."],
     ["Top lightly, shake test","Per pizza: 70–80 g uncooked sauce, 70–90 g drained mozzarella, basil, olive oil. Make sure it slides on the peel."],
@@ -765,10 +768,10 @@ function methodFor(rid,c){
     ["Night before: tangzhong",`${gt(q.tflour)} flour + ${gt(q.milk)} milk, whisked over low heat to 65 °C (thick paste). Cover and chill.`],
     ["Mix 2–3 min slow",`${gt(q.water)} cold water, ${gt(q.honey)} honey, the tangzhong, all the starter, ${gt(q.flour)} flour, ${gt(q.salt)} salt.`],
     ["Knead 10–15 min",`Add the ${gt(q.oil)} oil after 3–4 min. Aim for a weak windowpane and 24–26 °C dough.`],
-    ["Bulk to 40–50%",`${fmtWin(interp(SW_BULK,T))} at ${T} °C.`],
+    ["Bulk to 40–50%",`${fmtT(SW_BULK,T)} at ${T} °C.`],
     ["Shape","Roll to 25 × 35 cm, roll up tightly from the short end, pinch the seam, seam down in the greased tin."],
     ["Fridge overnight","Covered."],
-    ["Finish proof to the rim",`${fmtWin(interp(SW_PROOF,T))} at ${T} °C.`],
+    ["Finish proof to the rim",`${fmtT(SW_PROOF,T)} at ${T} °C.`],
     ["Bake","175 °C conventional / ~160 °C fan for 40–45 min; foil at 25–30 min if dark. Done at 93–96 °C."],
     ["Butter and cool",`Brush with ${gt(q.butter)} butter, 5–10 min in the tin, then 1–2 h on a rack.`]];
 }
@@ -1013,13 +1016,14 @@ function guideFor(rid){
   const t=S.temp,b=band(t),wt=75-2*t;
   const water=wt<5?"Ice-cold + chilled flour":`≈ ${Math.round(wt)} °C`;
   const g=[["Mother after feeding",t>=27?"30–60 min out, then fridge":"1–2 h out, then fridge",0]];
-  if(rid==="loaf")g.push(["Levain to peak",fmtWin(interp(LEV,t)),1],["Mixing water",water,0],["Shape at rise",LOAF_RISE[b],0],["Bulk from levain in",fmtWin(interp(LOAF_BULK,t)),1]);
-  else if(rid==="focaccia")g.push(["Levain to peak",fmtWin(interp(LEV_FAST,t)),1],["Mixing water",water,0],["Bulk target rise",FOC_RISE[b],0],["Bulk from levain in",fmtWin(interp(LOAF_BULK,t)),1],["Day-2 warm-up",fmtWin(interp(FOC_WARM,t)),1]);
-  else if(rid==="pizza")g.push(["Levain to peak",fmtWin(interp(LEV_FAST,t)),1],["Mixing water",water,0],["Bulk target rise",PIZ_RISE[b],0],["Bulk from levain in",fmtWin(interp(PIZ_BULK,t)),1],["Warm-up before baking",fmtWin(interp(PIZ_WARM,t)),1]);
-  else{const V=SANDWICH_VARIANTS[S.variant.sandwich];g.push(["Stiff starter",`${V.label}: ${V.sub}`,0],["Mixing water","Fridge-cold",0],["Bulk to 40–50%",fmtWin(interp(SW_BULK,t)),1],["Final proof from fridge",fmtWin(interp(SW_PROOF,t)),1])}
+  if(rid==="loaf")g.push(["Levain to peak",fmtT(LEV,t),1],["Mixing water",water,0],["Shape at rise",LOAF_RISE[b],0],["Bulk from levain in",fmtT(LOAF_BULK,t),1]);
+  else if(rid==="focaccia")g.push(["Levain to peak",fmtT(LEV_FAST,t),1],["Mixing water",water,0],["Bulk target rise",FOC_RISE[b],0],["Bulk from levain in",fmtT(LOAF_BULK,t),1],["Day-2 warm-up",fmtT(FOC_WARM,t),1]);
+  else if(rid==="pizza")g.push(["Levain to peak",fmtT(LEV_FAST,t),1],["Mixing water",water,0],["Bulk target rise",PIZ_RISE[b],0],["Bulk from levain in",fmtT(PIZ_BULK,t),1],["Warm-up before baking",fmtT(PIZ_WARM,t),1]);
+  else{const V=SANDWICH_VARIANTS[S.variant.sandwich];g.push(["Stiff starter",`${V.label}: ${V.sub}`,0],["Mixing water","Fridge-cold",0],["Bulk to 40–50%",fmtT(SW_BULK,t),1],["Final proof from fridge",fmtT(SW_PROOF,t),1])}
   return g;
 }
-function tempNote(){const t=S.temp;return t<18||t>32?`<div class="notebar" style="margin:10px 0 0"><span>ℹ︎</span><span>${t<18?"Below 18 °C":"Above 32 °C"} the timing tables are stretched beyond what they cover (estimates are held at the ${t<18?"23":"29"} °C values). Go by the dough cues${t>32?"; use chilled water and the fridge to slow things down":"; a warmer spot (oven with the light on) helps"}.</span></div>`:""}
+function tempNote(){const t=S.temp;if(t>=BAND_T[0]&&t<=BAND_T[4])return"";const hot=t>BAND_T[4],far=t<18||t>32;
+  return`<div class="notebar" style="margin:10px 0 0" data-test="temp-range"><span>ℹ︎</span><span>${hot?`Above ${BAND_T[4]} °C the timing tables stop, so these estimates use the ${BAND_T[4]} °C values and the real times will be shorter. Check early and go by the dough cues; to slow things down, use cold water from the water temperature helper, the Warm or Chill starter for the sandwich loaf, or a longer fridge stage.`:`Below ${BAND_T[0]} °C the timing tables stop, so these estimates use the ${BAND_T[0]} °C values and the real times will be longer. Go by the dough cues; a warmer spot (oven with the light on) helps.`}${far?` At ${t} °C you're well outside what the booklet covers.`:""}</span></div>`}
 function thermoColor(t){return t<=23?"#56707F":t<=25?"#5C6A38":t<=26?"#8A6A1E":t<=28?"#A9522A":"#B23A2E"} // v2.1: all ≥4.5:1 against the white label
 
 /* ---------- timer ----------
@@ -1141,7 +1145,7 @@ function ingBox(rid,c){
   const b=c.build;
   return`<div class="stats">${c.stats.map(([v,l])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("")}</div>
   <div class="card"><div class="ct" style="display:flex;justify-content:space-between"><span>Ingredients</span><span>Baker's %</span></div>${list}</div>
-  ${b?`<div class="card tint"><div class="ct">Levain build · start it first</div><div class="build"><div class="b"><b>${gnum(b.m)}</b><span>mother g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.f)}</b><span>flour g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.w)}</b><span>water g</span></div></div><div class="faint" style="margin-top:8px">Makes ≈ ${gt(b.t)}, use ${gt(b.use)} at peak. ${fmtWin(interp(rid==="loaf"?LEV:LEV_FAST,S.temp))} at ${S.temp} °C <span class="est">est.</span>${b.booklet?"":` · scaled from the booklet's ${BUILDS[rid][0].b.join(" + ")} for this batch`}</div></div>`:
+  ${b?`<div class="card tint"><div class="ct">Levain build · start it first</div><div class="build"><div class="b"><b>${gnum(b.m)}</b><span>mother g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.f)}</b><span>flour g</span></div><span class="plus">+</span><div class="b"><b>${gnum(b.w)}</b><span>water g</span></div></div><div class="faint" style="margin-top:8px">Makes ≈ ${gt(b.t)}, use ${gt(b.use)} at peak. ${fmtT(rid==="loaf"?LEV:LEV_FAST,S.temp)} at ${S.temp} °C <span class="est">est.</span>${b.booklet?"":` · scaled from the booklet's ${BUILDS[rid][0].b.join(" + ")} for this batch`}</div></div>`:
   `<div class="card tint"><div class="ct">Night before · ${esc(c.variant.label)}</div><p style="margin:0">Stiff starter: ${gt(c.q.seed)} starter + ${gt(c.q.shoney)} honey + ${gt(c.q.swater)} water + ${gt(c.q.sflour)} flour${S.variant.sandwich==="chill"?`, 3–4 h out then ${chillH()} h in the fridge`:", 8–10 h"}. It's the levain: use it all. Tangzhong: ${gt(c.q.tflour)} flour + ${gt(c.q.milk)} milk cooked to 65 °C, then chilled.</p></div>`}
   ${c.extras.length?`<div class="card"><div class="ct">Also needed</div>${c.extras.map(([a,v])=>`<div class="ing"><div class="n">${a}</div><div style="text-align:right;font-weight:600;font-size:14.5px;max-width:60%">${v}</div></div>`).join("")}</div>`:""}`;
 }
@@ -1238,7 +1242,7 @@ function readyBox(s,st){const last=s.idx>=s.steps.length-1,nx=last?null:s.steps[
    <div class="faint" style="margin-top:6px">Nothing starts until you choose. The time was an estimate; the dough decides.</div></div>`}
 function doughTBox(s){const bi=s.steps.findIndex(x=>x.key==="bulk"),si=s.steps.findIndex(x=>x.key==="bulkstart");if(bi<0||si<0||s.idx<si||s.idx>bi)return"";
   return`<div class="dtemp"><label for="dtin">Dough temperature after mixing</label><div class="dtrow"><input id="dtin" type="number" inputmode="decimal" step="0.5" min="15" max="35" value="${s.doughT??""}" placeholder="${s.temp}"><span>°C</span>${s.doughT!=null?`<button class="linkbtn" data-act="dtclear">Use kitchen temp</button>`:""}</div>
-   <div class="faint">${s.doughT!=null?`Bulk estimate uses your ${s.doughT} °C dough: ≈ ${fmtDur(s.steps[bi].d)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then follows the dough instead of the ${s.temp} °C kitchen.`}</div></div>`}
+   <div class="faint">${s.doughT!=null?`Bulk estimate uses your ${s.doughT} °C dough: ≈ ${fmtDur(s.steps[bi].d)}${tblNote(s.doughT)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then follows the dough instead of the ${s.temp} °C kitchen.`}</div></div>`}
 function guideSheet(s,st){const r=s.rid,b=band(s.temp),key=st.key;
   let h,li;
   if(key==="levain"&&r==="sandwich"){h="Is the stiff starter ready?";li=["Clearly risen, about 50% or more, and domed","Webby, bubbly inside when you pull a bit back","Smells sweet-tangy, not sharp or alcoholic","Not risen at all: leave it longer; it's still alive, just slow"]}
@@ -1269,7 +1273,7 @@ function vStarter(){
   <div class="card"><div class="steps">${[["Feed","Mix 20 g starter + 40 g flour + 35 g water in a clean jar. Mark the level."],["Short start at room temperature",`1–2 h (30–60 min at 28 °C+) until the first bubbles. Your kitchen is ${S.temp} °C: ${S.temp>=27?"30–60 min":"1–2 h"}.`],["Fridge before peak","3–5 °C. Refresh every 7–10 days."],["Revive if sluggish","A recovery feed left out until about doubled; repeat if needed. Emergency rebuild: 10 g + 20 g flour + 17–18 g water."]].map(([t,d],i)=>`<div class="step"><div class="dot">${i+1}</div><div class="tx"><b>${t}</b><span>${d}</span></div></div>`).join("")}</div></div>
   <h2 class="sh">Levain builds</h2>
   <div class="card"><table class="tbl"><thead><tr><th>For</th><th>Mother + flour + water</th><th class="r">Makes / use</th></tr></thead><tbody>${LEVAIN_TABLE.map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="r">${r[2]}</td></tr>`).join("")}</tbody></table></div>
-  <div class="card"><div class="ct">When is it ready?</div><p>5–8 h at 24–26 °C (3½–5 h at 28–30 °C). Use it at peak or as the dome just starts to flatten: 80–100% rise.</p><div class="chips"><span class="chip t">Your kitchen (${S.temp} °C): ${fmtWin(interp(LEV,S.temp))} <span class="est">est.</span></span></div></div>
+  <div class="card"><div class="ct">When is it ready?</div><p>5–8 h at 24–26 °C (3½–5 h at 28–30 °C). Use it at peak or as the dome just starts to flatten: 80–100% rise.</p><div class="chips"><span class="chip t">Your kitchen (${S.temp} °C): ${fmtT(LEV,S.temp)} <span class="est">est.</span></span></div></div>
   <div class="card heat"><div class="ct">Slow it down in the heat</div><ul class="clean"><li>Use 20 °C water for the build.</li><li>Halve the mother: 10 g + 75 + 75 (roughly 2–3 h longer, an estimate).</li><li>Let it rise about 50%, then refrigerate until needed.</li></ul></div>
   <div class="card"><div class="ct">Healthy</div><ul class="clean ok"><li>Bubbly, domed, predictable rise</li><li>Yogurty or mildly vinegary smell</li><li>Grey liquid on top: hungry, pour off and feed</li></ul><div class="ct" style="margin-top:12px">Discard if you see</div><ul class="clean bad"><li>Fuzzy mould</li><li>Pink, orange or red growth</li><li>A putrid smell</li></ul></div></div>`;
 }

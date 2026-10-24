@@ -183,6 +183,25 @@ with sync_playwright() as p:
   ok("console: no errors in clock tests",not errs,"; ".join(errs[:3]))
   ctx.close()
 
+  # ---------- C2. kitchen outside the 23–29 °C tables: timings say so, the Plan screen explains (issue #9) ----------
+  errs=[];ctx=new(b,390,844,"light");pg=page(ctx,errs);fresh(pg)
+  for T,want in [(33,"table stops at 29 °C: expect faster, check early"),(20,"table stops at 23 °C: expect slower"),(25,None),(29,None),(23,None)]:
+    for rid in ["loaf","focaccia","pizza","sandwich"]:
+      ev(pg,f"S.temp={T};S.tab='plan';S.rid='{rid}';render()")
+      g=[x.strip() for x in pg.locator(".guide .g b").all_inner_texts() if "≈" in x and (" h" in x or "min" in x)]
+      note=pg.locator("[data-test=temp-range]")
+      if want:
+        ok(f"table range: every guide timing at {T} °C carries the label",bool(g) and all(want in x for x in g),f"{rid}: {g}")
+        ok(f"table range: Plan screen shows the clamped-estimate notice at {T} °C",note.count()==1 and (("will be shorter" in note.inner_text()) if T>29 else ("will be longer" in note.inner_text())),f"{rid}")
+      else:
+        ok(f"table range: no label on guide timings at {T} °C",bool(g) and not any("table stops" in x for x in g),f"{rid}: {g}")
+        ok(f"table range: no clamped-estimate notice at {T} °C",note.count()==0,rid)
+  ev(pg,"S.temp=33;S.tab='plan';S.rid='pizza';render()");t=pg.locator("[data-test=temp-range]").inner_text()
+  ok("table range: hot notice points to the cooling options (water helper, Warm/Chill starter, fridge stage)",("water temperature helper" in t) and ("Warm or Chill starter" in t) and ("fridge stage" in t),t)
+  shot(pg,"light-plan-above-29")
+  ok("console: no errors in the table-range checks",not errs,"; ".join(errs[:3]))
+  ctx.close()
+
   # ---------- D. storage: two tabs, reset, stale sessions ----------
   errs=[];ctx=new(b);A=page(ctx,errs);fresh(A);Bp=page(ctx,errs);Bp.goto(BASE);Bp.wait_for_timeout(500)
   ev(A,"ACT.temp(3)");A.wait_for_timeout(500)
