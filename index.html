@@ -543,16 +543,17 @@ const IMPROVED={
   pizza:["Bulk stops at 20–30% (20% when warm), because balls keep fermenting in the fridge.","Ball weight and count are linked to the total dough, with no leftover scraps.","Flame down after launch for an even top and base in the Ooni.","Sauce kept uncooked and weighed: 400 g tomatoes + 4 g salt."],
   sandwich:["Kept the stiff sweet starter and tangzhong exactly; added the 65 °C cue.","Bulk times for both 23–24 °C and 27–28 °C kitchens.","Tin guidance: 3–3.5 L tin as standard, 0.75× for a 2 lb tin.","Doneness by internal temperature (93–96 °C) and foil timing for honey browning."]
 };
+// warm-kitchen tips; any timing is a function of the kitchen temperature, generated from the same tables (issue #4)
 const WARM_TIPS={
   loaf:["Mix with water at the temperature shown above.","Shape at a lower rise as the dough gets warmer.","Use the coolest spot in the house, away from windows."],
-  focaccia:["Aim for the lower end of 50–75% rise when warm.","Shorter warm-up on day 2: 1½–2½ h at 28–30 °C.","Cool water for the main mix."],
-  pizza:["Stop bulk at about 20% if the dough is 27 °C or warmer.","Warm-up 2–3 h at 28–30 °C.","Keep balls covered so they don't skin over in air-conditioning."],
-  sandwich:["At 27 °C+ pick the Warm (smaller seed) or Chill starter option above the ingredients.","Fridge-cold water for the main mix.","Bulk 5–7 h at 27–28 °C."]
+  focaccia:["Aim for the lower end of 50–75% rise when warm.","Day-2 warm-up: go by the puffiness and the big wobble rather than the clock (the time is in the Day-2 warm-up row).","Cool water for the main mix."],
+  pizza:["Stop bulk at about 20% if the dough is 27 °C or warmer.",T=>`Warm-up ${fmtWin(interp(PIZ_WARM,T))} at ${T} °C.`,"Keep balls covered so they don't skin over in air-conditioning."],
+  sandwich:["At 27 °C+ pick the Warm (smaller seed) or Chill starter option above the ingredients.","Fridge-cold water for the main mix.",T=>`Bulk ${fmtWin(interp(SW_BULK,T))} at ${T} °C.`]
 };
 const RULES=["Never use up the mother.","Build a separate levain for each bake.","For storage: feed, short start, fridge before peak.","Bake with the levain at peak.","Sour usually means hungry.","Follow the dough, not the clock.","Keep the ratios fixed.","Change one variable at a time, and log temperatures and times."];
-const WEEK=[["Mon / Tue","Refresh the mother if it's been 7+ days","rest"],["Thu 07:00","Build the loaf levain","wait"],["Thu 12:15","Autolyse; 13:00 levain in; folds until 15:20","prep"],["Thu 17:00–19:00","Shape → fridge","cold"],["Fri 07:00","Preheat 250 °C; build the pizza levain","oven"],["Fri 08:00","Bake the loaf (out ~09:00, slice ~11:30)","oven"],["Fri 12:30","Mix pizza; 2 folds; bulk 20–30% (~16:00–18:00); ball → fridge","prep"],["Sat 12:30–13:00","Pizza balls out","wait"],["Sat 15:50","Ooni on","oven"],["Sat 16:30","Pizza","oven"]];
-// booklet base builds (reference card); the recipe screens compute the build for the batch you set
-const LEVAIN_TABLE=[["Loaf","20 + 70 + 70","160 / 150 g"],["Focaccia 23 × 33","20 + 50 + 50","120 / 100 g"],["Focaccia 30 × 40","25 + 75 + 75","175 / 160 g"],["Pizza (4 × 280 g)","20 + 56 + 56","132 / 111 g"],["Sandwich stiff starter","15 starter + 15 honey + 30 water + 60 flour","120 g / all"]];
+const WEEK=[["Mon / Tue","Refresh the mother if it's been 7+ days","rest"],["Thu 07:00","Build the loaf levain","wait"],["Thu 12:15","Autolyse; 13:00 levain in; folds until 15:20","prep"],["Thu 17:00–19:00","Shape → fridge","cold"],["Fri 07:00","Preheat 250 °C; build the pizza levain","oven"],["Fri 08:00","Bake the loaf (out ~09:00, slice ~11:30)","oven"],["Fri 12:30","Mix pizza; 2 folds; bulk 20–30% (~16:00–18:00); ball → fridge","prep"],["Sat 14:00","Pizza balls out, 20–22 h after balling","wait"],["Sat 16:50","Ooni on","oven"],["Sat 17:30","Pizza","oven"]];
+// reference card: the booklet base builds, and for pizza the default 4 × 280 g batch (Michael, 23 Oct); the recipe screens compute the build for the batch you set
+const LEVAIN_TABLE=[["Loaf","20 + 70 + 70","160 / 150 g"],["Focaccia 23 × 33","20 + 50 + 50","120 / 100 g"],["Focaccia 30 × 40","25 + 75 + 75","175 / 158 g"],["Pizza (4 × 280 g)","20 + 56 + 56","132 / 111 g"],["Sandwich stiff starter","15 starter + 15 honey + 30 water + 60 flour","120 g / all"]];
 const OVENS=[["Loaf, covered","250 °C","230 °C","480 °F"],["Loaf, uncovered","220–225 °C","200–205 °C","430–435 °F"],["Focaccia","240–245 °C","220–225 °C","465–475 °F"],["Sandwich loaf","175 °C","~160 °C","350 °F"],["Pizza (Ooni stone)","420–450 °C","—","—"]];
 
 "use strict";
@@ -593,6 +594,7 @@ function interp(tab,T){const t=clamp(+T,BAND_T[0],BAND_T[4]);let i=0;while(i<3&&
   const f=(t-BAND_T[i])/(BAND_T[i+1]-BAND_T[i]),a=tab[i],b=tab[i+1],[al,ah]=rng(a.r),[bl,bh]=rng(b.r),L=(x,y)=>x+(y-x)*f,r5=x=>Math.round(x/5)*5;
   return{lo:r5(L(al,bl)),hi:r5(L(ah,bh)),m:r5(L(a.m,b.m))}}
 const fmtWin=w=>`≈ ${fmtHM(w.lo)}–${fmtHM(w.hi)}`;
+function warmTips(rid,T){return WARM_TIPS[rid].map(x=>typeof x==="function"?x(T):x)}
 
 /* ---------- one authoritative formula per recipe ---------- */
 const SANDWICH_VARIANTS={
@@ -1122,7 +1124,7 @@ function vDetail(rid){
   }else if(segv==="method"){
     body=`<div class="card"><div class="steps">${methodFor(rid,c).map(([t,d],i)=>`<div class="step"><div class="dot">${i+1}</div><div class="tx"><b>${esc(t)}</b><span>${esc(d)}</span></div></div>`).join("")}</div></div>
     <div class="card heat"><div class="ct">Your kitchen · ${S.temp} °C</div>${guideFor(rid).map(([l,v,e])=>`<div class="ctrl" style="padding:7px 0;border-color:rgba(0,0,0,.06)"><div class="lab" style="font-weight:500">${l}${e?`<span class="est">est.</span>`:""}</div><b style="text-align:right">${v}</b></div>`).join("")}
-    <ul class="clean" style="margin-top:6px">${WARM_TIPS[rid].map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
+    <ul class="clean" style="margin-top:6px">${warmTips(rid,S.temp).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
   }else{
     body=`<div class="card"><div class="ct">Troubleshooting</div>${TROUBLE[rid].map(([p,c2,f])=>`<div class="trow"><b>${esc(p)}</b><div class="cause">${esc(c2)}</div><div class="fix">${esc(f)}</div></div>`).join("")}</div>
     <div class="card olive"><div class="ct">What's improved</div><ul class="clean ok">${IMPROVED[rid].map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
@@ -1289,7 +1291,7 @@ function vRef(){
   return nav("Reference")+large("Quick reference","Reference","Rules, temperatures, conversions and fixes.")+
   `<div class="wrap"><h2 class="sh">Golden rules</h2><div class="card"><ol class="rules">${RULES.map(r=>`<li>${esc(r)}</li>`).join("")}</ol></div>
   <h2 class="sh">Sample week</h2><div class="card">${seg("week",[["0","Standard"],["1","Hot season"]],wk?"1":"0")}<div class="spacer"></div>
-  ${wk?`<p>Build the levain about <b>08:00</b> with 20 °C water, mix <b>11:30–12:00</b> with 15–19 °C water, and expect bulk to end about <b>15:00–16:00</b>. Shape, fridge, and bake the next morning as usual.</p>`:`<div class="tl">${WEEK.map(([w,t,k])=>`<div class="ev k-${k}" style="grid-template-columns:86px 22px 1fr"><div class="tm num" style="font-size:14px">${w}</div><div class="rail"><i></i></div><div class="bx"><div class="in" style="box-shadow:none;background:var(--bg)"><b style="font-size:14.5px;font-weight:600">${esc(t)}</b></div></div></div>`).join("")}</div>`}</div>
+  ${wk?"":`<div class="faint" data-test="week-temp" style="margin-bottom:8px">Timed for a kitchen of about 25 °C. In a warmer kitchen the rises and warm-ups are shorter, so use the Plan screen for your own times.</div>`}${wk?`<p>Build the levain about <b>08:00</b> with 20 °C water, mix <b>11:30–12:00</b> with 15–19 °C water, and expect bulk to end about <b>15:00–16:00</b>. Shape, fridge, and bake the next morning as usual.</p>`:`<div class="tl">${WEEK.map(([w,t,k])=>`<div class="ev k-${k}" style="grid-template-columns:86px 22px 1fr"><div class="tm num" style="font-size:14px">${w}</div><div class="rail"><i></i></div><div class="bx"><div class="in" style="box-shadow:none;background:var(--bg)"><b style="font-size:14.5px;font-weight:600">${esc(t)}</b></div></div></div>`).join("")}</div>`}</div>
   <h2 class="sh">Oven temperatures</h2><div class="card"><table class="tbl"><thead><tr><th>Bake</th><th class="r">Conv.</th><th class="r">Fan</th><th class="r">°F</th></tr></thead><tbody>${OVENS.map(r=>`<tr><td>${r[0]}</td><td class="r">${r[1]}</td><td class="r">${r[2]}</td><td class="r">${r[3]}</td></tr>`).join("")}</tbody></table></div>
   <h2 class="sh">Water temperature <small>for a 25 °C dough</small></h2><div class="card"><div class="wtable">${tb.map(t=>`<div class="${t===near?"on":""}"><span>room ${t}°</span><b>${75-2*t}°</b></div>`).join("")}</div><div class="eq" style="margin-top:10px">Water °C = (25 × 3) − room °C − flour °C</div></div>
   ${ddtCard()}

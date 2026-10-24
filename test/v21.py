@@ -237,6 +237,8 @@ with sync_playwright() as p:
   ok("import: invalid JSON and unknown versions are rejected",t)
   # DDT
   fresh(pg);ev(pg,"S.temp=30;ACT.tab('ref')");scroll_to(pg,"[data-test=ddt]")
+  ok("reference: Standard sample week says it is timed for about 25 °C",pg.locator("[data-test=week-temp]").count()==1 and "about 25 °C" in pg.locator("[data-test=week-temp]").inner_text())
+  ok("reference: focaccia warm tip no longer says 'Shorter warm-up'",ev(pg,"warmTips('focaccia',23).join(' ')").find("Shorter warm-up")<0)
   ok("ddt: 25 °C target in a 30 °C kitchen → 100 − 30 − 30 − 30 − 2 = 8 °C water",pg.locator("[data-test=ddt-water]").inner_text()=="8 °C")
   pg.fill("[data-inp=ddtX]","5");pg.dispatch_event("[data-inp=ddtX]","change");pg.wait_for_timeout(200);scroll_to(pg,"[data-test=ddt]")
   ok("ddt: friction factor is editable and used",pg.locator("[data-test=ddt-water]").inner_text()=="5 °C")

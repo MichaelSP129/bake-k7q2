@@ -162,6 +162,29 @@ edge("hands-on spanning two nights counts both",840,"23:00",1860,"prep");
     ok("alternatives: every offered alternative complies",cl===0,`${rid} ${at} → ${JSON.stringify(a)}`)}}
  counts["(alternatives checked)"]=alts}
 
+
+/* fixed reference text agrees with the formula and the tables (issue #4) */
+for(const rid of ["loaf","focaccia","pizza","sandwich"])for(let T=16;T<=40;T+=0.5){const st=defaults();st.temp=T;H.reset(st);
+  let tips=JSON.parse(R(`JSON.stringify(warmTips("${rid}",${T}))`)).join(" | ");
+  for(const tab of ["LEV","LEV_FAST","LOAF_BULK","FOC_WARM","PIZ_BULK","PIZ_WARM","SW_BULK","SW_PROOF"])tips=tips.split(R(`fmtWin(interp(${tab},${T}))`)).join("<table>");
+  ok("reference: warm-kitchen tips give no hand-typed hours (every timing is a table value at the kitchen temperature)",!/\d\s*(h|min)\b|[½¼¾]/.test(tips),`${rid} ${T}: ${tips}`);
+  ok("reference: warm-kitchen tips give no gram figures",gramFigures(tips).length===0,`${rid} ${T}: ${tips}`)}
+{H.reset(defaults());const week=JSON.parse(R(`JSON.stringify(WEEK)`)),day={"Fri":0,"Sat":1440};
+  const pClock=s=>{const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?+m[1]*60+ +m[2]:null};
+  const mixRow=week.find(r=>/ball → fridge/.test(r[1])),inM=mixRow[1].match(/~(\d{1,2}:\d{2})–(\d{1,2}:\d{2})/),outRow=week.find(r=>/balls out/i.test(r[1])),pzRow=week.find(r=>r[1]==="Pizza"),oo=week.find(r=>/Ooni on/.test(r[1]));
+  const at=(d,c)=>day[d]+pClock(c),inLo=at("Fri",inM[1]),inHi=at("Fri",inM[2]),outW=outRow[0].split(" "),out0=at(outW[0],outW[1].split("–")[0]),out1=at(outW[0],(outW[1].split("–")[1]||outW[1].split("–")[0]));
+  const cold=[(out0-inHi)/60,(out1-inLo)/60],need=[20,28];
+  ok("reference: sample week gives the pizza balls 20–28 h of cold ferment",cold[0]>=need[0]&&cold[1]<=need[1],JSON.stringify(cold));
+  const pz=at(...pzRow[0].split(" ")),w=JSON.parse(R(`JSON.stringify(interp(PIZ_WARM,25))`)),warm=pz-out1,warmMax=pz-out0;
+  ok("reference: sample week's warm-up (balls out → first pizza) is within the table at the default 25 °C",warm>=w.lo&&warmMax<=w.hi,`${warm}–${warmMax} vs ${w.lo}–${w.hi}`);
+  ok("reference: sample week turns the Ooni on 30–40 min before the first pizza",pz-at(...oo[0].split(" "))>=30&&pz-at(...oo[0].split(" "))<=40,oo[0])}
+{H.reset(defaults());const tab=JSON.parse(R(`JSON.stringify(LEVAIN_TABLE)`)),B=JSON.parse(R(`JSON.stringify(BUILDS)`));
+  const map={"Loaf":B.loaf[0],"Focaccia 23 × 33":B.focaccia[0],"Focaccia 30 × 40":B.focaccia[1]};   // the pizza row follows the 4 × 280 g default batch: checked by "pizza 280: reference levain card matches the default batch's build"
+  for(const [k,b] of Object.entries(map)){const r=tab.find(x=>x[0]===k),[mk,us]=r[2].replace(" g","").split(" / ").map(Number);
+    ok("reference: levain card parts, makes and use match the recipe build",r[1]===b.b.join(" + ")&&mk===b.b.reduce((a,x)=>a+x,0)&&us===b.use,`${k}: ${r[1]} ${r[2]} vs ${JSON.stringify(b)}`)}
+  // and the recipe screen uses the same figure for the 30 × 40 tray
+  const st=defaults();st.scale.focaccia.tray="30x40";H.reset(st);const c=JSON.parse(R(`JSON.stringify(calc("focaccia"))`));
+  ok("reference: 30 × 40 focaccia screen uses the levain card's figure",R(`gnum(${c.q.lev})`)==="158"&&c.build.booklet,R(`gnum(${c.q.lev})`))}
 /* a window so wide nothing can comply: explicit no-plan state, never a silent fallback */
 {const st=defaults();st.plan.away={on:true,from:"06:00",to:"05:00"};H.reset(st);H.setNow(BASE);const r=JSON.parse(R(`JSON.stringify(findPlan("loaf"))`));
  ok("no-plan: 23 h unavailable window gives ok:false with a least-conflict plan",r.ok===false&&r.c&&r.min>0,JSON.stringify(r))}
