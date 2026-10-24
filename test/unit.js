@@ -169,6 +169,16 @@ for(const rid of ["loaf","focaccia","pizza","sandwich"])for(let T=16;T<=40;T+=0.
   for(const tab of ["LEV","LEV_FAST","LOAF_BULK","FOC_WARM","PIZ_BULK","PIZ_WARM","SW_BULK","SW_PROOF"])tips=tips.split(R(`fmtWin(interp(${tab},${T}))`)).join("<table>");
   ok("reference: warm-kitchen tips give no hand-typed hours (every timing is a table value at the kitchen temperature)",!/\d\s*(h|min)\b|[½¼¾]/.test(tips),`${rid} ${T}: ${tips}`);
   ok("reference: warm-kitchen tips give no gram figures",gramFigures(tips).length===0,`${rid} ${T}: ${tips}`)}
+/* outside the 23–29 °C tables every timing says the table stops there; none inside (issue #9) */
+for(const rid of ["loaf","focaccia","pizza","sandwich"])for(let T=16;T<=40;T+=0.5){const st=defaults();st.temp=T;H.reset(st);
+  const txt=JSON.parse(R(`JSON.stringify(methodFor("${rid}"))`)).map(x=>x.join(" ")).concat(JSON.parse(R(`JSON.stringify(warmTips("${rid}",${T}))`))).join(" | ");
+  const note=T>29?" (table stops at 29 °C: expect faster, check early)":T<23?" (table stops at 23 °C: expect slower)":"";let wins=0,bad=[];
+  for(const tab of ["LEV","LEV_FAST","LOAF_BULK","FOC_WARM","PIZ_BULK","PIZ_WARM","SW_BULK","SW_PROOF"]){const w=R(`fmtWin(interp(${tab},${T}))`);
+    txt.split(w).slice(1).forEach(seg=>{wins++;if(note?!seg.startsWith(note):seg.startsWith(" (table stops"))bad.push(tab+": "+w+seg.slice(0,60))})}
+  ok("table range: method and tip timings exist",wins>0,`${rid} ${T}`);
+  ok(note?"table range: every timing outside 23–29 °C says the table stops":"table range: no table-stops label at 23–29 °C",bad.length===0,`${rid} ${T}: ${bad.slice(0,2).join(" / ")}`);
+  if(!note)ok("table range: no table-stops label at 23–29 °C (anywhere in the text)",!txt.includes("table stops"),`${rid} ${T}`)}
+ok("table range: no extrapolation (33 °C uses the 29 °C row)",R(`fmtWin(interp(PIZ_WARM,33))`)===R(`fmtWin(interp(PIZ_WARM,29))`));
 {H.reset(defaults());const week=JSON.parse(R(`JSON.stringify(WEEK)`)),day={"Fri":0,"Sat":1440};
   const pClock=s=>{const m=String(s).match(/(\d{1,2}):(\d{2})/);return m?+m[1]*60+ +m[2]:null};
   const mixRow=week.find(r=>/ball → fridge/.test(r[1])),inM=mixRow[1].match(/~(\d{1,2}:\d{2})–(\d{1,2}:\d{2})/),outRow=week.find(r=>/balls out/i.test(r[1])),pzRow=week.find(r=>r[1]==="Pizza"),oo=week.find(r=>/Ooni on/.test(r[1]));
