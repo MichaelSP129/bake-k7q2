@@ -101,6 +101,21 @@ for(const tab of ["LEV","LEV_FAST","LOAF_BULK","FOC_WARM","PIZ_BULK","PIZ_WARM",
 ok("temp: windows are formatted as ranges",R(`fmtWin(interp(LOAF_BULK,25))`).startsWith("≈ ")&&R(`fmtWin(interp(LOAF_BULK,25))`).includes("–"),R(`fmtWin(interp(LOAF_BULK,25))`));
 ok("temp: measured dough temp changes the bulk step only",(()=>{const a=JSON.parse(R(`JSON.stringify(buildPlan("loaf",25,14,calc("loaf"),{bulkT:28}).steps.map(s=>s.d))`)),b=JSON.parse(R(`JSON.stringify(buildPlan("loaf",25,14,calc("loaf"),{}).steps.map(s=>s.d))`));return a.filter((x,i)=>x!==b[i]).length===1&&a[5]<b[5]})());
 
+// bulk timing from the midpoint of dough and kitchen (Michael's decision on Claude's #7 question)
+ok("bulk midpoint: bulkTemp is (dough + kitchen) / 2",R(`bulkTemp(25,30)`)===27.5&&R(`bulkTemp(31,28)`)===29.5&&R(`bulkTemp(26.5,27)`)===26.75);
+ok("bulk midpoint: no dough reading means the kitchen alone",R(`bulkTemp(null,30)`)===30&&R(`bulkTemp(undefined,24)`)===24&&R(`bulkTemp("",26)`)===26);
+{const TAB={loaf:"LOAF_BULK",focaccia:"LOAF_BULK",pizza:"PIZ_BULK",sandwich:"SW_BULK"};
+ for(const rid of ["loaf","focaccia","pizza","sandwich"]){
+  const cold=R(`S.cold.${rid}`),plan=(T,o)=>JSON.parse(R(`JSON.stringify(buildPlan("${rid}",${T},${cold},calc("${rid}"),${JSON.stringify(o||{})}).steps)`));
+  for(let k=18;k<=35;k++){const base=plan(k);const bi=base.findIndex(s=>s.key==="bulk");
+   const off=JSON.parse(R(`JSON.stringify(interp(${TAB[rid]},${k}).m)`))-base[bi].d;
+   for(let d=15;d<=35;d+=0.5){const m=R(`bulkTemp(${d},${k})`);const p=plan(k,{bulkT:m});
+    ok("bulk midpoint: bulk step is the booklet table interpolated at (dough + kitchen) / 2",p[bi].d===R(`interp(${TAB[rid]},${(d+k)/2}).m`)-off,`${rid} k${k} d${d}: ${p[bi].d}`);
+    ok("bulk midpoint: every other step keeps the kitchen-temperature value",p.every((s,i)=>i===bi||(s.d===base[i].d&&s.detail===base[i].detail)),`${rid} k${k} d${d}`);
+    if(d===k)ok("bulk midpoint: dough equal to the kitchen gives exactly the previous result (dough-only and no reading)",JSON.stringify(p)===JSON.stringify(plan(k,{bulkT:d}))&&JSON.stringify(p)===JSON.stringify(base),`${rid} ${k}`);
+   }}}}
+ok("bulk midpoint: bulkWhy names the temperature and says it's the midpoint",R(`bulkWhy(25,30,27.5)`)==="timed for 27.5 °C, midway between your 25 °C dough and the 30 °C kitchen"&&R(`bulkWhy(26.5,27,26.75)`).startsWith("timed for 26.75 °C, midway")&&R(`bulkWhy(28,28,28)`)==="timed for 28 °C (your dough and the kitchen are the same)");
+
 /* ---------- 3. DDT ---------- */
 ok("ddt: water = 4×DDT − room − flour − levain − friction",R(`ddtWater({target:25,flour:null,lev:null,fric:2},25)`)===23);
 ok("ddt: measured flour/levain temps are used",R(`ddtWater({target:26,flour:20,lev:28,fric:3},30)`)===4*26-30-20-28-3);

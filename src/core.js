@@ -275,6 +275,15 @@ function alternatives(rid){
     for(let i=0;i<=4*96&&!c;i++)for(const dir of i?[1,-1]:[1]){const x=at(dir*i);if(fits(x,ph)){c=x;break}}
     if(c)add(`${h} h fridge stage instead`,{...c,cold:h},ph,{note:"Within the recipe's fridge range; fermentation times are unchanged."})}
   return out}
+// bulk fermentation timing temperature: the midpoint of the measured dough and the kitchen, because the dough drifts towards
+// the kitchen as it rises (Claude's question on #7; Michael chose the midpoint). No dough reading: the kitchen alone. Only bulk uses it.
+function bulkTemp(doughT,kitchenT){const k=+kitchenT;if(doughT===null||doughT===undefined||doughT===""||!Number.isFinite(+doughT))return k;return(+doughT+k)/2}
+const fmtC=x=>String(Math.round(+x*100)/100); // 26.25 stays 26.25, 27.5 stays 27.5
+// plain words for the temperature the bulk estimate was timed for
+function bulkWhy(doughT,kitchenT,bulkT){const d=+doughT,k=+kitchenT,b=+bulkT;
+  if(Math.abs(d-k)<1e-9)return`timed for ${fmtC(b)} °C (your dough and the kitchen are the same)`;
+  if(Math.abs(b-(d+k)/2)<1e-9)return`timed for ${fmtC(b)} °C, midway between your ${fmtC(d)} °C dough and the ${fmtC(k)} °C kitchen`;
+  return`timed for ${fmtC(b)} °C`}
 // measured dough temperature vs the kitchen setting: the signed gap (dough − kitchen) when it is more than TEMP_GAP °C, else null
 function tempMismatch(doughT,kitchenT){if(doughT===null||doughT===undefined||doughT===""||kitchenT===null||kitchenT===undefined)return null;const d=+doughT-+kitchenT;if(!Number.isFinite(d))return null;return Math.abs(d)>TEMP_GAP+1e-9?Math.round(d*10)/10:null}
 const DDT_DEFAULT={target:25,flour:null,lev:null,fric:2};

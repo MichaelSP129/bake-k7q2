@@ -57,7 +57,7 @@ function sanitize(T){
   T.rev=Number.isFinite(+T.rev)?+T.rev:0;if(typeof T.epoch!=="string")T.epoch="";
   const ss=T.session;if(ss&&(typeof ss!=="object"||!RECIPES[ss.rid]||!Array.isArray(ss.steps)||!ss.steps.length||!ss.steps.every(x=>x&&typeof x.t==="string"&&Number.isFinite(+x.d)&&+x.d>0)))T.session=null;
   else if(ss){ss.idx=clamp(Math.round(+ss.idx||0),0,ss.steps.length-1);if(!Number.isFinite(+ss.remaining))ss.remaining=ss.steps[ss.idx].d*60;if(!Number.isFinite(+ss.endsAt))ss.endsAt=0;
-    ss.running=!!ss.running;ss.alerted=!!ss.alerted;if(ss.doughT!==null&&ss.doughT!==undefined&&!Number.isFinite(+ss.doughT))ss.doughT=null}
+    ss.running=!!ss.running;ss.alerted=!!ss.alerted;if(ss.doughT!==null&&ss.doughT!==undefined&&!Number.isFinite(+ss.doughT))ss.doughT=null;if(ss.bulkT!==undefined&&!Number.isFinite(+ss.bulkT))delete ss.bulkT}
   return T}
 /* one write path. Every save carries the data's epoch (changes on reset) and a revision number.
    A tab whose epoch is stale adopts the stored data instead of writing its old copy back,
@@ -72,7 +72,7 @@ function persist(){
 function save(){if(skipSave){skipSave=false;return}clearTimeout(saveT);saveT=setTimeout(persist,120)}
 function saveNow(){clearTimeout(saveT);persist()}
 function keepUI(){return{tab:S.tab,detail:S.detail,seg:S.seg,rid:S.rid}}
-function adoptStored(cur,msg){const ui=keepUI();S=sanitize(merge(fresh(),cur));Object.assign(S,ui);seenRev=S.rev;closeSheet(true);wakeSync();skipSave=true;render();skipSave=false;if(msg)toast(msg)}
+function adoptStored(cur,msg){const ui=keepUI();S=sanitize(merge(fresh(),cur));Object.assign(S,ui);migrateBulk();seenRev=S.rev;closeSheet(true);wakeSync();skipSave=true;render();skipSave=false;if(msg)toast(msg)}
 
 /* ---------- guidance ---------- */
 function guideFor(rid){
@@ -103,13 +103,21 @@ function tGo(i,autoplay){const s=S.session;if(!s)return;s.idx=clamp(i,0,s.steps.
 function tAdd(min){const s=S.session;if(!s)return;if(s.running)s.endsAt+=min*60000;else s.remaining=Math.max(0,s.remaining+min*60);if(remNow()>0)s.alerted=false;sessDirty=true;saveNow()}
 /* readiness check "not yet": run this same step on for m more minutes */
 function tMore(m){const s=S.session;if(!s)return;s.remaining=m*60;s.closedEnd=false;sessDirty=true;tPlay();toast(`${m} more minutes, then check again`)}
-/* measured dough temperature drives the bulk estimate (never shortens below what has already passed) */
+/* measured dough temperature drives the bulk estimate through bulkTemp(): the midpoint of dough and kitchen (never shortens below what has already passed).
+   Returns the new bulk duration in minutes, or null when bulk is already over. Stores the dough reading and the temperature used (s.bulkT). */
+function bulkReset(s,T){const bi=s.steps.findIndex(x=>x.key==="bulk");if(bi<0||s.idx>bi)return null;
+  const bt=bulkTemp(T,s.temp),p=buildPlan(s.rid,s.temp,s.cold,calc(s.rid),{variant:s.variant,chillH:s.chillH,bulkT:bt}),nb=p.steps.find(x=>x.key==="bulk");
+  const nd=nb.d,delta=nd-s.steps[bi].d;s.steps[bi].d=nd;s.steps[bi].detail=nb.detail;
+  if(s.idx===bi&&!(s.alerted&&remNow()<=0)){if(s.running)s.endsAt+=delta*60000;else s.remaining=Math.max(60,s.remaining+delta*60)}
+  s.doughT=T;if(T===null)delete s.bulkT;else s.bulkT=bt;return nd}
 function setDoughT(v){const s=S.session;if(!s)return;const bi=s.steps.findIndex(x=>x.key==="bulk");if(bi<0)return;
   if(s.idx>bi){toast("Bulk is already finished");return}
-  const T=v===null?null:clamp(v,15,35);const p=buildPlan(s.rid,s.temp,s.cold,calc(s.rid),{variant:s.variant,chillH:s.chillH,bulkT:T===null?s.temp:T});
-  const nd=p.steps.find(x=>x.key==="bulk").d,delta=nd-s.steps[bi].d;s.steps[bi].d=nd;s.steps[bi].detail=p.steps.find(x=>x.key==="bulk").detail;
-  if(s.idx===bi&&!(s.alerted&&remNow()<=0)){if(s.running)s.endsAt+=delta*60000;else s.remaining=Math.max(60,s.remaining+delta*60)}
-  s.doughT=T;sessDirty=true;saveNow();render();toast(T===null?"Back to the kitchen-temperature estimate":`Bulk estimate now uses ${T} °C dough: ${fmtDur(nd)}`)}
+  const T=v===null?null:clamp(v,15,35),nd=bulkReset(s,T);
+  sessDirty=true;saveNow();render();toast(T===null?"Back to the kitchen-temperature estimate":`Bulk ${bulkWhy(T,s.temp,s.bulkT)}: ${fmtDur(nd)}`)}
+/* sessions saved before the midpoint change have a dough reading but no s.bulkT: their bulk step was timed from the dough alone.
+   Re-time it from the midpoint once (same rules as entering the reading). If bulk is already over, record the dough-only value it used. */
+function migrateBulk(){const s=S.session;if(!s||s.doughT===null||s.doughT===undefined||Number.isFinite(+s.bulkT))return false;
+  if(bulkReset(s,+s.doughT)===null)s.bulkT=+s.doughT;sessDirty=true;return true}
 let AC=null;function unlockAudio(){try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}AC&&AC.state==="suspended"&&AC.resume()}catch(e){}}
 function chime(){if(!S.sound||!AC)return;try{const t0=AC.currentTime;[0,.32,.64].forEach((o,i)=>{const os=AC.createOscillator(),g=AC.createGain();os.type="sine";os.frequency.value=[784,988,1175][i];g.gain.setValueAtTime(0,t0+o);g.gain.linearRampToValueAtTime(.28,t0+o+.02);g.gain.exponentialRampToValueAtTime(.001,t0+o+.6);os.connect(g).connect(AC.destination);os.start(t0+o);os.stop(t0+o+.65)})}catch(e){}}
 function stepDone(){const s=S.session,late=Date.now()-s.endsAt;
@@ -304,21 +312,22 @@ function readyBox(s,st){const last=s.idx>=s.steps.length-1,nx=last?null:s.steps[
    <div class="faint" style="margin-top:6px">Nothing starts until you choose. The time was an estimate; the dough decides.</div></div>`}
 function doughTBox(s){const bi=s.steps.findIndex(x=>x.key==="bulk"),si=s.steps.findIndex(x=>x.key==="bulkstart");if(bi<0||si<0||s.idx<si||s.idx>bi)return"";
   return`<div class="dtemp"><label for="dtin">Dough temperature after mixing</label><div class="dtrow"><input id="dtin" type="number" inputmode="decimal" step="0.5" min="15" max="35" value="${s.doughT??""}" placeholder="${s.temp}"><span>°C</span>${s.doughT!=null?`<button class="linkbtn" data-act="dtclear">Use kitchen temp</button>`:""}</div>
-   <div class="faint">${s.doughT!=null?`Bulk estimate uses your ${s.doughT} °C dough: ≈ ${fmtDur(s.steps[bi].d)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then follows the dough instead of the ${s.temp} °C kitchen.`}</div>${tempGapNote(s)}</div>`}
+   <div class="faint">${s.doughT!=null?`Bulk estimate ${bulkWhy(s.doughT,s.temp,s.bulkT??bulkTemp(s.doughT,s.temp))}: ≈ ${fmtDur(s.steps[bi].d)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then uses the temperature midway between your dough and the ${s.temp} °C kitchen.`}</div>${tempGapNote(s)}</div>`}
 /* non-blocking notice when the dough and the kitchen differ by more than TEMP_GAP °C; the timer keeps running */
 function tempGapNote(s){const g=tempMismatch(s.doughT,s.temp);if(g===null)return`<div class="dtwarn" role="status" aria-live="polite" data-test="temp-gap"></div>`;
   const dT=g1(s.doughT),tg=S.ddt.target,onT=Math.abs(+s.doughT-tg)<=1+1e-9;
-  const drift=g<0?`The bulk estimate uses your dough's ${dT} °C, but the dough will warm towards the kitchen as it rises, so bulk will probably finish sooner than shown: start checking early and go by the readiness cues.`:`The bulk estimate uses your dough's ${dT} °C, but the dough will cool towards the kitchen as it rises, so bulk may take a little longer than shown: go by the readiness cues.`;
+  const bw=bulkWhy(s.doughT,s.temp,s.bulkT??bulkTemp(s.doughT,s.temp));
+  const drift=g<0?`The bulk estimate is ${bw}, because the dough warms towards the kitchen as it rises. That's an approximation: start checking early and go by the readiness cues.`:`The bulk estimate is ${bw}, because the dough cools towards the kitchen as it rises. That's an approximation: go by the readiness cues.`;
   const water=onT?`That's on your ${g1(tg)} °C target dough temperature, so the mixing water was right.`:`To land nearer your ${g1(tg)} °C target next time, adjust the mixing water.`;
   return`<div class="dtwarn" role="status" aria-live="polite" data-test="temp-gap"><span aria-hidden="true">ℹ︎</span><span>Your dough is ${dT} °C, ${g1(Math.abs(g))} °C ${g>0?"warmer":"cooler"} than the ${s.temp} °C kitchen. ${drift} Later steps use the kitchen setting. ${water} <button class="linkbtn" data-act="ddtgo">Open the water temperature helper</button></span></div>`}
-function guideSheet(s,st){const r=s.rid,b=band(s.temp),key=st.key;
+function guideSheet(s,st){const r=s.rid,key=st.key,b=band(key==="bulk"&&s.doughT!=null?(s.bulkT??bulkTemp(s.doughT,s.temp)):s.temp);
   let h,li;
   if(key==="levain"&&r==="sandwich"){h="Is the stiff starter ready?";li=["Clearly risen, about 50% or more, and domed","Webby, bubbly inside when you pull a bit back","Smells sweet-tangy, not sharp or alcoholic","Not risen at all: leave it longer; it's still alive, just slow"]}
   else if(key==="levain"){h="Is the levain at peak?";li=["Roughly doubled from the mark (80–100% rise)","Bubbly all through when you look at the side of the jar","Dome is just starting to flatten: use it now","Collapsed and very sour: it's past peak. Use it soon, or build again for a milder loaf"]}
   else if(key==="bulk"){const tgt=r==="loaf"?LOAF_RISE[b]:r==="focaccia"?FOC_RISE[b]:r==="pizza"?PIZ_RISE[b]:"40–50%";h="Is bulk fermentation done?";
     li=[`Risen about ${tgt} from the mark on the container`,r==="pizza"?"Only slightly domed with a few bubbles; pizza dough should look under-risen":"Domed edges where the dough meets the container","Bubbles on the sides and underneath",r==="sandwich"?"Soft and puffy; a floured finger leaves a dent that slowly fills":"The whole mass wobbles when you shake the container","Warm kitchen and right at the target: move on. Over-fermented dough is harder to rescue than slightly under"]}
   else{h="Is the proof done?";li=r==="sandwich"?["The dome has reached about the rim of the tin","Poke test: springs straight back → wait; fills back slowly → bake; stays dented → bake now"]:r==="pizza"?["Balls have relaxed and spread a little","Poke springs back slowly and leaves a slight dent","Still tight and springy: give it 30 more minutes"]:["Very puffy, with bubbles under the surface","The whole sheet jiggles when you move the tray","Still tight at the edges: 15–30 more minutes, or let the preheat run longer"]}
-  return`<h3>${h}</h3><ul class="clean">${li.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="faint" style="margin:10px 0">Times are estimates for ${s.temp} °C${s.doughT!=null?` with ${s.doughT} °C dough`:""}. These cues decide.</div><button class="btn" data-act="sheetclose">Back to the check</button>`}
+  return`<h3>${h}</h3><ul class="clean">${li.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="faint" style="margin:10px 0">Times are estimates for ${s.temp} °C${s.doughT!=null?`; bulk is ${bulkWhy(s.doughT,s.temp,s.bulkT??bulkTemp(s.doughT,s.temp))}`:""}. These cues decide.</div><button class="btn" data-act="sheetclose">Back to the check</button>`}
 const IS_IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 function alertNote(){const bits=[];
   if(IS_IOS)bits.push("iPhone can't vibrate for web apps, and the chime can't play while the screen is locked or another app is open. Keep this screen open and the ring/silent switch off.");
@@ -567,7 +576,7 @@ window.addEventListener("storage",e=>{if(e.key!==KEY&&e.key!==null)return;
   let o;try{o=JSON.parse(e.newValue)}catch(x){return}if(!o)return;
   const resetElsewhere=o.epoch!==S.epoch;
   if(resetElsewhere){adoptStored(o,"Everything was reset or replaced in another tab");return}
-  const ui=keepUI();S=sanitize(merge(fresh(),o));Object.assign(S,ui);seenRev=S.rev;
+  const ui=keepUI();S=sanitize(merge(fresh(),o));Object.assign(S,ui);seenRev=S.rev;migrateBulk();
   if(!document.querySelector(".sheet")&&!(document.activeElement&&document.activeElement.matches&&document.activeElement.matches("input"))){skipSave=true;render();skipSave=false}else updateTimerDom()});
 window.addEventListener("popstate",()=>{if(document.querySelector(".sheet")){closeSheet();return}if(S.detail){S.detail=null;render("pop")}});
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>render());
@@ -578,6 +587,7 @@ function boot(){
   if(S.detail){try{history.replaceState(null,"");history.pushState({v:"detail"},"")}catch(e){}}
   const ss=S.session;if(ss&&ss.running&&remNow()<=0&&!ss.alerted){const at=new Date(ss.endsAt);ss.running=false;ss.remaining=0;ss.alerted=true;ss.closedEnd=true;sessDirty=true;saveNow();
     setTimeout(()=>toast(`Step ${ss.idx+1} finished at ${fmtClock(at.getHours()*60+at.getMinutes())}${relDay(at)==="Today"?"":" "+relDay(at).toLowerCase()} while the app was closed.`),400)}
+  if(migrateBulk())saveNow();
   if(S.tab==="plan")ensurePlan(S.rid,true);
   wakeSync();
   registerSW();
