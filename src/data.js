@@ -58,7 +58,7 @@ const IMPROVED={
 // warm-kitchen tips; any timing is a function of the kitchen temperature, generated from the same tables (issue #4)
 const WARM_TIPS={
   loaf:["Mix with water at the temperature shown above.","Shape at a lower rise as the dough gets warmer.","Use the coolest spot in the house, away from windows."],
-  focaccia:["Aim for the lower end of 50–75% rise when warm.",T=>`Shorter warm-up on day 2: ${fmtWin(interp(FOC_WARM,T))} at ${T} °C.`,"Cool water for the main mix."],
+  focaccia:["Aim for the lower end of 50–75% rise when warm.","Day-2 warm-up: go by the puffiness and the big wobble rather than the clock (the time is in the Day-2 warm-up row).","Cool water for the main mix."],
   pizza:["Stop bulk at about 20% if the dough is 27 °C or warmer.",T=>`Warm-up ${fmtWin(interp(PIZ_WARM,T))} at ${T} °C.`,"Keep balls covered so they don't skin over in air-conditioning."],
   sandwich:["At 27 °C+ pick the Warm (smaller seed) or Chill starter option above the ingredients.","Fridge-cold water for the main mix.",T=>`Bulk ${fmtWin(interp(SW_BULK,T))} at ${T} °C.`]
 };
