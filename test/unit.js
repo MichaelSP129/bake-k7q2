@@ -174,6 +174,13 @@ edge("hands-on spanning two nights counts both",840,"23:00",1860,"prep");
  ok("dst: 05:30–06:30 local on a clock-change day clashes 30 min",Math.abs(t-30)<1e-9,`${t} (TZ=${TZ})`)}
 
 console.log(`TZ=${TZ}`);
+/* dough vs kitchen temperature notice (PR #7) */
+{H.reset(defaults());const tm=(a,b)=>R(`tempMismatch(${JSON.stringify(a)},${JSON.stringify(b)})`);
+  ok("temp gap: threshold is 2 °C",R("TEMP_GAP")===2);
+  for(const [d,k,want] of [[28,25,3],[27,25,null],[23,25,null],[27.5,25,2.5],[22.5,25,-2.5],[22,25,-3],[null,25,null],[undefined,25,null],["",25,null],["x",25,null],[25,null,null],["28",25,3]])
+    ok("temp gap: tempMismatch cases",tm(d,k)===want,`${d} vs ${k} → ${tm(d,k)} (want ${want})`);
+  for(let d=15;d<=35;d+=0.5)for(let k=16;k<=40;k+=0.5){const g=tm(d,k),exp=Math.abs(d-k)>2?Math.round((d-k)*10)/10:null;
+    ok("temp gap: notice exactly when |dough − kitchen| > 2 °C, signed dough − kitchen",g===exp,`${d} vs ${k}: ${g}`)}}
 console.log(`scaling: ${combos} recipe/scale/option combinations, ${figs} gram figures extracted from method + planner/timer text`);
 console.log(`planner sweep: ${sweep} plans (${sweepFinish} ready-at sweeps every 15 min) → ${okPlans} compliant, ${none} explicit no-compliant-plan`);
 for(const [k,v] of Object.entries(counts))console.log(`  ${String(v).padStart(6)}  ${k}`);

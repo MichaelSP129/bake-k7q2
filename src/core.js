@@ -275,6 +275,8 @@ function alternatives(rid){
     for(let i=0;i<=4*96&&!c;i++)for(const dir of i?[1,-1]:[1]){const x=at(dir*i);if(fits(x,ph)){c=x;break}}
     if(c)add(`${h} h fridge stage instead`,{...c,cold:h},ph,{note:"Within the recipe's fridge range; fermentation times are unchanged."})}
   return out}
+// measured dough temperature vs the kitchen setting: the signed gap (dough − kitchen) when it is more than TEMP_GAP °C, else null
+function tempMismatch(doughT,kitchenT){if(doughT===null||doughT===undefined||doughT===""||kitchenT===null||kitchenT===undefined)return null;const d=+doughT-+kitchenT;if(!Number.isFinite(d))return null;return Math.abs(d)>TEMP_GAP+1e-9?Math.round(d*10)/10:null}
 const DDT_DEFAULT={target:25,flour:null,lev:null,fric:2};
 // water °C = 4 × DDT − room − flour − levain − friction (the "4" is for doughs with a preferment)
 function ddtWater(d,room){const f=d.flour??room,l=d.lev??room;return 4*d.target-room-f-l-d.fric}

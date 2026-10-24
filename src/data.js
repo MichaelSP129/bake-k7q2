@@ -41,6 +41,8 @@ const SW_PROOF=[R("3–4 h",210),R("2–4 h",180),R("2–3 h",150),R("1½–3 h"
 const COLD_OPTS={loaf:[10,12,14,16],focaccia:[8,10,12,14,16],pizza:[20,24,28],sandwich:[8,10,12,14]};
 // sandwich "Chill" variant: hours the stiff starter spends in the fridge before mixing (Michael, 23 Oct: user picks 8–12 h, default 8 h)
 const CHILL_H={def:8,min:8,max:12};
+// dough vs kitchen: a notice appears when the measured dough temperature is more than this many °C from the kitchen setting (Claude's suggestion, v2.1 review)
+const TEMP_GAP=2;
 const ANCHOR_DEFAULT={loaf:"09:00",focaccia:"13:05",pizza:"16:30",sandwich:"10:15"};
 
 const TROUBLE={

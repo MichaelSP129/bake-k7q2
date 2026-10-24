@@ -304,7 +304,13 @@ function readyBox(s,st){const last=s.idx>=s.steps.length-1,nx=last?null:s.steps[
    <div class="faint" style="margin-top:6px">Nothing starts until you choose. The time was an estimate; the dough decides.</div></div>`}
 function doughTBox(s){const bi=s.steps.findIndex(x=>x.key==="bulk"),si=s.steps.findIndex(x=>x.key==="bulkstart");if(bi<0||si<0||s.idx<si||s.idx>bi)return"";
   return`<div class="dtemp"><label for="dtin">Dough temperature after mixing</label><div class="dtrow"><input id="dtin" type="number" inputmode="decimal" step="0.5" min="15" max="35" value="${s.doughT??""}" placeholder="${s.temp}"><span>°C</span>${s.doughT!=null?`<button class="linkbtn" data-act="dtclear">Use kitchen temp</button>`:""}</div>
-   <div class="faint">${s.doughT!=null?`Bulk estimate uses your ${s.doughT} °C dough: ≈ ${fmtDur(s.steps[bi].d)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then follows the dough instead of the ${s.temp} °C kitchen.`}</div></div>`}
+   <div class="faint">${s.doughT!=null?`Bulk estimate uses your ${s.doughT} °C dough: ≈ ${fmtDur(s.steps[bi].d)} for the hands-off part.`:`Optional. Probe the dough; the bulk estimate then follows the dough instead of the ${s.temp} °C kitchen.`}</div>${tempGapNote(s)}</div>`}
+/* non-blocking notice when the dough and the kitchen differ by more than TEMP_GAP °C; the timer keeps running */
+function tempGapNote(s){const g=tempMismatch(s.doughT,s.temp);if(g===null)return`<div class="dtwarn" role="status" aria-live="polite" data-test="temp-gap"></div>`;
+  const dT=g1(s.doughT),tg=S.ddt.target,onT=Math.abs(+s.doughT-tg)<=1+1e-9;
+  const drift=g<0?`The bulk estimate uses your dough's ${dT} °C, but the dough will warm towards the kitchen as it rises, so bulk will probably finish sooner than shown: start checking early and go by the readiness cues.`:`The bulk estimate uses your dough's ${dT} °C, but the dough will cool towards the kitchen as it rises, so bulk may take a little longer than shown: go by the readiness cues.`;
+  const water=onT?`That's on your ${g1(tg)} °C target dough temperature, so the mixing water was right.`:`To land nearer your ${g1(tg)} °C target next time, adjust the mixing water.`;
+  return`<div class="dtwarn" role="status" aria-live="polite" data-test="temp-gap"><span aria-hidden="true">ℹ︎</span><span>Your dough is ${dT} °C, ${g1(Math.abs(g))} °C ${g>0?"warmer":"cooler"} than the ${s.temp} °C kitchen. ${drift} Later steps use the kitchen setting. ${water} <button class="linkbtn" data-act="ddtgo">Open the water temperature helper</button></span></div>`}
 function guideSheet(s,st){const r=s.rid,b=band(s.temp),key=st.key;
   let h,li;
   if(key==="levain"&&r==="sandwich"){h="Is the stiff starter ready?";li=["Clearly risen, about 50% or more, and domed","Webby, bubbly inside when you pull a bit back","Smells sweet-tangy, not sharp or alcoholic","Not risen at all: leave it longer; it's still alive, just slow"]}
@@ -342,7 +348,7 @@ function vStarter(){
 function ddtCard(){const d=S.ddt,room=S.temp,w=ddtWater(d,room),wr=Math.round(w*2)/2;
   const row=(act,lab,sub,val,lo,hi,isNull)=>`<div class="ctrl"><div class="lab">${lab}<small>${sub}</small></div>${stepper(act,val,"°C",{label:lab,input:val,dec:1,lo,hi,min:val<=lo,max:val>=hi})}</div>`;
   const warn=w<2?"That's colder than tap water can go: use iced water, chilled flour, or a cooler room.":w>40?"Water above about 40 °C stresses the culture. Mix with 35–38 °C water and give the dough a warmer spot instead.":"";
-  return`<h2 class="sh">Dough temperature calculator <small>optional</small></h2><div class="card" data-test="ddt">
+  return`<h2 class="sh" id="ddth" tabindex="-1">Dough temperature calculator <small>optional</small></h2><div class="card" data-test="ddt">
    ${row("ddtT","Target dough temp","After mixing",d.target,18,32)}
    <div class="ctrl"><div class="lab">Kitchen<small>From your kitchen setting</small></div><b class="num">${room} °C</b></div>
    ${row("ddtF","Flour temp",d.flour===null?"Assumed = kitchen":"Measured",d.flour??room,-5,45)}
@@ -527,6 +533,7 @@ const ACT={
   ddtF(d){S.ddt.flour=clamp((S.ddt.flour??S.temp)+ +d,-5,45);render()},
   ddtL(d){S.ddt.lev=clamp((S.ddt.lev??S.temp)+ +d,-5,45);render()},
   ddtX(d){S.ddt.fric=clamp(S.ddt.fric+ +d,0,20);render()},
+  ddtgo(){haptic(5);S.tab="ref";S.detail=null;render("enter");setTimeout(()=>{const h=document.getElementById("ddth");if(h){h.scrollIntoView({block:"start"});const v=document.getElementById("view");if(v)v.scrollBy(0,-12);h.focus({preventScroll:true})}},60)},
   ddtreset(){S.ddt=Object.assign({},DDT_DEFAULT);render()}
 };
 /* press-and-hold on steppers repeats; the click that ends a hold is swallowed */

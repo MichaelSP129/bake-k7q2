@@ -35,6 +35,7 @@ with sync_playwright() as p:
       ("timer readiness check","S.session.endsAt=Date.now()+200"),
       ("guide sheet (dialog)","ACT.tguide()"),
       ("end-bake sheet (dialog)","closeSheet();ACT.tend&&ACT.tend()"),
+      ("timer dough-temp mismatch notice","closeSheet();ACT.tab('timer');ACT.trid('loaf');ACT.tstart(0);tGo(2,true);setDoughT(29);render()"),
       ("starter","closeSheet();ACT.tab('starter')"),("reference + DDT","ACT.tab('ref')"),
       ("reset sheet (dialog)","ACT.resetall()")]
     for name,js in screens:
