@@ -29,7 +29,10 @@ def fresh(pg):
 def ev(pg,js): r=pg.evaluate(js);pg.wait_for_timeout(120);return r
 def shot(pg,name): pg.wait_for_timeout(350);pg.screenshot(path=f"{OUT}/v21-{name}.png")
 def scroll_to(pg,sel): pg.evaluate(f"(()=>{{const e=document.querySelector('{sel}');if(e)e.scrollIntoView({{block:'start'}});document.querySelector('#view').scrollBy(0,-70)}})()");pg.wait_for_timeout(200)
-def overflow(pg): return pg.evaluate("(()=>{const v=document.querySelector('#view');if(document.documentElement.scrollWidth>innerWidth+1||v.scrollWidth>v.clientWidth+1)return 'page scrolls sideways';const bad=[...v.querySelectorAll('*')].filter(e=>{if(e.closest('svg'))return false;const r=e.getBoundingClientRect();return r.width>0&&r.right>innerWidth+2&&getComputedStyle(e).position!=='fixed'&&!e.closest('.pillrow,.rpick,.scards,.overview,.seg.sticky,.tbl')});return bad.length?bad.slice(0,3).map(e=>e.tagName+'.'+e.className).join(','):false})()")
+def overflow(pg):
+  # wait for finite animations (e.g. the 380 ms pushIn on ACT.open) so the check measures settled layout; infinite ones (badge, done-pulse) are skipped (issue #8)
+  pg.evaluate("Promise.all(document.getAnimations().filter(a=>a.effect&&a.effect.getComputedTiming().endTime!==Infinity).map(a=>a.finished.catch(()=>{})))")
+  return pg.evaluate("(()=>{const v=document.querySelector('#view');if(document.documentElement.scrollWidth>innerWidth+1||v.scrollWidth>v.clientWidth+1)return 'page scrolls sideways';const bad=[...v.querySelectorAll('*')].filter(e=>{if(e.closest('svg'))return false;const r=e.getBoundingClientRect();return r.width>0&&r.right>innerWidth+2&&getComputedStyle(e).position!=='fixed'&&!e.closest('.pillrow,.rpick,.scards,.overview,.seg.sticky,.tbl')});return bad.length?bad.slice(0,3).map(e=>e.tagName+'.'+e.className).join(','):false})()")
 
 with sync_playwright() as p:
   b=p.chromium.launch(executable_path=os.environ.get("CHROME","/usr/bin/google-chrome"),args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])
@@ -216,7 +219,7 @@ with sync_playwright() as p:
   ev(pg,"S.session.endsAt=Date.now()+200");pg.wait_for_timeout(2300)
   ok("timer: a hands-on step ends with 'Start next', not an automatic start",pg.locator(".nextbtn").count()==1 and ev(pg,"S.session.idx===2&&!S.session.running"))
   # just finished while closed
-  ev(pg,"tGo(5,true)");pg.evaluate("(()=>{S.session.endsAt=Date.now()-60000;S.session.running=true;S.session.alerted=false;localStorage.setItem(KEY,JSON.stringify(S));location.reload()})()");pg.wait_for_timeout(1200)
+  ev(pg,"tGo(5,true)");pg.evaluate("(()=>{const hi=setTimeout(()=>{},0);for(let i=1;i<=hi;i++){clearTimeout(i);clearInterval(i)}const T=JSON.parse(JSON.stringify(S));T.session.endsAt=Date.now()-60000;T.session.running=true;T.session.alerted=false;localStorage.setItem(KEY,JSON.stringify(T));location.reload()})()");pg.wait_for_load_state();pg.wait_for_timeout(1200)  # stop the old page's tick/save and write a copy, so nothing can mark the step ended before the reload commits (issue #8)
   ok("timer: reload after a step ended while closed shows the readiness check, not the next step",pg.locator("[data-test=readiness]").count()==1 and ev(pg,"S.session.idx")==5)
   ok("timer: …and says when it finished, persistently in the readiness box",re.search(r"Timer ended at \d\d:\d\d.* while the app was closed",pg.locator("[data-test=ended-at]").inner_text()) is not None,pg.locator("[data-test=readiness]").inner_text()[:200])
   # wake lock refused
