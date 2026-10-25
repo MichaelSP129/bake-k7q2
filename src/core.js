@@ -92,6 +92,7 @@ function calc(rid,st){
    hands: minutes of real work at the start of a wait step (mixing a build, cooking a tangzhong…)
    check: a fermentation/proof stage that ends with a readiness check, never an automatic next step */
 function chillH(h){const v=+(h??(S&&S.variant&&S.variant.chillH));return Number.isFinite(v)?clamp(Math.round(v),CHILL_H.min,CHILL_H.max):CHILL_H.def}
+function pizzaMin(){const v=S&&+S.pizzaMin;return Number.isFinite(v)?clamp(Math.round(v),PIZZA_MIN.min,PIZZA_MIN.max):PIZZA_MIN.def}
 function buildPlan(id,T,coldH,c,o){
   o=o||{};const bT=o.bulkT??T,b=band(T),q=c.q;
   const S_=(t,d,k,detail,x)=>Object.assign({t,d:Math.max(1,Math.round(d)),k,detail},x||{});
@@ -135,7 +136,7 @@ function buildPlan(id,T,coldH,c,o){
     S_("Cold ferment",coldH*60,"cold","3–5 °C, 20–28 h (24 h is the target)."),
     S_("Warm-up",warm-40,"wait","Balls out, covered. Don't re-ball. Prep sauce and drain mozzarella.",{est:1,check:1,hands:5,key:"proof",cue:"Poke springs back slowly."}),
     S_("Heat the Ooni",40,"oven","30–40 min until the stone centre reads 420–450 °C."),
-    S_("Bake the pizzas",Math.max(1,q.n)*3,"oven","Open, top lightly (70–80 g sauce, 70–90 g mozzarella per pizza), launch, flame down, 60–90 s each, rotating every 15–20 s.")]}}
+    S_("Bake the pizzas",Math.max(1,q.n)*pizzaMin(),"oven",`Open, top lightly (70–80 g sauce, 70–90 g mozzarella per pizza), launch, flame down, 60–90 s each, rotating every 15–20 s. Planned at ${pizzaMin()} min per pizza, including letting the stone come back to 420–450 °C.`)]}}
   // sandwich
   const bulk=interp(SW_BULK,bT).m,proof=interp(SW_PROOF,T).m,v=o.variant||"std",V=SANDWICH_VARIANTS[v];
   const build=`Stiff starter: ${gt(q.seed)} starter + ${gt(q.shoney)} honey + ${gt(q.swater)} water + ${gt(q.sflour)} flour. Tangzhong: ${gt(q.tflour)} flour + ${gt(q.milk)} milk, whisked to 65 °C, covered and chilled.`;
@@ -223,7 +224,7 @@ function awayCfg(){const a=S.plan.away;if(!a||!a.on)return null;const f=parseClo
 function awayOverlap(t0,t1,aw){if(!aw||t1<=t0)return 0;let tot=0;const d=new Date(t0);d.setHours(0,0,0,0);d.setDate(d.getDate()-1);
   while(d.getTime()<t1){const ws=new Date(d);ws.setHours(0,aw.f,0,0);const we=new Date(d);if(aw.t<aw.f)we.setDate(we.getDate()+1);we.setHours(0,aw.t,0,0);
     const o=Math.min(t1,we.getTime())-Math.max(t0,ws.getTime());if(o>0)tot+=o;d.setDate(d.getDate()+1)}return tot/60000}
-function planSig(rid){const a=S.plan.away;return[rid,S.plan.mode,S.plan.day[rid],S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start,S.plan.target[rid],S.cold[rid],S.temp,S.variant.sandwich,rid==="sandwich"&&S.variant.sandwich==="chill"?chillH():"",a.on?a.from+"-"+a.to:"off"].join("|")}
+function planSig(rid){const a=S.plan.away;return[rid,S.plan.mode,S.plan.day[rid],S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start,S.plan.target[rid],S.cold[rid],S.temp,S.variant.sandwich,rid==="sandwich"&&S.variant.sandwich==="chill"?chillH():"",a.on?a.from+"-"+a.to:"off",rid==="pizza"?pizzaMin():""].join("|")}
 function timeline(rid,o){
   o=o||{};const mode=o.mode||S.plan.mode,date=o.date||S.plan.day[rid],target=o.target||S.plan.target[rid];
   const atS=o.at||(mode==="finish"?S.plan.anchor[rid]:S.plan.start);
@@ -266,13 +267,16 @@ function alternatives(rid){
     out.push({label,date:c.date,at:c.at,cold:c.cold,desc:`${mode==="finish"?lbl:"Start"} ${dayName(mode==="finish"?t.targetD:t.startD)}, ${clockOf(mode==="finish"?t.targetD:t.startD)} · start ${dayName(t.startD)} ${clockOf(t.startD)}`,...extra})};
   const at=i=>{const d=new Date(anchorT.getTime()+i*9e5);return{date:isoDate(d),at:clockOf(d)}};
   const fits=(c,pp)=>timeline(rid,{...c,mode,target,p:pp}).ok;
-  const scan=(dir,lim,pp)=>{for(let i=1;i<=lim;i++){const c=at(dir*i);if(dir<0&&timeline(rid,{...c,mode,target,p:pp}).past)return null;if(fits(c,pp))return c}return null};
+  // prefer plans whose oven time (first pizza in, for pizza) falls in the recipe's READY_WIN, like the default plan does
+  const [w0,w1]=READY_WIN[rid],inWin=(c,pp)=>{const d=timeline(rid,{...c,mode,target,p:pp}).ovenD,m=d.getHours()*60+d.getMinutes();return m>=w0&&m<=w1};
+  const scan1=(dir,lim,pp,pref)=>{for(let i=1;i<=lim;i++){const c=at(dir*i);if(dir<0&&timeline(rid,{...c,mode,target,p:pp}).past)return null;if(fits(c,pp)&&(!pref||inWin(c,pp)))return c}return null};
+  const scan=(dir,lim,pp)=>scan1(dir,lim,pp,true)||scan1(dir,lim,pp,false);
   const later=scan(1,8*96,p);if(later)add(mode==="finish"?"Later finish":"Later start",later,p);
   const earlier=scan(-1,4*96,p);if(earlier)add(mode==="finish"?"Earlier finish":"Earlier start",earlier,p);
   for(let k=1;k<=7;k++){const d=new Date(anchorT);d.setDate(d.getDate()+k);const c={date:isoDate(d),at:clockOf(anchorT)};if(fits(c,p)){add("Same time, another day",c,p);break}}
   // another fridge option allowed by the recipe: the nearest time that fits with it
   for(const h of COLD_OPTS[rid]){if(h===S.cold[rid])continue;const ph=currentPlan(rid,{cold:h});let c=null;
-    for(let i=0;i<=4*96&&!c;i++)for(const dir of i?[1,-1]:[1]){const x=at(dir*i);if(fits(x,ph)){c=x;break}}
+    for(const pref of [true,false])for(let i=0;i<=4*96&&!c;i++)for(const dir of i?[1,-1]:[1]){const x=at(dir*i);if(fits(x,ph)&&(!pref||inWin(x,ph))){c=x;break}}
     if(c)add(`${h} h fridge stage instead`,{...c,cold:h},ph,{note:"Within the recipe's fridge range; fermentation times are unchanged."})}
   return out}
 const DDT_DEFAULT={target:25,flour:null,lev:null,fric:2};

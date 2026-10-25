@@ -13,7 +13,7 @@ Set `CHROME=/path/to/chrome` if Chrome is not at `/usr/bin/google-chrome`.
 | Suite | Command | What it covers |
 |---|---|---|
 | Unit (core.js) | `TZ=Asia/Qatar node test/unit.js` and `TZ=Europe/London node test/unit.js` | Scaling consistency, planner sweep (21,312 plans), unavailable-window edges, alternatives, interpolation, DDT. London adds the clock-change days. |
-| Pizza session | `TZ=Asia/Qatar node test/pizza_session.js` (and London) | The whole pizza session (every ball, 3 min each) is checked against the unavailable window, including the 23 °C / 28 h case from issue #1, with negative controls. |
+| Pizza session | `TZ=Asia/Qatar node test/pizza_session.js` (and London) | The whole pizza session (every ball, 6 min each by default, 3–10 min setting) is checked against the unavailable window, including the 23 °C / 28 h case from issues #1 and #3, with negative controls; alternatives prefer the 12:00–21:00 window. |
 | End to end | `python3 test/v21.py <url>` | Every screen at 3 sizes, light and dark, planner, timer, readiness checks, storage, export and import. Screenshots go to `shots/` (gitignored). |
 | Accessibility | `sh test/fetch_axe.sh && python3 test/audit21.py <url>` | axe-core 4.10.3 (serious or critical fails) and 44 × 44 px targets. |
 | Offline | `python3 test/offline.py <url>` | Service worker install, versioned cache, offline reload. |

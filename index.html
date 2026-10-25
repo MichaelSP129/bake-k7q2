@@ -529,6 +529,8 @@ const SW_PROOF=[R("3–4 h",210),R("2–4 h",180),R("2–3 h",150),R("1½–3 h"
 const COLD_OPTS={loaf:[10,12,14,16],focaccia:[8,10,12,14,16],pizza:[20,24,28],sandwich:[8,10,12,14]};
 // sandwich "Chill" variant: hours the stiff starter spends in the fridge before mixing (Michael, 23 Oct: user picks 8–12 h, default 8 h)
 const CHILL_H={def:8,min:8,max:12};
+// minutes per pizza in the Ooni session: open, top, launch, 60–90 s bake, stone back to 420–450 °C (issue #3)
+const PIZZA_MIN={def:6,min:3,max:10};
 const ANCHOR_DEFAULT={loaf:"09:00",focaccia:"13:05",pizza:"16:30",sandwich:"10:15"};
 
 const TROUBLE={
@@ -649,6 +651,7 @@ function calc(rid,st){
    hands: minutes of real work at the start of a wait step (mixing a build, cooking a tangzhong…)
    check: a fermentation/proof stage that ends with a readiness check, never an automatic next step */
 function chillH(h){const v=+(h??(S&&S.variant&&S.variant.chillH));return Number.isFinite(v)?clamp(Math.round(v),CHILL_H.min,CHILL_H.max):CHILL_H.def}
+function pizzaMin(){const v=S&&+S.pizzaMin;return Number.isFinite(v)?clamp(Math.round(v),PIZZA_MIN.min,PIZZA_MIN.max):PIZZA_MIN.def}
 function buildPlan(id,T,coldH,c,o){
   o=o||{};const bT=o.bulkT??T,b=band(T),q=c.q;
   const S_=(t,d,k,detail,x)=>Object.assign({t,d:Math.max(1,Math.round(d)),k,detail},x||{});
@@ -692,7 +695,7 @@ function buildPlan(id,T,coldH,c,o){
     S_("Cold ferment",coldH*60,"cold","3–5 °C, 20–28 h (24 h is the target)."),
     S_("Warm-up",warm-40,"wait","Balls out, covered. Don't re-ball. Prep sauce and drain mozzarella.",{est:1,check:1,hands:5,key:"proof",cue:"Poke springs back slowly."}),
     S_("Heat the Ooni",40,"oven","30–40 min until the stone centre reads 420–450 °C."),
-    S_("Bake the pizzas",Math.max(1,q.n)*3,"oven","Open, top lightly (70–80 g sauce, 70–90 g mozzarella per pizza), launch, flame down, 60–90 s each, rotating every 15–20 s.")]}}
+    S_("Bake the pizzas",Math.max(1,q.n)*pizzaMin(),"oven",`Open, top lightly (70–80 g sauce, 70–90 g mozzarella per pizza), launch, flame down, 60–90 s each, rotating every 15–20 s. Planned at ${pizzaMin()} min per pizza, including letting the stone come back to 420–450 °C.`)]}}
   // sandwich
   const bulk=interp(SW_BULK,bT).m,proof=interp(SW_PROOF,T).m,v=o.variant||"std",V=SANDWICH_VARIANTS[v];
   const build=`Stiff starter: ${gt(q.seed)} starter + ${gt(q.shoney)} honey + ${gt(q.swater)} water + ${gt(q.sflour)} flour. Tangzhong: ${gt(q.tflour)} flour + ${gt(q.milk)} milk, whisked to 65 °C, covered and chilled.`;
@@ -780,7 +783,7 @@ function awayCfg(){const a=S.plan.away;if(!a||!a.on)return null;const f=parseClo
 function awayOverlap(t0,t1,aw){if(!aw||t1<=t0)return 0;let tot=0;const d=new Date(t0);d.setHours(0,0,0,0);d.setDate(d.getDate()-1);
   while(d.getTime()<t1){const ws=new Date(d);ws.setHours(0,aw.f,0,0);const we=new Date(d);if(aw.t<aw.f)we.setDate(we.getDate()+1);we.setHours(0,aw.t,0,0);
     const o=Math.min(t1,we.getTime())-Math.max(t0,ws.getTime());if(o>0)tot+=o;d.setDate(d.getDate()+1)}return tot/60000}
-function planSig(rid){const a=S.plan.away;return[rid,S.plan.mode,S.plan.day[rid],S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start,S.plan.target[rid],S.cold[rid],S.temp,S.variant.sandwich,rid==="sandwich"&&S.variant.sandwich==="chill"?chillH():"",a.on?a.from+"-"+a.to:"off"].join("|")}
+function planSig(rid){const a=S.plan.away;return[rid,S.plan.mode,S.plan.day[rid],S.plan.mode==="finish"?S.plan.anchor[rid]:S.plan.start,S.plan.target[rid],S.cold[rid],S.temp,S.variant.sandwich,rid==="sandwich"&&S.variant.sandwich==="chill"?chillH():"",a.on?a.from+"-"+a.to:"off",rid==="pizza"?pizzaMin():""].join("|")}
 function timeline(rid,o){
   o=o||{};const mode=o.mode||S.plan.mode,date=o.date||S.plan.day[rid],target=o.target||S.plan.target[rid];
   const atS=o.at||(mode==="finish"?S.plan.anchor[rid]:S.plan.start);
@@ -823,13 +826,16 @@ function alternatives(rid){
     out.push({label,date:c.date,at:c.at,cold:c.cold,desc:`${mode==="finish"?lbl:"Start"} ${dayName(mode==="finish"?t.targetD:t.startD)}, ${clockOf(mode==="finish"?t.targetD:t.startD)} · start ${dayName(t.startD)} ${clockOf(t.startD)}`,...extra})};
   const at=i=>{const d=new Date(anchorT.getTime()+i*9e5);return{date:isoDate(d),at:clockOf(d)}};
   const fits=(c,pp)=>timeline(rid,{...c,mode,target,p:pp}).ok;
-  const scan=(dir,lim,pp)=>{for(let i=1;i<=lim;i++){const c=at(dir*i);if(dir<0&&timeline(rid,{...c,mode,target,p:pp}).past)return null;if(fits(c,pp))return c}return null};
+  // prefer plans whose oven time (first pizza in, for pizza) falls in the recipe's READY_WIN, like the default plan does
+  const [w0,w1]=READY_WIN[rid],inWin=(c,pp)=>{const d=timeline(rid,{...c,mode,target,p:pp}).ovenD,m=d.getHours()*60+d.getMinutes();return m>=w0&&m<=w1};
+  const scan1=(dir,lim,pp,pref)=>{for(let i=1;i<=lim;i++){const c=at(dir*i);if(dir<0&&timeline(rid,{...c,mode,target,p:pp}).past)return null;if(fits(c,pp)&&(!pref||inWin(c,pp)))return c}return null};
+  const scan=(dir,lim,pp)=>scan1(dir,lim,pp,true)||scan1(dir,lim,pp,false);
   const later=scan(1,8*96,p);if(later)add(mode==="finish"?"Later finish":"Later start",later,p);
   const earlier=scan(-1,4*96,p);if(earlier)add(mode==="finish"?"Earlier finish":"Earlier start",earlier,p);
   for(let k=1;k<=7;k++){const d=new Date(anchorT);d.setDate(d.getDate()+k);const c={date:isoDate(d),at:clockOf(anchorT)};if(fits(c,p)){add("Same time, another day",c,p);break}}
   // another fridge option allowed by the recipe: the nearest time that fits with it
   for(const h of COLD_OPTS[rid]){if(h===S.cold[rid])continue;const ph=currentPlan(rid,{cold:h});let c=null;
-    for(let i=0;i<=4*96&&!c;i++)for(const dir of i?[1,-1]:[1]){const x=at(dir*i);if(fits(x,ph)){c=x;break}}
+    for(const pref of [true,false])for(let i=0;i<=4*96&&!c;i++)for(const dir of i?[1,-1]:[1]){const x=at(dir*i);if(fits(x,ph)&&(!pref||inWin(x,ph))){c=x;break}}
     if(c)add(`${h} h fridge stage instead`,{...c,cold:h},ph,{note:"Within the recipe's fridge range; fermentation times are unchanged."})}
   return out}
 const DDT_DEFAULT={target:25,flour:null,lev:null,fric:2};
@@ -944,7 +950,7 @@ const DEFAULT={
   tab:"recipes",detail:null,seg:"ing",rid:"loaf",
   scale:{loaf:{mode:"loaves",n:1,w:1415},focaccia:{tray:"23x33",cw:23,cl:33},pizza:{balls:4,bw:280},sandwich:{tin:"large",n:1}},
   hyd:{loaf:69.7,focaccia:80,pizza:66.4},temp:25,
-  cold:{loaf:14,focaccia:14,pizza:24,sandwich:12},variant:{sandwich:"std",chillH:CHILL_H.def},
+  cold:{loaf:14,focaccia:14,pizza:24,sandwich:12},variant:{sandwich:"std",chillH:CHILL_H.def},pizzaMin:PIZZA_MIN.def,
   plan:{mode:"finish",anchor:Object.assign({},ANCHOR_DEFAULT),start:"07:00",day:{loaf:tomorrowIso(),focaccia:tomorrowIso(),pizza:tomorrowIso(),sandwich:tomorrowIso()},custom:{},
     target:{loaf:"oven",focaccia:"oven",pizza:"oven",sandwich:"oven"},away:{on:true,from:"23:00",to:"06:00"},accept:{}},
   session:null,starter:{fedAt:null},sound:true,wake:true,notify:false,theme:"auto",weekHot:false,openAcc:{},ddt:Object.assign({},DDT_DEFAULT),v:4,epoch:"",rev:0
@@ -961,7 +967,7 @@ function sanitize(T){
   if(!T.v||T.v<2){T.wake=true;if(T.plan&&T.plan.date){for(const r of RIDS)T.plan.day[r]=T.plan.date}if(T.plan)delete T.plan.date}
   if(!T.v||T.v<3){if(+T.scale.pizza.bw===276)T.scale.pizza.bw=276.5;T.v=3}   // 276 was the rounded booklet ball; 276.5 × 4 = the booklet's 1,106 g
   if(T.v<4){if(T.scale&&T.scale.pizza&&[276,276.5].includes(+T.scale.pizza.bw))T.scale.pizza.bw=280;T.v=4}   // Michael, 23 Oct: 280 g balls replace the old 276 / 276.5 g default
-  num(T,"temp",16,40,25,1);num(T.scale.loaf,"n",1,8,1,1);num(T.scale.loaf,"w",300,12000,1415,1);
+  num(T,"temp",16,40,25,1);num(T,"pizzaMin",PIZZA_MIN.min,PIZZA_MIN.max,PIZZA_MIN.def,1);num(T.scale.loaf,"n",1,8,1,1);num(T.scale.loaf,"w",300,12000,1415,1);
   num(T.scale.pizza,"balls",1,24,4,1);num(T.scale.pizza,"bw",150,400,280,.5);
   num(T.scale.focaccia,"cw",10,80,23,1);num(T.scale.focaccia,"cl",10,80,33,1);num(T.scale.sandwich,"n",1,6,1,1);
   for(const r of ["loaf","focaccia","pizza"]){const raw=+T.hyd[r];num(T.hyd,r,LEAN[r].Hmin,LEAN[r].Hmax,LEAN[r].H0,.5);if(Math.abs(raw-LEAN[r].H0)<.01)T.hyd[r]=LEAN[r].H0}   // the slider moves in 0.5 % steps, but the booklet values (69.7 %, 66.4 %) are kept exactly
@@ -1175,7 +1181,7 @@ function vPlan(){
     const w=Math.max(4,Math.sqrt(e.d/maxd)*100),hands=attendMin(e),handNote=e.k!=="prep"&&e.k!=="oven"&&hands?`<span class="chip t">${hands} min hands-on at the start</span>`:"";
     items+=`<div class="ev k-${e.k}${e.conflict?" clash":""}"><div class="tm num">${clockOf(d)}</div><div class="rail"><i></i></div><div class="bx"><div class="in"><b>${esc(e.t)}</b><div class="d">${esc(e.detail)}</div><div class="meta"><span class="chip ${e.k==="cold"?"c":e.k==="oven"?"h":e.k==="rest"?"o":e.k==="prep"?"t":""}">${e.est?"≈ ":""}${fmtDur(e.d)}</span>${e.est?`<span class="est">estimate</span>`:""}${handNote}<div class="bar" style="width:${w*.45}%"></div></div>${e.conflict?`<div class="clashtag">⚠ ${fmtDur(e.conflict)} inside your unavailable hours</div>`:""}</div></div></div>`;
     if(e.i===tl.p.anchor)mark(tl.ovenD,T[0][1],`${RECIPES[rid].name} · ${c.summary}`,S.plan.target[rid]==="oven")});
-  mark(tl.serveD,T[1][1],rid==="pizza"?`${c.q.n} pizza${c.q.n>1?"s":""}, about 3 min each`:"After cooling",S.plan.target[rid]==="serve");
+  mark(tl.serveD,T[1][1],rid==="pizza"?`${c.q.n} pizza${c.q.n>1?"s":""}, about ${pizzaMin()} min each`:"After cooling",S.plan.target[rid]==="serve");
   const ov=tl.ev.map(e=>`<i class="k-${e.k}${e.conflict?" clash":""}" style="flex:${Math.max(e.d,8)}"></i>`).join("");
   const at=mode==="finish"?S.plan.anchor[rid]:S.plan.start,aw=S.plan.away,other=S.plan.target[rid]==="oven"?[T[1][1],tl.serveD]:[T[0][1],tl.ovenD];
   return nav("Plan")+large("Start-time planner","Plan a bake","Pick a recipe, set your kitchen and when you want it ready.")+
@@ -1190,6 +1196,7 @@ function vPlan(){
    <div class="pillrow">${days.map(d=>`<button class="pill ${isoDate(d)===S.plan.day[rid]?"on":""}" aria-pressed="${isoDate(d)===S.plan.day[rid]}" data-act="pdate" data-arg="${isoDate(d)}">${DOW[d.getDay()]}<small>${relDay(d)==="Today"||relDay(d)==="Tomorrow"?relDay(d):d.getDate()+" "+MON[d.getMonth()]}</small></button>`).join("")}</div>
    <div class="ctrl"><div class="lab">At</div><div class="timepick"><button class="sm" data-act="ptime" data-arg="-15" aria-label="15 minutes earlier">−15</button><input type="time" id="ptime" value="${esc(at)}" step="300" aria-label="${mode==="finish"?tgtLabel(rid)+" time":"Start time"}"><button class="sm" data-act="ptime" data-arg="15" aria-label="15 minutes later">+15</button></div></div>
    <div class="ctrl" style="display:block"><div class="lab" style="margin-bottom:8px">Fridge stage</div>${seg("pcold",COLD_OPTS[rid].map(h=>[h,h+" h"]),S.cold[rid])}</div>
+   ${rid==="pizza"?`<div class="ctrl"><div class="lab">Minutes per pizza<small>Opening, topping, the bake and stone recovery. Faster with two people.</small></div>${stepper("pmin",S.pizzaMin,"min",{label:"Minutes per pizza",min:S.pizzaMin<=PIZZA_MIN.min,max:S.pizzaMin>=PIZZA_MIN.max})}</div>`:""}
    <div class="ctrl" style="display:block"><div class="lab" style="margin-bottom:8px">I'm unavailable<small>Hands-on and oven steps stay out of these hours; rising, fridge and cooling can run through them.</small></div>
     ${seg("pawayon",[["1","Set hours"],["0","Any time"]],aw.on?"1":"0")}
     ${aw.on?`<div class="awayrow"><label>From<input type="time" id="pawayf" value="${esc(aw.from)}" step="900"></label><label>To<input type="time" id="pawayt" value="${esc(aw.to)}" step="900"></label></div>`:""}</div></div>
@@ -1363,7 +1370,7 @@ document.addEventListener("keydown",e=>{const sh=document.querySelector(".sheet"
     const first=f[0],last=f[f.length-1];if(e.shiftKey&&(document.activeElement===first||document.activeElement===sh)){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}},true);
 
 /* ---------- export / import ---------- */
-const EXPORT_KEYS=["scale","hyd","temp","cold","variant","plan","starter","sound","wake","theme","weekHot","ddt"];
+const EXPORT_KEYS=["scale","hyd","temp","cold","pizzaMin","variant","plan","starter","sound","wake","theme","weekHot","ddt"];
 function exportObj(){const data={};EXPORT_KEYS.forEach(k=>data[k]=JSON.parse(JSON.stringify(S[k])));return{format:"michaels-baking-export",version:1,app:"2.1",exportedAt:new Date().toISOString(),data}}
 function exportData(){const o=exportObj(),blob=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");
   a.href=URL.createObjectURL(blob);a.download=`michaels-baking-${isoDate(new Date())}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast("Exported. Keep the file somewhere safe.")}
@@ -1420,6 +1427,7 @@ const ACT={
   pdate(a){S.plan.day[S.rid]=a;S.plan.custom[S.rid]=true;haptic(5);render()},
   ptime(d){const k=S.plan.mode==="finish";const cur=parseClock(k?S.plan.anchor[S.rid]:S.plan.start)??540;const nv=fmtClock(cur+ +d);if(k)S.plan.anchor[S.rid]=nv;else S.plan.start=nv;S.plan.custom[S.rid]=true;haptic(5);render()},
   pcold(a){S.cold[S.rid]=+a;render()},
+  pmin(d){S.pizzaMin=clamp(S.pizzaMin+ +d,PIZZA_MIN.min,PIZZA_MIN.max);haptic(5);render()},
   ptarget(a){const r=S.rid;if(S.plan.target[r]===a)return;S.plan.target[r]=a;render()},
   pawayon(a){S.plan.away.on=a==="1";render()},
   palt(a){const [d,t,c]=a.split("|"),r=S.rid;S.plan.day[r]=d;if(S.plan.mode==="finish")S.plan.anchor[r]=t;else S.plan.start=t;if(c)S.cold[r]=+c;S.plan.custom[r]=true;haptic(8);render();toast(c?`Plan moved to the ${c} h fridge option`:"Plan moved")},
