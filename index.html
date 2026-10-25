@@ -1181,7 +1181,7 @@ function vPlan(){
     const w=Math.max(4,Math.sqrt(e.d/maxd)*100),hands=attendMin(e),handNote=e.k!=="prep"&&e.k!=="oven"&&hands?`<span class="chip t">${hands} min hands-on at the start</span>`:"";
     items+=`<div class="ev k-${e.k}${e.conflict?" clash":""}"><div class="tm num">${clockOf(d)}</div><div class="rail"><i></i></div><div class="bx"><div class="in"><b>${esc(e.t)}</b><div class="d">${esc(e.detail)}</div><div class="meta"><span class="chip ${e.k==="cold"?"c":e.k==="oven"?"h":e.k==="rest"?"o":e.k==="prep"?"t":""}">${e.est?"≈ ":""}${fmtDur(e.d)}</span>${e.est?`<span class="est">estimate</span>`:""}${handNote}<div class="bar" style="width:${w*.45}%"></div></div>${e.conflict?`<div class="clashtag">⚠ ${fmtDur(e.conflict)} inside your unavailable hours</div>`:""}</div></div></div>`;
     if(e.i===tl.p.anchor)mark(tl.ovenD,T[0][1],`${RECIPES[rid].name} · ${c.summary}`,S.plan.target[rid]==="oven")});
-  mark(tl.serveD,T[1][1],rid==="pizza"?`${c.q.n} pizza${c.q.n>1?"s":""}, about 3 min each`:"After cooling",S.plan.target[rid]==="serve");
+  mark(tl.serveD,T[1][1],rid==="pizza"?`${c.q.n} pizza${c.q.n>1?"s":""}, about ${pizzaMin()} min each`:"After cooling",S.plan.target[rid]==="serve");
   const ov=tl.ev.map(e=>`<i class="k-${e.k}${e.conflict?" clash":""}" style="flex:${Math.max(e.d,8)}"></i>`).join("");
   const at=mode==="finish"?S.plan.anchor[rid]:S.plan.start,aw=S.plan.away,other=S.plan.target[rid]==="oven"?[T[1][1],tl.serveD]:[T[0][1],tl.ovenD];
   return nav("Plan")+large("Start-time planner","Plan a bake","Pick a recipe, set your kitchen and when you want it ready.")+
