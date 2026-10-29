@@ -1,5 +1,5 @@
 /* Michael's Baking: offline service worker. Cache-first; the cache name changes with every build. */
-const VERSION="af76d18bc5";
+const VERSION="2b0c2baa85";
 const CACHE="bake-"+VERSION;
 const ASSETS=["./","index.html","manifest.webmanifest","icons/icon-192.png","icons/icon-512.png","icons/icon-maskable-512.png","icons/apple-touch-icon.png"];
 self.addEventListener("install",e=>{
