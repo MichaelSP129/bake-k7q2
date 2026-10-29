@@ -105,15 +105,18 @@ function tAdd(min){const s=S.session;if(!s)return;if(s.running)s.endsAt+=min*600
 function tMore(m){const s=S.session;if(!s)return;s.remaining=m*60;s.closedEnd=false;sessDirty=true;tPlay();toast(`${m} more minutes, then check again`)}
 /* measured dough temperature drives the bulk estimate through bulkTemp(): the midpoint of dough and kitchen (never shortens below what has already passed).
    Returns the new bulk duration in minutes, or null when bulk is already over. Stores the dough reading and the temperature used (s.bulkT). */
+/* a shorter estimate never moves the end of a running or paused bulk into the past: if the time already passed covers the new estimate, the timer keeps
+   at least 1 minute and ends in the readiness check (bulkClamped is set so the toast can say so) (ChatGPT, PR #12) */
+let bulkClamped=false;
 function bulkReset(s,T){const bi=s.steps.findIndex(x=>x.key==="bulk");if(bi<0||s.idx>bi)return null;
   const bt=bulkTemp(T,s.temp),p=buildPlan(s.rid,s.temp,s.cold,calc(s.rid),{variant:s.variant,chillH:s.chillH,bulkT:bt}),nb=p.steps.find(x=>x.key==="bulk");
   const nd=nb.d,delta=nd-s.steps[bi].d;s.steps[bi].d=nd;s.steps[bi].detail=nb.detail;
-  if(s.idx===bi&&!(s.alerted&&remNow()<=0)){if(s.running)s.endsAt+=delta*60000;else s.remaining=Math.max(60,s.remaining+delta*60)}
+  bulkClamped=false;if(s.idx===bi&&!(s.alerted&&remNow()<=0)){if(s.running){const want=s.endsAt+delta*60000,floor=Date.now()+60000;const keep=Math.min(s.endsAt,floor);bulkClamped=want<keep;s.endsAt=Math.max(want,keep)}else{const keep=Math.min(s.remaining,60);bulkClamped=s.remaining+delta*60<keep;s.remaining=Math.max(keep,s.remaining+delta*60)}}
   s.doughT=T;if(T===null)delete s.bulkT;else s.bulkT=bt;return nd}
 function setDoughT(v){const s=S.session;if(!s)return;const bi=s.steps.findIndex(x=>x.key==="bulk");if(bi<0)return;
   if(s.idx>bi){toast("Bulk is already finished");return}
-  const T=v===null?null:clamp(v,15,35),nd=bulkReset(s,T);
-  sessDirty=true;saveNow();render();toast(T===null?"Back to the kitchen-temperature estimate":`Bulk ${bulkWhy(T,s.temp,s.bulkT)}: ${fmtDur(nd)}`)}
+  const T=v===null?null:clamp(v,15,35),nd=bulkReset(s,T),clamped=bulkClamped; // read before render(): re-rendering the focused field can fire a second change event
+  sessDirty=true;saveNow();render();toast(T===null?"Back to the kitchen-temperature estimate":`Bulk ${bulkWhy(T,s.temp,s.bulkT)}: ${fmtDur(nd)}${clamped?". That much time has already passed, so check the dough in about a minute":""}`)}
 /* sessions saved before the midpoint change have a dough reading but no s.bulkT: their bulk step was timed from the dough alone.
    Re-time it from the midpoint once (same rules as entering the reading). If bulk is already over, record the dough-only value it used. */
 function migrateBulk(){const s=S.session;if(!s||s.doughT===null||s.doughT===undefined||Number.isFinite(+s.bulkT))return false;
